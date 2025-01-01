@@ -13,7 +13,7 @@ export default function Navbar() {
 
   return (
     <nav className="max-w-5xl mx-auto">
-      <div className="flex items-center justify-between gap-x-4 py-4">
+      <div className="px-4 flex items-center justify-between gap-x-4 py-4">
         <Link href={"/"} className="flex items-center gap-x-2">
           <RefreshCcw />
           WorkSync

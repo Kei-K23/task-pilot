@@ -43,7 +43,7 @@ export default function SignInPage() {
   }
 
   return (
-    <Card className="max-w-xl mx-auto mt-10">
+    <Card className="max-w-xl mx-auto mt-4">
       <CardHeader>
         <CardTitle className="text-center">Welcome Back</CardTitle>
       </CardHeader>
