@@ -23,32 +23,11 @@ import { useForm } from "react-hook-form";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import Link from "next/link";
-
-const formSchema = z.object({
-  username: z
-    .string()
-    .min(6, {
-      message: "Username must contain at least 6 characters",
-    })
-    .max(100),
-  email: z.string().email(),
-  password: z
-    .string()
-    .min(6, {
-      message: "Password must contain at least 6 characters",
-    })
-    .max(18),
-  confirmPassword: z
-    .string()
-    .min(6, {
-      message: "Confirm password must contain at least 6 characters",
-    })
-    .max(18),
-});
+import { registerSchema } from "@/features/auth/schemas";
 
 export default function SignUpPage() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       username: "",
       email: "",
@@ -58,7 +37,7 @@ export default function SignUpPage() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof registerSchema>) {
     console.log(values);
   }
 
