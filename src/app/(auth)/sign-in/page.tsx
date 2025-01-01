@@ -17,20 +17,13 @@ import { useForm } from "react-hook-form";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import Link from "next/link";
-
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z
-    .string()
-    .min(6, {
-      message: "Password must contain at least 6 characters",
-    })
-    .max(18),
-});
+import { loginSchema } from "@/features/auth/schemas";
+import { useLogin } from "@/features/auth/api/use-login";
 
 export default function SignInPage() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const { mutate, isPending } = useLogin();
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -38,8 +31,8 @@ export default function SignInPage() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  function onSubmit(values: z.infer<typeof loginSchema>) {
+    mutate({ json: values });
   }
 
   return (
@@ -49,8 +42,9 @@ export default function SignInPage() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
+              disabled={isPending}
               control={form.control}
               name="email"
               render={({ field }) => (
@@ -68,6 +62,7 @@ export default function SignInPage() {
               )}
             />
             <FormField
+              disabled={isPending}
               control={form.control}
               name="password"
               render={({ field }) => (
@@ -84,14 +79,22 @@ export default function SignInPage() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full font-bold">
+            <Button
+              disabled={isPending}
+              type="submit"
+              className="w-full font-bold"
+            >
               Login
             </Button>
           </form>
         </Form>
         <Separator className="w-full h-[1px] my-6" />
         <div className="space-y-4">
-          <Button variant={"outline"} className="w-full flex items-center">
+          <Button
+            disabled={isPending}
+            variant={"outline"}
+            className="w-full flex items-center"
+          >
             <Image
               src={"/icons/google.svg"}
               alt="google icon"
@@ -100,7 +103,11 @@ export default function SignInPage() {
             />
             Continue with Google
           </Button>
-          <Button variant={"outline"} className="w-full flex items-center">
+          <Button
+            disabled={isPending}
+            variant={"outline"}
+            className="w-full flex items-center"
+          >
             <Image
               src={"/icons/github.svg"}
               alt="google icon"
