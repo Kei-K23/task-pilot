@@ -24,8 +24,10 @@ import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import Link from "next/link";
 import { registerSchema } from "@/features/auth/schemas";
+import { useRegister } from "@/features/auth/api/use-register";
 
 export default function SignUpPage() {
+  const { mutate, isPending } = useRegister();
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -38,7 +40,7 @@ export default function SignUpPage() {
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof registerSchema>) {
-    console.log(values);
+    mutate({ json: values });
   }
 
   return (
@@ -61,7 +63,11 @@ export default function SignUpPage() {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter username" {...field} />
+                    <Input
+                      disabled={isPending}
+                      placeholder="Enter username"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -75,6 +81,7 @@ export default function SignUpPage() {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
+                      disabled={isPending}
                       type="email"
                       placeholder="Enter email address"
                       {...field}
@@ -92,6 +99,7 @@ export default function SignUpPage() {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
+                      disabled={isPending}
                       type="password"
                       placeholder="Enter password"
                       {...field}
@@ -109,6 +117,7 @@ export default function SignUpPage() {
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
                     <Input
+                      disabled={isPending}
                       type="password"
                       placeholder="Enter confirm password"
                       {...field}
@@ -118,14 +127,22 @@ export default function SignUpPage() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full font-bold">
+            <Button
+              disabled={isPending}
+              type="submit"
+              className="w-full font-bold"
+            >
               Sign Up
             </Button>
           </form>
         </Form>
         <Separator className="w-full h-[1px] my-6" />
         <div className="space-y-4">
-          <Button variant={"outline"} className="w-full flex items-center">
+          <Button
+            disabled={isPending}
+            variant={"outline"}
+            className="w-full flex items-center"
+          >
             <Image
               src={"/icons/google.svg"}
               alt="google icon"
@@ -134,7 +151,11 @@ export default function SignUpPage() {
             />
             Continue with Google
           </Button>
-          <Button variant={"outline"} className="w-full flex items-center">
+          <Button
+            disabled={isPending}
+            variant={"outline"}
+            className="w-full flex items-center"
+          >
             <Image
               src={"/icons/github.svg"}
               alt="google icon"
