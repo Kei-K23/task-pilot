@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
@@ -22,6 +21,7 @@ import { useLogin } from "@/features/auth/api/use-login";
 
 export default function SignInPage() {
   const { mutate, isPending } = useLogin();
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -31,7 +31,7 @@ export default function SignInPage() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof loginSchema>) {
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
     mutate({ json: values });
   }
 
@@ -50,13 +50,11 @@ export default function SignInPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="Enter email address"
-                      {...field}
-                    />
-                  </FormControl>
+                  <Input
+                    type="email"
+                    placeholder="Enter email address"
+                    {...field}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -68,13 +66,11 @@ export default function SignInPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Enter password"
-                      {...field}
-                    />
-                  </FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Enter password"
+                    {...field}
+                  />
                   <FormMessage />
                 </FormItem>
               )}

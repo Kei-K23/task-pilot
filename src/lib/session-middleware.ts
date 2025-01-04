@@ -30,8 +30,9 @@ export const sessionMiddleware = createMiddleware<AdditionalType>(
       .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
 
     const session = getCookie(c, AUTH_COOKIE);
+
     if (!session) {
-      return c.json({ error: "Unauthorized" });
+      return c.json({ error: "Unauthorized" }, 401);
     }
 
     // Set session to App write Client

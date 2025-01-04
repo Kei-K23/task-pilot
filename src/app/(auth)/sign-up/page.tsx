@@ -12,7 +12,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
@@ -62,13 +61,11 @@ export default function SignUpPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      placeholder="Enter username"
-                      {...field}
-                    />
-                  </FormControl>
+                  <Input
+                    disabled={isPending}
+                    placeholder="Enter username"
+                    {...field}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -79,14 +76,12 @@ export default function SignUpPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      type="email"
-                      placeholder="Enter email address"
-                      {...field}
-                    />
-                  </FormControl>
+                  <Input
+                    disabled={isPending}
+                    type="email"
+                    placeholder="Enter email address"
+                    {...field}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -97,14 +92,12 @@ export default function SignUpPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      type="password"
-                      placeholder="Enter password"
-                      {...field}
-                    />
-                  </FormControl>
+                  <Input
+                    disabled={isPending}
+                    type="password"
+                    placeholder="Enter password"
+                    {...field}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
@@ -115,14 +108,12 @@ export default function SignUpPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      type="password"
-                      placeholder="Enter confirm password"
-                      {...field}
-                    />
-                  </FormControl>
+                  <Input
+                    disabled={isPending}
+                    type="password"
+                    placeholder="Enter confirm password"
+                    {...field}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
