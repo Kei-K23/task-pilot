@@ -48,7 +48,7 @@ export default function UserButton() {
         sideOffset={10}
       >
         <div className="flex items-center justify-center flex-col">
-          <Avatar className="size-16 border border-neutral-300 transition-all hover:opacity-75 cursor-pointer">
+          <Avatar className="size-14 border border-neutral-300 transition-all hover:opacity-75 cursor-pointer">
             <AvatarFallback className="bg-neutral-200 font-medium text-2xl">
               {fallbackName}
             </AvatarFallback>
