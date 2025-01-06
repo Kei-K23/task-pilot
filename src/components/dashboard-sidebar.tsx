@@ -12,6 +12,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { NAV_ITEMS } from "@/constants";
+import { WorkspaceSwitcher } from "@/features/workspaces/components/workspace-switcher";
 import { RefreshCcw } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -22,13 +23,16 @@ export function DashboardSidebar({
   const pathname = usePathname();
   return (
     <Sidebar {...props}>
-      <SidebarHeader className="p-4">
+      <SidebarHeader className="pt-4 px-4">
         <SidebarMenu>
-          <SidebarMenuItem className="">
+          <SidebarMenuItem>
             <Link href={"/"} className="flex items-center gap-x-2">
               <RefreshCcw />
               WorkSync
             </Link>
+          </SidebarMenuItem>
+          <SidebarMenuItem className="pt-4">
+            <WorkspaceSwitcher />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

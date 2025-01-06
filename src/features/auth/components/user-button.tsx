@@ -34,7 +34,7 @@ export default function UserButton() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className="focus:outline-none ring-neutral-200">
         <Avatar className="size-10 border border-neutral-300 transition-all hover:opacity-75 cursor-pointer">
           <AvatarFallback className="bg-neutral-200 font-medium">
             {fallbackName}
