@@ -11,8 +11,8 @@ type RequestType = InferRequestType<
 
 export const useCreateWorkspaces = () => {
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async ({ json }) => {
-      const res = await client.api.workspaces.login.$post({ json });
+    mutationFn: async ({ form }) => {
+      const res = await client.api.workspaces.login.$post({ form });
       return await res.json();
     },
   });

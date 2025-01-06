@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
@@ -16,6 +17,10 @@ import { useForm } from "react-hook-form";
 import { useCreateWorkspaces } from "../api/use-create-workspaces";
 import { workspacesCreateSchema } from "../schemas";
 import { toast } from "sonner";
+import { useRef } from "react";
+import Image from "next/image";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ImageIcon } from "lucide-react";
 
 interface CreateWorkspacesFormProps {
   onCancel?: () => void;
@@ -25,18 +30,23 @@ export default function CreateWorkspacesForm({
   onCancel,
 }: CreateWorkspacesFormProps) {
   const { mutate, isPending } = useCreateWorkspaces();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof workspacesCreateSchema>>({
     resolver: zodResolver(workspacesCreateSchema),
     defaultValues: {
       name: "",
+      imageUrl: "",
     },
   });
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof workspacesCreateSchema>) {
+    const finalValue = {
+      ...values,
+      imageUrl: values.imageUrl instanceof File ? values.imageUrl : "",
+    };
     mutate(
-      { json: values },
+      { form: finalValue },
       {
         onSuccess: () => {
           toast.success("Successfully created workspace");
@@ -49,6 +59,12 @@ export default function CreateWorkspacesForm({
     );
   }
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      form.setValue("imageUrl", file);
+    }
+  };
   return (
     <Card className="mt-4">
       <CardHeader>
@@ -56,7 +72,7 @@ export default function CreateWorkspacesForm({
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               disabled={isPending}
               control={form.control}
@@ -64,9 +80,65 @@ export default function CreateWorkspacesForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Workspace Name</FormLabel>
-                  <Input placeholder="Enter workspace name" {...field} />
+                  <FormControl>
+                    <Input placeholder="Enter workspace name" {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
+              )}
+            />
+            <FormField
+              disabled={isPending}
+              control={form.control}
+              name="imageUrl"
+              render={({ field }) => (
+                <div className="flex items-center gap-4">
+                  {field.value ? (
+                    <div className="relative size-20 rounded-full">
+                      <Image
+                        alt="Logo"
+                        src={
+                          field.value instanceof File
+                            ? URL.createObjectURL(field.value)
+                            : field.value
+                        }
+                        fill
+                        className="object-cover rounded-full"
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <Avatar className="size-20">
+                        <AvatarFallback>
+                          <ImageIcon className="size-10 text-neutral-500" />
+                        </AvatarFallback>
+                      </Avatar>
+                    </div>
+                  )}
+                  <div>
+                    <p className="font-semibold">Workspace Icon</p>
+                    <p className="text-sm text-muted-foreground">
+                      JPG, PNG, SVG or JPEG, max 1MB
+                    </p>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      className="hidden"
+                      onChange={handleImageChange}
+                    />
+                    <Button
+                      variant={"secondary"}
+                      type="button"
+                      size={"sm"}
+                      className="mt-2"
+                      onClick={() => {
+                        fileInputRef?.current?.click();
+                      }}
+                    >
+                      Upload Image
+                    </Button>
+                  </div>
+                </div>
               )}
             />
             <div className="flex items-center gap-3">
