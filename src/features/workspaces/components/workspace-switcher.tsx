@@ -16,7 +16,7 @@ import {
 
 export function WorkspaceSwitcher() {
   const workspaceId = useGetWorkspaceParam();
-  const { data } = useGetWorkspaces();
+  const { data, isPending } = useGetWorkspaces();
 
   return (
     <SidebarMenu>
@@ -27,7 +27,13 @@ export function WorkspaceSwitcher() {
         </div>
         <Select value={workspaceId}>
           <SelectTrigger className="focus-visible:right-0 focus-visible:ring-neutral-200">
-            <SelectValue placeholder={"No workspace selected"} />
+            {isPending ? (
+              <div className="animate-pulse text-muted-foreground flex items-center gap-x-1">
+                Loading...
+              </div>
+            ) : (
+              <SelectValue placeholder={"No workspace selected"} />
+            )}
           </SelectTrigger>
           <SelectContent>
             {data?.documents.map((workspace) => (
