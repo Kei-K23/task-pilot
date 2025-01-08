@@ -1,73 +1,39 @@
 "use client";
 
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Plus } from "lucide-react";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
+import { SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { useGetWorkspaces } from "../api/use-get-workspaces";
-import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useGetWorkspaceParam } from "../hooks/use-get-workspace-param";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function WorkspaceSwitcher() {
+  const workspaceId = useGetWorkspaceParam();
   const { data } = useGetWorkspaces();
-  //! TODO: Find a way to inter the type that come from App Write
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [selectedValue, setSelectedValue] = useState<null | any>(null);
 
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground focus:outline-none ring-neutral-200"
-            >
-              {selectedValue ? (
-                <div className="flex items-center justify-center gap-x-2">
-                  <div className="aspect-square size-10 rounded-lg">
-                    <Avatar className="w-full h-full rounded-lg">
-                      <AvatarImage
-                        src={selectedValue?.imageUrl}
-                        alt="Workspace logo"
-                      />
-                      <AvatarFallback className="bg-black text-white rounded-lg font-bold text-lg">
-                        {selectedValue?.name.charAt(0).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                  </div>
-                  <div className="flex flex-col gap-0.5 leading-none">
-                    <span className="font-semibold">{selectedValue?.name}</span>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-0.5 leading-none">
-                  <span>No workspace selected</span>
-                </div>
-              )}
-              <ChevronsUpDown className="ml-auto" />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width]"
-            align="start"
-          >
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[11px] text-muted-foreground">WORKSPACE</span>
+          <Plus className="size-4 p-0.5 bg-neutral-500 hover:bg-neutral-500/80 cursor-pointer transition-all text-white rounded-full" />
+        </div>
+        <Select value={workspaceId}>
+          <SelectTrigger className="focus-visible:right-0 focus-visible:ring-neutral-200">
+            <SelectValue placeholder={"No workspace selected"} />
+          </SelectTrigger>
+          <SelectContent>
             {data?.documents.map((workspace) => (
-              <DropdownMenuItem
-                key={workspace.$id}
-                onSelect={() => setSelectedValue(workspace)}
-              >
-                <div className="flex aspect-square size-10 items-center justify-center rounded-lg">
-                  <Avatar className="w-full h-full rounded-lg">
+              <SelectItem key={workspace.$id} value={workspace.$id}>
+                <div className="flex items-center gap-x-2">
+                  <Avatar className="size-8 rounded-lg">
                     <AvatarImage
                       src={workspace?.imageUrl}
                       alt="Workspace logo"
@@ -76,17 +42,12 @@ export function WorkspaceSwitcher() {
                       {workspace?.name.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
+                  <span>{workspace?.name}</span>
                 </div>
-                <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">{workspace?.name}</span>
-                </div>
-                {workspace.$id === selectedValue?.$id && (
-                  <Check className="ml-auto" />
-                )}
-              </DropdownMenuItem>
+              </SelectItem>
             ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </SelectContent>
+        </Select>
       </SidebarMenuItem>
     </SidebarMenu>
   );
