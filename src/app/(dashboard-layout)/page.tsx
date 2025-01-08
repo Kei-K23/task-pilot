@@ -10,7 +10,7 @@ export default async function Home() {
     return redirect("/sign-in");
   }
 
-  if (workspaces?.total === 0) {
+  if (!workspaces || workspaces?.total === 0) {
     redirect("/workspaces/create");
   } else {
     redirect(`/workspaces/${workspaces?.documents[0].$id}`);

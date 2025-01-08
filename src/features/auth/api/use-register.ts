@@ -19,7 +19,7 @@ export const useRegister = () => {
     },
     onSuccess: () => {
       router.refresh();
-      queryClient.invalidateQueries({ queryKey: ["current"] });
+      queryClient.invalidateQueries();
     },
   });
 

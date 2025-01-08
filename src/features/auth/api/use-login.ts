@@ -17,7 +17,7 @@ export const useLogin = () => {
     },
     onSuccess: () => {
       router.refresh();
-      queryClient.invalidateQueries({ queryKey: ["current"] });
+      queryClient.invalidateQueries();
     },
   });
 

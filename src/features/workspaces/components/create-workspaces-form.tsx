@@ -145,15 +145,17 @@ export default function CreateWorkspacesForm({
               )}
             />
             <div className="flex items-center gap-3">
-              <Button
-                variant={"secondary-white"}
-                disabled={isPending}
-                type="button"
-                className="font-bold"
-                onClick={onCancel}
-              >
-                Cancel
-              </Button>
+              {onCancel && (
+                <Button
+                  variant={"secondary-white"}
+                  disabled={isPending}
+                  type="button"
+                  className="font-bold"
+                  onClick={onCancel}
+                >
+                  Cancel
+                </Button>
+              )}
               <Button disabled={isPending} type="submit" className="font-bold">
                 Create Workspace
               </Button>
