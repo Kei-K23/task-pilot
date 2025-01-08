@@ -12,6 +12,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { NAV_ITEMS } from "@/constants";
+import CreateWorkspacesModal from "@/features/workspaces/components/create-workspaces-modal";
 import { WorkspaceSwitcher } from "@/features/workspaces/components/workspace-switcher";
 import { RefreshCcw } from "lucide-react";
 import Link from "next/link";
@@ -23,6 +24,7 @@ export function DashboardSidebar({
   const pathname = usePathname();
   return (
     <Sidebar {...props}>
+      <CreateWorkspacesModal />
       <SidebarHeader className="pt-4 px-4">
         <SidebarMenu>
           <SidebarMenuItem>

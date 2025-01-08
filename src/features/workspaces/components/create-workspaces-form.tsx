@@ -66,7 +66,7 @@ export default function CreateWorkspacesForm({
     }
   };
   return (
-    <Card className="mt-4">
+    <Card className="mt-4 border-none">
       <CardHeader>
         <CardTitle className="text-center">Create a new Workspace</CardTitle>
       </CardHeader>
