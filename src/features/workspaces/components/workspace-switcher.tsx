@@ -13,8 +13,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useCreateWorkspace } from "../hooks/use-create-workspace";
+import { useRouter } from "next/navigation";
 
 export function WorkspaceSwitcher() {
+  const router = useRouter();
+  const { open: openCreateWorkspace } = useCreateWorkspace();
   const workspaceId = useGetWorkspaceParam();
   const { data, isPending } = useGetWorkspaces();
 
@@ -23,9 +27,17 @@ export function WorkspaceSwitcher() {
       <SidebarMenuItem>
         <div className="flex items-center justify-between mb-1">
           <span className="text-[11px] text-muted-foreground">WORKSPACE</span>
-          <Plus className="size-4 p-0.5 bg-neutral-500 hover:bg-neutral-500/80 cursor-pointer transition-all text-white rounded-full" />
+          <Plus
+            onClick={openCreateWorkspace}
+            className="size-4 p-0.5 bg-neutral-500 hover:bg-neutral-500/80 cursor-pointer transition-all text-white rounded-full"
+          />
         </div>
-        <Select value={workspaceId}>
+        <Select
+          value={workspaceId}
+          onValueChange={(e) => {
+            router.push(`/workspaces/${e}`);
+          }}
+        >
           <SelectTrigger className="focus-visible:right-0 focus-visible:ring-neutral-200">
             {isPending ? (
               <div className="animate-pulse text-muted-foreground flex items-center gap-x-1">

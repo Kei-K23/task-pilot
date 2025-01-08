@@ -21,6 +21,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ImageIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface CreateWorkspacesFormProps {
   onCancel?: () => void;
@@ -29,6 +30,7 @@ interface CreateWorkspacesFormProps {
 export default function CreateWorkspacesForm({
   onCancel,
 }: CreateWorkspacesFormProps) {
+  const router = useRouter();
   const { mutate, isPending } = useCreateWorkspaces();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -48,9 +50,10 @@ export default function CreateWorkspacesForm({
     mutate(
       { form: finalValue },
       {
-        onSuccess: () => {
+        onSuccess: ({ data }) => {
           toast.success("Successfully created workspace");
           form.reset();
+          router.push(`/workspaces/${data.$id}`);
         },
         onError: () => {
           toast.error("Failed to create workspace");
