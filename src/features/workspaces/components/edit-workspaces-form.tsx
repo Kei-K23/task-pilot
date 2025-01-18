@@ -50,7 +50,6 @@ export default function EditWorkspacesForm({
       ...values,
       imageUrl: values.imageUrl instanceof File ? values.imageUrl : "",
     };
-    console.log(finalValue);
 
     mutate(
       {
@@ -158,6 +157,7 @@ export default function EditWorkspacesForm({
                             type="button"
                             size={"sm"}
                             className="mt-2"
+                            disabled={isPending}
                             onClick={() => {
                               field.onChange("");
                               if (fileInputRef.current) {
@@ -173,6 +173,7 @@ export default function EditWorkspacesForm({
                             type="button"
                             size={"sm"}
                             className="mt-2"
+                            disabled={isPending}
                             onClick={() => {
                               fileInputRef?.current?.click();
                             }}

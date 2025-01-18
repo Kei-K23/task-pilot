@@ -1,4 +1,4 @@
-import { getCurrent } from "@/features/auth/actions";
+import { getCurrent } from "@/features/auth/queries";
 import EditWorkspacesForm from "@/features/workspaces/components/edit-workspaces-form";
 import { getWorkspaceById } from "@/features/workspaces/queries";
 import { redirect } from "next/navigation";

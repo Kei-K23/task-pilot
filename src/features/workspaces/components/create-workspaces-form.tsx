@@ -20,7 +20,7 @@ import { toast } from "sonner";
 import { useRef } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { ImageIcon } from "lucide-react";
+import { ImageIcon, Trash2, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface CreateWorkspacesFormProps {
@@ -131,17 +131,36 @@ export default function CreateWorkspacesForm({
                       className="hidden"
                       onChange={handleImageChange}
                     />
-                    <Button
-                      variant={"secondary"}
-                      type="button"
-                      size={"sm"}
-                      className="mt-2"
-                      onClick={() => {
-                        fileInputRef?.current?.click();
-                      }}
-                    >
-                      Upload Image
-                    </Button>
+                    {field.value ? (
+                      <Button
+                        variant={"destructive"}
+                        type="button"
+                        size={"sm"}
+                        disabled={isPending}
+                        className="mt-2"
+                        onClick={() => {
+                          field.onChange("");
+                          if (fileInputRef.current) {
+                            fileInputRef.current.value = "";
+                          }
+                        }}
+                      >
+                        <Trash2 />
+                      </Button>
+                    ) : (
+                      <Button
+                        variant={"secondary"}
+                        type="button"
+                        disabled={isPending}
+                        size={"sm"}
+                        className="mt-2"
+                        onClick={() => {
+                          fileInputRef?.current?.click();
+                        }}
+                      >
+                        <Upload />
+                      </Button>
+                    )}
                   </div>
                 </div>
               )}

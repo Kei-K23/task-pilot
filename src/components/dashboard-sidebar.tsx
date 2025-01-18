@@ -48,7 +48,6 @@ export function DashboardSidebar({
               {NAV_ITEMS.map(({ name, link, icon: Icon }) => {
                 const fullHrefPath = `/workspaces/${workspaceId}${link}`;
                 const isActive = pathname === fullHrefPath;
-                console.log(fullHrefPath);
 
                 return (
                   <SidebarMenuItem key={name}>
