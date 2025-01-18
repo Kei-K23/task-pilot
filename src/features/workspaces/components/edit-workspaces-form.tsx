@@ -14,12 +14,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { workspacesCreateSchema } from "../schemas";
+import { workspacesUpdateSchema } from "../schemas";
 import { toast } from "sonner";
 import { useRef } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { ChevronLeft, ImageIcon } from "lucide-react";
+import { ChevronLeft, ImageIcon, Trash2, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useUpdateWorkspace } from "../api/use-update-workspaces";
 import { Workspace } from "../type";
@@ -37,19 +37,21 @@ export default function EditWorkspacesForm({
   const { mutate, isPending } = useUpdateWorkspace();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const form = useForm<z.infer<typeof workspacesCreateSchema>>({
-    resolver: zodResolver(workspacesCreateSchema),
+  const form = useForm<z.infer<typeof workspacesUpdateSchema>>({
+    resolver: zodResolver(workspacesUpdateSchema),
     defaultValues: {
       name: initialValue.name,
       imageUrl: initialValue.imageUrl || "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof workspacesCreateSchema>) {
+  async function onSubmit(values: z.infer<typeof workspacesUpdateSchema>) {
     const finalValue = {
       ...values,
       imageUrl: values.imageUrl instanceof File ? values.imageUrl : "",
     };
+    console.log(finalValue);
+
     mutate(
       {
         param: {
@@ -114,53 +116,75 @@ export default function EditWorkspacesForm({
               control={form.control}
               name="imageUrl"
               render={({ field }) => (
-                <div className="flex items-center gap-4">
-                  {field.value ? (
-                    <div className="relative size-20 rounded-full">
-                      <Image
-                        alt="Logo"
-                        src={
-                          field.value instanceof File
-                            ? URL.createObjectURL(field.value)
-                            : field.value
-                        }
-                        fill
-                        className="object-cover rounded-full"
-                      />
+                <FormItem>
+                  <FormControl>
+                    <div className="flex items-center gap-4">
+                      {field.value ? (
+                        <div className="relative size-20 rounded-full">
+                          <Image
+                            alt="Logo"
+                            src={
+                              field.value instanceof File
+                                ? URL.createObjectURL(field.value)
+                                : field.value
+                            }
+                            fill
+                            className="object-cover rounded-full"
+                          />
+                        </div>
+                      ) : (
+                        <div>
+                          <Avatar className="size-20">
+                            <AvatarFallback>
+                              <ImageIcon className="size-10 text-neutral-500" />
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
+                      )}
+                      <div>
+                        <p className="font-semibold">Workspace Icon</p>
+                        <p className="text-sm text-muted-foreground">
+                          JPG, PNG, SVG or JPEG, max 1MB
+                        </p>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          className="hidden"
+                          onChange={handleImageChange}
+                        />
+                        {field.value ? (
+                          <Button
+                            variant={"destructive"}
+                            type="button"
+                            size={"sm"}
+                            className="mt-2"
+                            onClick={() => {
+                              field.onChange("");
+                              if (fileInputRef.current) {
+                                fileInputRef.current.value = "";
+                              }
+                            }}
+                          >
+                            <Trash2 />
+                          </Button>
+                        ) : (
+                          <Button
+                            variant={"secondary"}
+                            type="button"
+                            size={"sm"}
+                            className="mt-2"
+                            onClick={() => {
+                              fileInputRef?.current?.click();
+                            }}
+                          >
+                            <Upload />
+                          </Button>
+                        )}
+                      </div>
                     </div>
-                  ) : (
-                    <div>
-                      <Avatar className="size-20">
-                        <AvatarFallback>
-                          <ImageIcon className="size-10 text-neutral-500" />
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
-                  )}
-                  <div>
-                    <p className="font-semibold">Workspace Icon</p>
-                    <p className="text-sm text-muted-foreground">
-                      JPG, PNG, SVG or JPEG, max 1MB
-                    </p>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      className="hidden"
-                      onChange={handleImageChange}
-                    />
-                    <Button
-                      variant={"secondary"}
-                      type="button"
-                      size={"sm"}
-                      className="mt-2"
-                      onClick={() => {
-                        fileInputRef?.current?.click();
-                      }}
-                    >
-                      Upload Image
-                    </Button>
-                  </div>
-                </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
             />
             <div className="flex items-center gap-3">

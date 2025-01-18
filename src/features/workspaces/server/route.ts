@@ -147,13 +147,11 @@ const app = new Hono()
         imageUploadUrl = `data:image/png;base64,${Buffer.from(
           arrayBuffer
         ).toString("base64")}`;
-      } else {
-        imageUploadUrl = imageUrl;
       }
-
+      // TODO: Delete the previous old uploaded image
       await databases.updateDocument(DATABASE_ID, WORKSPACES_ID, workspaceId, {
         name,
-        imageUrl: imageUploadUrl,
+        imageUrl: imageUploadUrl || null,
       });
 
       return c.json({

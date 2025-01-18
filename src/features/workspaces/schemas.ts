@@ -11,7 +11,7 @@ export const workspacesCreateSchema = z.object({
 });
 
 export const workspacesUpdateSchema = z.object({
-  name: z.string().trim().min(1, "Required"),
+  name: z.string().trim().min(1, "Must be 1 or more characters").optional(),
   imageUrl: z
     .union([
       z.instanceof(File),
