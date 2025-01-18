@@ -14,31 +14,34 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { useCreateWorkspaces } from "../api/use-create-workspaces";
 import { workspacesCreateSchema } from "../schemas";
 import { toast } from "sonner";
 import { useRef } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { ImageIcon } from "lucide-react";
+import { ChevronLeft, ImageIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useUpdateWorkspace } from "../api/use-update-workspaces";
+import { Workspace } from "../type";
 
-interface CreateWorkspacesFormProps {
+interface EditWorkspacesFormProps {
   onCancel?: () => void;
+  initialValue: Workspace;
 }
 
-export default function CreateWorkspacesForm({
+export default function EditWorkspacesForm({
   onCancel,
-}: CreateWorkspacesFormProps) {
+  initialValue,
+}: EditWorkspacesFormProps) {
   const router = useRouter();
-  const { mutate, isPending } = useCreateWorkspaces();
+  const { mutate, isPending } = useUpdateWorkspace();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof workspacesCreateSchema>>({
     resolver: zodResolver(workspacesCreateSchema),
     defaultValues: {
-      name: "",
-      imageUrl: "",
+      name: initialValue.name,
+      imageUrl: initialValue.imageUrl || "",
     },
   });
 
@@ -48,15 +51,20 @@ export default function CreateWorkspacesForm({
       imageUrl: values.imageUrl instanceof File ? values.imageUrl : "",
     };
     mutate(
-      { form: finalValue },
       {
-        onSuccess: ({ data }) => {
-          toast.success("Successfully created workspace");
+        param: {
+          workspaceId: initialValue.$id,
+        },
+        form: finalValue,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Successfully updated workspace");
           form.reset();
-          router.push(`/workspaces/${data.$id}`);
+          router.push(`/workspaces/${initialValue.$id}`);
         },
         onError: () => {
-          toast.error("Failed to create workspace");
+          toast.error("Failed to update workspace");
         },
       }
     );
@@ -69,10 +77,19 @@ export default function CreateWorkspacesForm({
     }
   };
   return (
-    <Card className="mt-4 border-none">
-      <CardHeader>
+    <Card className="mt-4">
+      <CardHeader className="flex items-center flex-row gap-x-4">
+        <Button
+          variant={"ghost"}
+          onClick={() => {
+            router.push(`/workspaces/${initialValue.$id}`);
+          }}
+        >
+          <ChevronLeft />
+          Back
+        </Button>
         <CardTitle className="text-lg text-center">
-          Create a new Workspace
+          Edit &quot;{initialValue.name}&quot; workspace
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -159,7 +176,7 @@ export default function CreateWorkspacesForm({
                 </Button>
               )}
               <Button disabled={isPending} type="submit" className="font-bold">
-                Create Workspace
+                Save Workspace
               </Button>
             </div>
           </form>

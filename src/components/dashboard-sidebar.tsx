@@ -42,7 +42,6 @@ export function DashboardSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        {/* We create a SidebarGroup for each parent. */}
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
