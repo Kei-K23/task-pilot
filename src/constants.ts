@@ -3,7 +3,7 @@ import { CheckCircle2, Home, Settings, Users } from "lucide-react";
 export const NAV_ITEMS = [
   {
     name: "Home",
-    link: "/",
+    link: "",
     icon: Home,
   },
   {
