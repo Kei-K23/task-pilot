@@ -12,6 +12,7 @@ import { ID, Query } from "node-appwrite";
 import { MEMBER_ROLE } from "../type";
 import { generateRandomCharacters } from "@/lib/utils";
 import { z } from "zod";
+import { getMember } from "@/features/members/queries";
 
 const app = new Hono()
   .get("/", sessionMiddleware, async (c) => {
@@ -112,20 +113,9 @@ const app = new Hono()
       const { name, imageUrl } = c.req.valid("form");
 
       let imageUploadUrl: string | undefined;
+      const member = await getMember(databases, workspaceId, user.$id);
 
-      const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
-        Query.equal("memberId", user.$id),
-        Query.equal("workspaceId", workspaceId),
-      ]);
-
-      if (members.total === 0) {
-        return c.json({
-          success: false,
-          message: "No member found",
-        });
-      }
-
-      if (members.documents[0].role !== "ADMIN") {
+      if (!member || member?.role !== "ADMIN") {
         return c.json({
           success: false,
           message: "Unauthorized",

@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import { useRef } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { ChevronLeft, ImageIcon, Trash2, Upload } from "lucide-react";
+import { ImageIcon, Trash2, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useUpdateWorkspace } from "../api/use-update-workspaces";
 import { Workspace } from "../type";
@@ -80,15 +80,6 @@ export default function EditWorkspacesForm({
   return (
     <Card className="mt-4">
       <CardHeader className="flex items-center flex-row gap-x-4">
-        <Button
-          variant={"ghost"}
-          onClick={() => {
-            router.push(`/workspaces/${initialValue.$id}`);
-          }}
-        >
-          <ChevronLeft />
-          Back
-        </Button>
         <CardTitle className="text-lg text-center">
           Edit &quot;{initialValue.name}&quot; workspace
         </CardTitle>
