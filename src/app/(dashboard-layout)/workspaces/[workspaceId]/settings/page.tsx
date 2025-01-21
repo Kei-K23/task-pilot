@@ -28,7 +28,7 @@ export default async function WorkspaceIdSettingPage({
   return (
     <div className="w-full mx-auto">
       <EditWorkspacesForm initialValue={workspace} />
-      <DeleteWorkspaceSection />
+      <DeleteWorkspaceSection workspaceId={workspace.$id} />
     </div>
   );
 }

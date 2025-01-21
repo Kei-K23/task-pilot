@@ -149,6 +149,50 @@ const app = new Hono()
         message: "Successfully update the workspace",
       });
     }
+  )
+  .delete(
+    "/:workspaceId",
+    zValidator(
+      "param",
+      z.object({
+        workspaceId: z.string(),
+      })
+    ),
+    sessionMiddleware,
+    async (c) => {
+      const databases = c.get("databases");
+      const user = c.get("user");
+
+      const { workspaceId } = c.req.valid("param");
+
+      const member = await getMember(databases, workspaceId, user.$id);
+
+      if (!member || member?.role !== "ADMIN") {
+        return c.json({
+          success: false,
+          message: "Unauthorized",
+        });
+      }
+      // Delete the workspace
+      await databases.deleteDocument(DATABASE_ID, WORKSPACES_ID, workspaceId);
+
+      // Delete the members that related to workspace
+
+      const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
+        Query.equal("workspaceId", workspaceId),
+      ]);
+
+      if (members.total !== 0) {
+        members.documents.forEach(async (member) => {
+          await databases.deleteDocument(DATABASE_ID, MEMBERS_ID, member.$id);
+        });
+      }
+      // TODO delete also other related data with workspace
+      return c.json({
+        success: true,
+        message: "Successfully deleted the workspace",
+      });
+    }
   );
 
 export default app;
