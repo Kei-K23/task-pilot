@@ -1,6 +1,7 @@
 import { getCurrent } from "@/features/auth/queries";
 import DeleteWorkspaceSection from "@/features/workspaces/components/delete-workspace-section";
 import EditWorkspacesForm from "@/features/workspaces/components/edit-workspaces-form";
+import WorkspaceInvitationSection from "@/features/workspaces/components/workspace-invitation-section";
 import { getWorkspaceById } from "@/features/workspaces/queries";
 import { redirect } from "next/navigation";
 
@@ -28,6 +29,10 @@ export default async function WorkspaceIdSettingPage({
   return (
     <div className="w-full mx-auto">
       <EditWorkspacesForm initialValue={workspace} />
+      <WorkspaceInvitationSection
+        workspaceId={workspace.$id}
+        inviteCode={workspace.inviteCode}
+      />
       <DeleteWorkspaceSection workspaceId={workspace.$id} />
     </div>
   );
