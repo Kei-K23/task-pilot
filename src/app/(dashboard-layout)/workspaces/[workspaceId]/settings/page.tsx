@@ -27,7 +27,7 @@ export default async function WorkspaceIdSettingPage({
   }
 
   return (
-    <div className="w-full mx-auto">
+    <div className="w-full mx-auto space-y-6">
       <EditWorkspacesForm initialValue={workspace} />
       <WorkspaceInvitationSection
         workspaceId={workspace.$id}

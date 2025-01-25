@@ -193,6 +193,47 @@ const app = new Hono()
         message: "Successfully deleted the workspace",
       });
     }
+  )
+  .post(
+    "/:workspaceId/reset-invite-code",
+    zValidator(
+      "param",
+      z.object({
+        workspaceId: z.string(),
+      })
+    ),
+    sessionMiddleware,
+    async (c) => {
+      const databases = c.get("databases");
+      const user = c.get("user");
+
+      const { workspaceId } = c.req.valid("param");
+
+      const member = await getMember(databases, workspaceId, user.$id);
+
+      if (!member || member?.role !== "ADMIN") {
+        return c.json({
+          success: false,
+          message: "Unauthorized",
+          data: null,
+        });
+      }
+
+      const workspace = await databases.updateDocument(
+        DATABASE_ID,
+        WORKSPACES_ID,
+        workspaceId,
+        {
+          inviteCode: generateRandomCharacters(6),
+        }
+      );
+
+      return c.json({
+        success: true,
+        message: "Success",
+        data: workspace,
+      });
+    }
   );
 
 export default app;
