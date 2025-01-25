@@ -20,7 +20,10 @@ export default async function WorkspaceJoinPage({
 
   return (
     <div className="max-w-2xl mx-auto">
-      <WorkspaceJoinScreen workspaceName={workspace?.name} />
+      <WorkspaceJoinScreen
+        workspaceName={workspace?.name}
+        workspaceId={workspace.$id}
+      />
     </div>
   );
 }

@@ -15,15 +15,42 @@ import {
   InputOTP,
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
+import { useJoinWorkspace } from "../api/use-join-workspace";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface WorkspaceJoinScreenProps {
+  workspaceId: string;
   workspaceName: string;
 }
 
 export default function WorkspaceJoinScreen({
+  workspaceId,
   workspaceName,
 }: WorkspaceJoinScreenProps) {
+  const router = useRouter();
   const inviteCode = useGetInviteCodeParam();
+  const { mutate, isPending } = useJoinWorkspace();
+
+  const handleJoinWorkspace = async () => {
+    mutate(
+      {
+        param: {
+          workspaceId,
+          inviteCode: inviteCode,
+        },
+      },
+      {
+        onSuccess: ({ data, message }) => {
+          toast.success(message);
+          router.push(`/workspaces/${data?.$id}`);
+        },
+        onError: ({ message }) => {
+          toast.error(message);
+        },
+      }
+    );
+  };
 
   return (
     <Card>
@@ -55,8 +82,18 @@ export default function WorkspaceJoinScreen({
           </InputOTP>
         </div>
         <div className="mt-4 flex items-center justify-between">
-          <Button variant={"outline"}>Cancel</Button>
-          <Button>Join</Button>
+          <Button
+            disabled={isPending}
+            variant={"outline"}
+            onClick={() => {
+              router.push("/");
+            }}
+          >
+            Cancel
+          </Button>
+          <Button disabled={isPending} onClick={handleJoinWorkspace}>
+            Join
+          </Button>
         </div>
       </CardContent>
     </Card>

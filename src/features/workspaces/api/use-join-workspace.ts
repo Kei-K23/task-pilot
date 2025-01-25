@@ -3,37 +3,32 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { InferRequestType, InferResponseType } from "hono";
 
 type ResponseType = InferResponseType<
-  (typeof client.api.workspaces)[":workspaceId"]["reset-invite-code"]["$post"]
+  (typeof client.api.workspaces)[":workspaceId"]["join"][":inviteCode"]["$post"]
 >;
 type RequestType = InferRequestType<
-  (typeof client.api.workspaces)[":workspaceId"]["reset-invite-code"]["$post"]
+  (typeof client.api.workspaces)[":workspaceId"]["join"][":inviteCode"]["$post"]
 >;
 
-export const useWorkspaceRestInviteCode = () => {
+export const useJoinWorkspace = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async ({ param }) => {
-      const res = await client.api.workspaces[":workspaceId"][
-        "reset-invite-code"
+      const res = await client.api.workspaces[":workspaceId"]["join"][
+        ":inviteCode"
       ]["$post"]({
         param,
       });
 
       if (!res.ok) {
         const errorBody = await res.json();
-        throw new Error(
-          errorBody.message || "Failed to reset workspace invitation code"
-        );
+        throw new Error(errorBody.message || "Failed to join workspace");
       }
 
       return await res.json();
     },
-    onSuccess: ({ data }) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["workspaces"] });
-      queryClient.invalidateQueries({
-        queryKey: ["workspaces", data?.$id],
-      });
     },
   });
 

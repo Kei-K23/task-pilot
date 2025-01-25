@@ -116,10 +116,13 @@ const app = new Hono()
       const member = await getMember(databases, workspaceId, user.$id);
 
       if (!member || member?.role !== "ADMIN") {
-        return c.json({
-          success: false,
-          message: "Unauthorized",
-        });
+        return c.json(
+          {
+            success: false,
+            message: "Unauthorized",
+          },
+          401
+        );
       }
 
       if (imageUrl instanceof File) {
@@ -168,10 +171,13 @@ const app = new Hono()
       const member = await getMember(databases, workspaceId, user.$id);
 
       if (!member || member?.role !== "ADMIN") {
-        return c.json({
-          success: false,
-          message: "Unauthorized",
-        });
+        return c.json(
+          {
+            success: false,
+            message: "Unauthorized",
+          },
+          401
+        );
       }
       // Delete the workspace
       await databases.deleteDocument(DATABASE_ID, WORKSPACES_ID, workspaceId);
@@ -212,11 +218,14 @@ const app = new Hono()
       const member = await getMember(databases, workspaceId, user.$id);
 
       if (!member || member?.role !== "ADMIN") {
-        return c.json({
-          success: false,
-          message: "Unauthorized",
-          data: null,
-        });
+        return c.json(
+          {
+            success: false,
+            message: "Unauthorized",
+            data: null,
+          },
+          401
+        );
       }
 
       const workspace = await databases.updateDocument(
@@ -231,6 +240,76 @@ const app = new Hono()
       return c.json({
         success: true,
         message: "Successfully reset invitation code",
+        data: workspace,
+      });
+    }
+  )
+  .post(
+    "/:workspaceId/join/:inviteCode",
+    zValidator(
+      "param",
+      z.object({
+        workspaceId: z.string(),
+        inviteCode: z.string(),
+      })
+    ),
+    sessionMiddleware,
+    async (c) => {
+      const databases = c.get("databases");
+      const user = c.get("user");
+
+      const { workspaceId, inviteCode } = c.req.valid("param");
+
+      const workspace = await databases.getDocument(
+        DATABASE_ID,
+        WORKSPACES_ID,
+        workspaceId
+      );
+
+      if (!workspace) {
+        return c.json(
+          {
+            success: false,
+            message: "No workspace found",
+            data: null,
+          },
+          404
+        );
+      }
+
+      if (workspace.inviteCode !== inviteCode) {
+        return c.json(
+          {
+            success: false,
+            message: "Incorrect invitation code to join the workspace",
+            data: null,
+          },
+          400
+        );
+      }
+
+      const member = await getMember(databases, workspaceId, user.$id);
+
+      if (member) {
+        return c.json(
+          {
+            success: false,
+            message: "You already the member of this workspace",
+            data: null,
+          },
+          400
+        );
+      }
+
+      await databases.createDocument(DATABASE_ID, MEMBERS_ID, ID.unique(), {
+        memberId: user.$id,
+        workspaceId: workspaceId,
+        role: MEMBER_ROLE.MEMBER,
+      });
+
+      return c.json({
+        success: true,
+        message: "Successfully joined the workspace",
         data: workspace,
       });
     }
