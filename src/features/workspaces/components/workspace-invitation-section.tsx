@@ -9,12 +9,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Clipboard, ClipboardCheck, Recycle } from "lucide-react";
-import { useDeleteWorkspace } from "../api/use-delete-workspaces";
 import useConfirmDialog from "@/hooks/use-confirm-dialog";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { useWorkspaceRestInviteCode } from "../api/use-workspace-reset-invite-code";
 
 interface WorkspaceInvitationSectionProps {
   workspaceId: string;
@@ -27,13 +27,13 @@ export default function WorkspaceInvitationSection({
 }: WorkspaceInvitationSectionProps) {
   const [isCopied, setIsCopied] = useState(false);
   const router = useRouter();
-  const { mutate } = useDeleteWorkspace();
+  const { mutate, isPending } = useWorkspaceRestInviteCode();
   const [ResetInvitationConfirmDialog, confirm] = useConfirmDialog(
     "Are you sure?",
     "This process cannot be undo and you cannot invite anyone again with previous invitation code."
   );
 
-  const handleDelete = async () => {
+  const handleResetCode = async () => {
     const ok = await confirm();
     if (!ok) {
       return;
@@ -48,7 +48,7 @@ export default function WorkspaceInvitationSection({
       {
         onSuccess: (data) => {
           toast.success(data.message);
-          router.push("/");
+          router.refresh();
         },
         onError: (data) => {
           toast.success(data.message);
@@ -81,13 +81,23 @@ export default function WorkspaceInvitationSection({
         </CardHeader>
         <CardContent>
           <div className="flex items-center gap-x-3">
-            <Input value={fullInvitationUrl} readOnly disabled />
-            <Button onClick={handleCopy} size={"sm"} variant={"outline"}>
+            <Input
+              value={fullInvitationUrl}
+              readOnly
+              disabled
+              className="pointer-events-none"
+            />
+            <Button
+              disabled={isPending}
+              onClick={handleCopy}
+              size={"sm"}
+              variant={"outline"}
+            >
               {isCopied ? <ClipboardCheck /> : <Clipboard />}
             </Button>
           </div>
           <div className="flex justify-end mt-8">
-            <Button onClick={handleDelete}>
+            <Button disabled={isPending} onClick={handleResetCode}>
               <Recycle /> Reset invite link
             </Button>
           </div>

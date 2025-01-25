@@ -32,7 +32,7 @@ export const getWorkspaces = async () => {
   }
 };
 
-export const getWorkspaceById = async (workspaceId: string) => {
+export const getWorkspaceForMemberById = async (workspaceId: string) => {
   try {
     const { account, databases } = await createSessionClient();
     const user = await account.get();
@@ -50,6 +50,22 @@ export const getWorkspaceById = async (workspaceId: string) => {
     // if (members.documents[0].role !== "ADMIN") {
     //   return null;
     // }
+
+    const workspace = await databases.getDocument<Workspace>(
+      DATABASE_ID,
+      WORKSPACES_ID,
+      workspaceId
+    );
+
+    return workspace;
+  } catch {
+    return null;
+  }
+};
+
+export const getWorkspaceById = async (workspaceId: string) => {
+  try {
+    const { databases } = await createSessionClient();
 
     const workspace = await databases.getDocument<Workspace>(
       DATABASE_ID,

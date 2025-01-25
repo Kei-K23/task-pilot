@@ -2,7 +2,7 @@ import { getCurrent } from "@/features/auth/queries";
 import DeleteWorkspaceSection from "@/features/workspaces/components/delete-workspace-section";
 import EditWorkspacesForm from "@/features/workspaces/components/edit-workspaces-form";
 import WorkspaceInvitationSection from "@/features/workspaces/components/workspace-invitation-section";
-import { getWorkspaceById } from "@/features/workspaces/queries";
+import { getWorkspaceForMemberById } from "@/features/workspaces/queries";
 import { redirect } from "next/navigation";
 
 interface WorkspaceIdSettingPageProps {
@@ -21,7 +21,7 @@ export default async function WorkspaceIdSettingPage({
     return redirect("/sign-in");
   }
 
-  const workspace = await getWorkspaceById(workspaceId);
+  const workspace = await getWorkspaceForMemberById(workspaceId);
   if (!workspace) {
     return redirect(`/workspaces/${workspaceId}`);
   }
