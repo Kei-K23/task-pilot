@@ -11,7 +11,7 @@ export const getMember = async (
 ) => {
   try {
     const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
-      Query.equal("memberId", userId),
+      Query.equal("userId", userId),
       Query.equal("workspaceId", workspaceId),
     ]);
 

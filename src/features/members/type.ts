@@ -5,3 +5,8 @@ export type Member = Models.Document & {
   workspaceId: string;
   role: "ADMIN" | "MEMBER";
 };
+
+export type MemberWithUserData = Member & {
+  name: string;
+  email: string;
+};

@@ -11,7 +11,7 @@ export const getWorkspaces = async () => {
     const user = await account.get();
 
     const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
-      Query.equal("memberId", user.$id),
+      Query.equal("userId", user.$id),
     ]);
 
     if (members.total === 0) {
@@ -38,7 +38,7 @@ export const getWorkspaceForMemberById = async (workspaceId: string) => {
     const user = await account.get();
 
     const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
-      Query.equal("memberId", user.$id),
+      Query.equal("userId", user.$id),
       Query.equal("workspaceId", workspaceId),
     ]);
 
