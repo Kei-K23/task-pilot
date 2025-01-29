@@ -10,7 +10,7 @@ import {
 } from "@/config";
 import { ID, Query } from "node-appwrite";
 import { MEMBER_ROLE } from "../type";
-import { generateRandomCharacters } from "@/lib/utils";
+import { generateRandomCharacters, generateRandomColor } from "@/lib/utils";
 import { z } from "zod";
 import { getMember } from "@/features/members/queries";
 
@@ -87,6 +87,7 @@ const app = new Hono()
         memberId: user.$id,
         workspaceId: workspace.$id,
         role: MEMBER_ROLE.ADMIN,
+        color: generateRandomColor(),
       });
 
       return c.json({
@@ -305,6 +306,7 @@ const app = new Hono()
         memberId: user.$id,
         workspaceId: workspaceId,
         role: MEMBER_ROLE.MEMBER,
+        color: generateRandomColor(),
       });
 
       return c.json({

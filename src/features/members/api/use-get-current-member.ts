@@ -1,11 +1,13 @@
 import { client } from "@/lib/rpc";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetMembers = (workspaceId: string) => {
+export const useGetCurrentMember = (workspaceId: string) => {
   const query = useQuery({
-    queryKey: ["members"],
+    queryKey: ["members", "current-member"],
     queryFn: async () => {
-      const res = await client.api.members.$get({ query: { workspaceId } });
+      const res = await client.api.members["current-member"]["$get"]({
+        query: { workspaceId },
+      });
 
       if (!res.ok) {
         const resData = await res.json();

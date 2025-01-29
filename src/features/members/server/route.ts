@@ -7,6 +7,7 @@ import { getMember } from "../queries";
 import { DATABASE_ID, MEMBERS_ID } from "@/config";
 import { Query } from "node-appwrite";
 import { MEMBER_ROLE } from "@/features/workspaces/type";
+import { MemberWithUserData } from "../type";
 
 const app = new Hono()
   .get(
@@ -38,6 +39,7 @@ const app = new Hono()
 
       const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
         Query.equal("workspaceId", workspaceId),
+        Query.orderDesc("role"),
       ]);
 
       const populateMemberWithUserData = await Promise.all(
@@ -48,7 +50,11 @@ const app = new Hono()
             ...member,
             name: user.name,
             email: user.email,
-          };
+            userId: member.userId,
+            workspaceId: member.workspaceId,
+            role: member.role,
+            color: member.color,
+          } satisfies MemberWithUserData;
         })
       );
 
@@ -56,6 +62,49 @@ const app = new Hono()
         success: true,
         message: "Success",
         data: populateMemberWithUserData,
+      });
+    }
+  )
+  .get(
+    "/current-member",
+    zValidator(
+      "query",
+      z.object({
+        workspaceId: z.string(),
+      })
+    ),
+    sessionMiddleware,
+    async (c) => {
+      const databases = c.get("databases");
+      const user = c.get("user");
+      const { workspaceId } = c.req.valid("query");
+
+      const member = await getMember(databases, workspaceId, user.$id);
+      if (!member) {
+        return c.json(
+          {
+            success: false,
+            message: "Unauthorized",
+            data: null,
+          },
+          401
+        );
+      }
+
+      const populatedMember = {
+        ...member,
+        name: user.name,
+        email: user.email,
+        userId: member.userId,
+        workspaceId: member.workspaceId,
+        role: member.role,
+        color: member.color,
+      } satisfies MemberWithUserData;
+
+      return c.json({
+        success: true,
+        message: "Success",
+        data: populatedMember,
       });
     }
   )
@@ -83,11 +132,19 @@ const app = new Hono()
       const member = await databases.getDocument(
         DATABASE_ID,
         MEMBERS_ID,
-        memberId,
-        [Query.equal("workspaceId", workspaceId)]
+        memberId
       );
 
-      if (!member) {
+      const currentMember = await databases.listDocuments(
+        DATABASE_ID,
+        MEMBERS_ID,
+        [
+          Query.equal("userId", user.$id),
+          Query.equal("workspaceId", workspaceId),
+        ]
+      );
+
+      if (!member || currentMember.total === 0) {
         return c.json(
           {
             success: false,
@@ -98,27 +155,30 @@ const app = new Hono()
         );
       }
 
-      // Protecting from admin member delete their own account for admin
-      if (user.$id === member.userId && member.role === MEMBER_ROLE.ADMIN) {
+      const isAdmin = currentMember.documents[0].role === MEMBER_ROLE.ADMIN;
+      const isCurrentUser = user.$id === member.userId;
+
+      // Non-admin members can only leave, not kick others
+      if (!isAdmin && !isCurrentUser) {
         return c.json(
           {
             success: false,
-            message: "Admin member cannot delete",
+            message: "Only admins can remove other members",
+            data: null,
+          },
+          403
+        );
+      }
+
+      // Admins cannot delete themselves
+      if (isAdmin && isCurrentUser) {
+        return c.json(
+          {
+            success: false,
+            message: "Admins cannot delete themselves",
             data: null,
           },
           400
-        );
-      }
-
-      // Protecting from normal member delete other member
-      if (user.$id !== member.userId && member.role !== MEMBER_ROLE.ADMIN) {
-        return c.json(
-          {
-            success: false,
-            message: "Unauthorized",
-            data: null,
-          },
-          401
         );
       }
 
@@ -126,7 +186,9 @@ const app = new Hono()
 
       return c.json({
         success: true,
-        message: "Successfully delete the member account",
+        message: isCurrentUser
+          ? "Successfully left the workspace"
+          : "Successfully removed the member",
         data: null,
       });
     }

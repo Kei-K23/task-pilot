@@ -14,3 +14,15 @@ export function generateRandomCharacters(length: number) {
   }
   return result;
 }
+
+export function generateRandomColor(): string {
+  const colors = [
+    "#1ABC9C",
+    "#FF5733",
+    "#9B59B6",
+    "#3498DB",
+    "#E74C3C",
+    "#F39C12",
+  ];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
