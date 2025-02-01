@@ -1,9 +1,10 @@
 import { Models } from "node-appwrite";
+import { MEMBER_ROLE } from "../workspaces/type";
 
 export type Member = Models.Document & {
   userId: string;
   workspaceId: string;
-  role: "ADMIN" | "MEMBER";
+  role: MEMBER_ROLE;
   color: string;
 };
 

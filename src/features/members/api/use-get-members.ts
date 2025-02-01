@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useGetMembers = (workspaceId: string) => {
   const query = useQuery({
-    queryKey: ["members"],
+    queryKey: ["members", workspaceId],
     queryFn: async () => {
       const res = await client.api.members.$get({ query: { workspaceId } });
 

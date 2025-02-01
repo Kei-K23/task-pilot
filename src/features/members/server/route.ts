@@ -39,7 +39,7 @@ const app = new Hono()
 
       const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
         Query.equal("workspaceId", workspaceId),
-        Query.orderDesc("role"),
+        Query.orderAsc("role"),
       ]);
 
       const populateMemberWithUserData = await Promise.all(
@@ -221,12 +221,33 @@ const app = new Hono()
       const { workspaceId } = c.req.valid("query");
       const { role } = c.req.valid("json");
 
+      const currentMemberList = await databases.listDocuments(
+        DATABASE_ID,
+        MEMBERS_ID,
+        [
+          Query.equal("workspaceId", workspaceId),
+          Query.equal("userId", user.$id),
+        ]
+      );
+
+      if (currentMemberList.total === 0) {
+        return c.json(
+          {
+            success: false,
+            message: "Unauthorized",
+            data: null,
+          },
+          401
+        );
+      }
+
       const member = await databases.getDocument(
         DATABASE_ID,
         MEMBERS_ID,
-        memberId,
-        [Query.equal("workspaceId", workspaceId)]
+        memberId
       );
+
+      const currentMember = currentMemberList.documents[0];
 
       if (!member) {
         return c.json(
@@ -250,7 +271,7 @@ const app = new Hono()
         );
       }
 
-      if (member.role !== MEMBER_ROLE.ADMIN) {
+      if (currentMember.role !== MEMBER_ROLE.ADMIN) {
         return c.json(
           {
             success: false,
@@ -272,7 +293,7 @@ const app = new Hono()
 
       return c.json({
         success: true,
-        message: "Successfully delete the member account",
+        message: "Successfully change the member role",
         data: updatedMember,
       });
     }

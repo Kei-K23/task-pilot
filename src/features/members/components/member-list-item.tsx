@@ -8,72 +8,27 @@ import { Gavel, LogOut, MoreHorizontal, Shield, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import MemberAvatar from "./member-avatar";
-import { Member } from "../type";
+import type { Member } from "../type";
 import { MEMBER_ROLE } from "@/features/workspaces/type";
-import { useMemo } from "react";
-import { useDeleteMember } from "../api/use-delete-member";
-import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
-import useConfirmDialog from "@/hooks/use-confirm-dialog";
 
 interface MemberListItemProps {
   member: Member;
   currentMember?: Member | null;
-  workspaceId: string;
+  isMutationLoading: boolean;
+  setOpenRoleUpdateDialog: (openRoleUpdateDialog: boolean) => void;
+  setSelectedMember: (selectedMember: Member) => void;
+  onDeleteMember: (memberId: string) => void;
 }
 
 export default function MemberListItem({
   member,
   currentMember,
-  workspaceId,
+  isMutationLoading,
+  onDeleteMember,
+  setOpenRoleUpdateDialog,
+  setSelectedMember,
 }: MemberListItemProps) {
-  const [DeleteConfirmDialog, deleteConfirm] = useConfirmDialog(
-    "Are you sure?",
-    "This process cannot be undo and permanently delete all member's data for this workspace."
-  );
-  const router = useRouter();
-  const queryClient = useQueryClient();
-  const { mutate: deleteMember, isPending: deleteMemberLoading } =
-    useDeleteMember();
-
-  const isMutationLoading = useMemo(() => {
-    return deleteMemberLoading;
-  }, [deleteMemberLoading]);
-
-  const handleDeleteMember = async (memberId: string) => {
-    const isOk = await deleteConfirm();
-    if (!isOk) {
-      return;
-    }
-
-    deleteMember(
-      {
-        param: {
-          memberId,
-        },
-        query: {
-          workspaceId,
-        },
-      },
-      {
-        onSuccess: ({ message }) => {
-          toast.success(message);
-
-          if (currentMember?.$id === memberId) {
-            queryClient.invalidateQueries({ queryKey: ["workspaces"] });
-            queryClient.removeQueries({ queryKey: ["members"] });
-            router.push("/");
-          }
-        },
-        onError: ({ message }) => {
-          toast.error(message);
-        },
-      }
-    );
-  };
-
   const renderDropdownMenu = (member: Member) => {
     if (!currentMember) return null;
 
@@ -81,47 +36,45 @@ export default function MemberListItem({
     const isCurrentUser = currentMember.$id === member.$id;
 
     return (
-      <>
-        <DeleteConfirmDialog />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              disabled={isMutationLoading}
-              variant={"outline"}
-              size={"sm"}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button disabled={isMutationLoading} variant={"outline"} size={"sm"}>
+            <MoreHorizontal />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem>
+            <User />
+            View Profile
+          </DropdownMenuItem>
+          {isAdmin && (
+            <DropdownMenuItem
+              onClick={() => {
+                setSelectedMember(member);
+                setOpenRoleUpdateDialog(true);
+              }}
             >
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              <User />
-              View Profile
+              <Shield /> Role
             </DropdownMenuItem>
-            {isAdmin && (
-              <DropdownMenuItem>
-                <Shield /> Role
-              </DropdownMenuItem>
-            )}
-            {!isAdmin && isCurrentUser && (
-              <DropdownMenuItem
-                className="bg-red-500 text-white focus:bg-red-600/90 focus:text-white/90"
-                onClick={() => handleDeleteMember(member.$id)}
-              >
-                <LogOut /> Leave
-              </DropdownMenuItem>
-            )}
-            {isAdmin && !isCurrentUser && (
-              <DropdownMenuItem
-                className="bg-red-500 text-white focus:bg-red-600/90 focus:text-white/90"
-                onClick={() => handleDeleteMember(member.$id)}
-              >
-                <Gavel /> Kick
-              </DropdownMenuItem>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </>
+          )}
+          {!isAdmin && isCurrentUser && (
+            <DropdownMenuItem
+              className="bg-red-500 text-white focus:bg-red-600/90 focus:text-white/90"
+              onClick={() => onDeleteMember(member.$id)}
+            >
+              <LogOut /> Leave
+            </DropdownMenuItem>
+          )}
+          {isAdmin && !isCurrentUser && member.role !== MEMBER_ROLE.ADMIN && (
+            <DropdownMenuItem
+              className="bg-red-500 text-white focus:bg-red-600/90 focus:text-white/90"
+              onClick={() => onDeleteMember(member.$id)}
+            >
+              <Gavel /> Kick
+            </DropdownMenuItem>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
     );
   };
 

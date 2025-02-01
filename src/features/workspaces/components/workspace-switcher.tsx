@@ -37,7 +37,9 @@ export function WorkspaceSwitcher() {
         <Select
           value={workspaceId}
           onValueChange={(e) => {
-            queryClient.removeQueries({ queryKey: ["members"] });
+            queryClient.invalidateQueries({
+              queryKey: ["members", workspaceId],
+            });
             router.push(`/workspaces/${e}`);
           }}
         >

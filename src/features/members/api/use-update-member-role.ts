@@ -9,7 +9,7 @@ type RequestType = InferRequestType<
   (typeof client.api.members)[":memberId"]["$patch"]
 >;
 
-export const useUpdateMemberRole = () => {
+export const useUpdateMemberRole = (workspaceId: string) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
@@ -23,7 +23,7 @@ export const useUpdateMemberRole = () => {
       return await res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["members"] });
+      queryClient.invalidateQueries({ queryKey: ["members", workspaceId] });
     },
   });
 
