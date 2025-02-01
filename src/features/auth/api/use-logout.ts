@@ -16,7 +16,7 @@ export const useLogout = () => {
     },
     onSuccess: () => {
       router.refresh();
-      queryClient.invalidateQueries();
+      queryClient.removeQueries();
     },
   });
 

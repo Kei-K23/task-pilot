@@ -84,7 +84,7 @@ const app = new Hono()
       );
 
       await databases.createDocument(DATABASE_ID, MEMBERS_ID, ID.unique(), {
-        memberId: user.$id,
+        userId: user.$id,
         workspaceId: workspace.$id,
         role: MEMBER_ROLE.ADMIN,
         color: generateRandomColor(),
@@ -303,7 +303,7 @@ const app = new Hono()
       }
 
       await databases.createDocument(DATABASE_ID, MEMBERS_ID, ID.unique(), {
-        memberId: user.$id,
+        userId: user.$id,
         workspaceId: workspaceId,
         role: MEMBER_ROLE.MEMBER,
         color: generateRandomColor(),

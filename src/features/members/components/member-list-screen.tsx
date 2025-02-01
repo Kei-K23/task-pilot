@@ -5,8 +5,7 @@ import { useGetMembers } from "../api/use-get-members";
 import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 import { useGetCurrentMember } from "../api/use-get-current-member";
 import { useMemo } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import MemberListItem from "./member-list-item";
+import MemberListItem, { MemberListItemSkeleton } from "./member-list-item";
 
 export default function MemberListScreen() {
   const workspaceId = useGetWorkspaceParam();
@@ -28,27 +27,16 @@ export default function MemberListScreen() {
         </CardHeader>
         <CardContent>
           <div className="space-y-5">
-            {isLoading ? (
-              <div className="w-full h-[60px] border-b pb-4 last:border-b-0 last:pb-0 flex gap-x-2 justify-between">
-                <div className="flex gap-x-2">
-                  <Skeleton className="size-12 rounded-full" />
-                  <div className="space-y-2">
-                    <Skeleton className="w-[100px] h-4" />
-                    <Skeleton className="w-[140px] h-4" />
-                  </div>
-                </div>
-                <Skeleton className="size-10" />
-              </div>
-            ) : (
-              membersList?.data?.map((member) => (
-                <MemberListItem
-                  key={member.$id}
-                  member={member}
-                  currentMember={currentMember?.data}
-                  workspaceId={workspaceId}
-                />
-              ))
-            )}
+            {isLoading
+              ? [1, 2, 3].map((i) => <MemberListItemSkeleton key={i} />)
+              : membersList?.data?.map((member) => (
+                  <MemberListItem
+                    key={member.$id}
+                    member={member}
+                    currentMember={currentMember?.data}
+                    workspaceId={workspaceId}
+                  />
+                ))}
           </div>
         </CardContent>
       </Card>

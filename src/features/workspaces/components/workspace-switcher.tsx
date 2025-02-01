@@ -15,8 +15,10 @@ import {
 } from "@/components/ui/select";
 import { useCreateWorkspace } from "../hooks/use-create-workspace";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function WorkspaceSwitcher() {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { open: openCreateWorkspace } = useCreateWorkspace();
   const workspaceId = useGetWorkspaceParam();
@@ -35,6 +37,7 @@ export function WorkspaceSwitcher() {
         <Select
           value={workspaceId}
           onValueChange={(e) => {
+            queryClient.removeQueries({ queryKey: ["members"] });
             router.push(`/workspaces/${e}`);
           }}
         >
