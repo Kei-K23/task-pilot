@@ -12,6 +12,7 @@ import {
 import { ID, Query } from "node-appwrite";
 import { z } from "zod";
 import { getMember } from "@/features/members/queries";
+import { Project } from "../type";
 
 const app = new Hono()
   .get(
@@ -48,10 +49,11 @@ const app = new Hono()
         );
       }
 
-      const projects = await databases.listDocuments(DATABASE_ID, PROJECTS_ID, [
-        Query.equal("workspaceId", workspaceId),
-        Query.orderDesc("$createdAt"),
-      ]);
+      const projects = await databases.listDocuments<Project>(
+        DATABASE_ID,
+        PROJECTS_ID,
+        [Query.equal("workspaceId", workspaceId), Query.orderDesc("$createdAt")]
+      );
 
       return c.json({
         data: projects,
