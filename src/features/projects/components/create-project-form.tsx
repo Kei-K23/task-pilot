@@ -20,6 +20,8 @@ import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ImageIcon, Trash2, Upload } from "lucide-react";
 import { projectCreateSchema } from "../schemas";
+import { useCreateProject } from "../api/use-create-project";
+import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 
 interface CreateProjectFormProps {
   onCancel?: () => void;
@@ -28,6 +30,7 @@ interface CreateProjectFormProps {
 export default function CreateProjectForm({
   onCancel,
 }: CreateProjectFormProps) {
+  const workspaceId = useGetWorkspaceParam();
   const { mutate, isPending } = useCreateProject();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -36,6 +39,7 @@ export default function CreateProjectForm({
     defaultValues: {
       name: "",
       imageUrl: "",
+      workspaceId,
     },
   });
 
@@ -44,12 +48,14 @@ export default function CreateProjectForm({
       ...values,
       imageUrl: values.imageUrl instanceof File ? values.imageUrl : "",
     };
+
     mutate(
       { form: finalValue },
       {
         onSuccess: () => {
           toast.success("Successfully created new project");
           form.reset();
+          onCancel?.();
         },
         onError: () => {
           toast.error("Failed to create new project");

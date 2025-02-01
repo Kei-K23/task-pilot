@@ -20,6 +20,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ProjectsNavigation from "./projects-navigation";
 import { Separator } from "./ui/separator";
+import CreateProjectModal from "@/features/projects/components/create-project-modal";
 
 export function DashboardSidebar({
   ...props
@@ -30,6 +31,7 @@ export function DashboardSidebar({
   return (
     <Sidebar {...props}>
       <CreateWorkspacesModal />
+      <CreateProjectModal />
       <SidebarHeader className="pt-4 px-4">
         <SidebarMenu>
           <SidebarMenuItem>

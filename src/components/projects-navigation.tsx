@@ -1,11 +1,9 @@
 import { Plus } from "lucide-react";
 import { SidebarMenu, SidebarMenuItem } from "./ui/sidebar";
 import { useCreateProject } from "@/features/projects/hooks/use-create-project";
-import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 
 export default function ProjectsNavigation() {
   const { open: openCreateProject } = useCreateProject();
-  const workspaceId = useGetWorkspaceParam();
 
   return (
     <SidebarMenu>
