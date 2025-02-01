@@ -27,7 +27,7 @@ export function WorkspaceSwitcher() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-between mb-1">
           <span className="text-[11px] text-muted-foreground">WORKSPACE</span>
           <Plus
             onClick={openCreateWorkspace}

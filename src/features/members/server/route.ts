@@ -40,6 +40,7 @@ const app = new Hono()
       const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
         Query.equal("workspaceId", workspaceId),
         Query.orderAsc("role"),
+        Query.orderDesc("$createdAt"),
       ]);
 
       const populateMemberWithUserData = await Promise.all(

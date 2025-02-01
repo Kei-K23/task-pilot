@@ -18,6 +18,8 @@ import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-worksp
 import { RefreshCcw } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ProjectsNavigation from "./projects-navigation";
+import { Separator } from "./ui/separator";
 
 export function DashboardSidebar({
   ...props
@@ -43,7 +45,7 @@ export function DashboardSidebar({
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupContent>
+          <SidebarGroupContent className="space-y-4">
             <SidebarMenu>
               {NAV_ITEMS.map(({ name, link, icon: Icon }) => {
                 const fullHrefPath = `/workspaces/${workspaceId}${link}`;
@@ -60,6 +62,8 @@ export function DashboardSidebar({
                 );
               })}
             </SidebarMenu>
+            <Separator />
+            <ProjectsNavigation />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
