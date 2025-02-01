@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { workspacesUpdateSchema } from "../schemas";
+import { projectUpdateSchema } from "../schemas";
 import { toast } from "sonner";
 import { useRef } from "react";
 import Image from "next/image";
@@ -22,30 +22,30 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ImageIcon, Trash2, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useUpdateWorkspace } from "../api/use-update-workspaces";
-import { Workspace } from "../type";
+import { Project } from "../type";
 
-interface EditWorkspacesFormProps {
+interface EditProjectFormProps {
   onCancel?: () => void;
-  initialValue: Workspace;
+  initialValue: Project;
 }
 
-export default function EditWorkspacesForm({
+export default function EditProjectForm({
   onCancel,
   initialValue,
-}: EditWorkspacesFormProps) {
+}: EditProjectFormProps) {
   const router = useRouter();
   const { mutate, isPending } = useUpdateWorkspace();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const form = useForm<z.infer<typeof workspacesUpdateSchema>>({
-    resolver: zodResolver(workspacesUpdateSchema),
+  const form = useForm<z.infer<typeof projectUpdateSchema>>({
+    resolver: zodResolver(projectUpdateSchema),
     defaultValues: {
       name: initialValue.name,
       imageUrl: initialValue.imageUrl || "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof workspacesUpdateSchema>) {
+  async function onSubmit(values: z.infer<typeof projectUpdateSchema>) {
     const finalValue = {
       ...values,
       imageUrl: values.imageUrl instanceof File ? values.imageUrl : "",
@@ -60,12 +60,12 @@ export default function EditWorkspacesForm({
       },
       {
         onSuccess: () => {
-          toast.success("Successfully updated workspace");
+          toast.success("Successfully updated project");
           form.reset();
-          router.push(`/workspaces/${initialValue.$id}`);
+          router.push(`/projects/${initialValue.$id}`);
         },
         onError: () => {
-          toast.error("Failed to update workspace");
+          toast.error("Failed to update project");
         },
       }
     );
@@ -81,7 +81,7 @@ export default function EditWorkspacesForm({
     <Card className="mt-4">
       <CardHeader className="flex items-center flex-row gap-x-4">
         <CardTitle className="text-lg text-center">
-          Edit &quot;{initialValue.name}&quot; workspace
+          Edit &quot;{initialValue.name}&quot; Project
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -93,9 +93,9 @@ export default function EditWorkspacesForm({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Workspace Name</FormLabel>
+                  <FormLabel>Project Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter workspace name" {...field} />
+                    <Input placeholder="Enter project name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -132,7 +132,7 @@ export default function EditWorkspacesForm({
                         </div>
                       )}
                       <div>
-                        <p className="font-semibold">Workspace Icon</p>
+                        <p className="font-semibold">Project Icon</p>
                         <p className="text-sm text-muted-foreground">
                           JPG, PNG, SVG or JPEG, max 1MB
                         </p>
@@ -192,7 +192,7 @@ export default function EditWorkspacesForm({
                 </Button>
               )}
               <Button disabled={isPending} type="submit" className="font-bold">
-                Save Workspace
+                Save Project
               </Button>
             </div>
           </form>

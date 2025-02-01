@@ -71,7 +71,7 @@ export default function CreateProjectForm({
     }
   };
   return (
-    <Card className="mt-4 border-none">
+    <Card className="border-none">
       <CardHeader>
         <CardTitle className="text-lg text-center">
           Create a new Project

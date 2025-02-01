@@ -21,7 +21,8 @@ import { useRef } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ImageIcon, Trash2, Upload } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface CreateWorkspacesFormProps {
   onCancel?: () => void;
@@ -30,6 +31,7 @@ interface CreateWorkspacesFormProps {
 export default function CreateWorkspacesForm({
   onCancel,
 }: CreateWorkspacesFormProps) {
+  const pathname = usePathname();
   const router = useRouter();
   const { mutate, isPending } = useCreateWorkspaces();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -68,8 +70,11 @@ export default function CreateWorkspacesForm({
       form.setValue("imageUrl", file);
     }
   };
+
+  const isInStandaloneLayout = pathname === "/workspaces/create";
+
   return (
-    <Card className="mt-4 border-none">
+    <Card className={cn(isInStandaloneLayout ? "border mt-10" : "border-none")}>
       <CardHeader>
         <CardTitle className="text-lg text-center">
           Create a new Workspace

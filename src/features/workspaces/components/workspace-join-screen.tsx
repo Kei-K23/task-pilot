@@ -53,7 +53,7 @@ export default function WorkspaceJoinScreen({
   };
 
   return (
-    <Card>
+    <Card className="mt-10">
       <CardHeader>
         <CardTitle>
           You have invited to join &quot;{workspaceName}&quot; workspace
