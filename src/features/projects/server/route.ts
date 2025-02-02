@@ -7,11 +7,9 @@ import {
   MEMBERS_ID,
   PROJECTS_ID,
   STORAGE_BUCKET_ID,
-  WORKSPACES_ID,
 } from "@/config";
 import { ID, Query } from "node-appwrite";
 import { z } from "zod";
-import { getMember } from "@/features/members/queries";
 import { Project } from "../type";
 
 const app = new Hono()
@@ -126,11 +124,11 @@ const app = new Hono()
     }
   )
   .patch(
-    "/:workspaceId",
+    "/:projectId",
     zValidator(
       "param",
       z.object({
-        workspaceId: z.string(),
+        projectId: z.string(),
       })
     ),
     zValidator("form", projectUpdateSchema),
@@ -138,23 +136,10 @@ const app = new Hono()
     async (c) => {
       const databases = c.get("databases");
       const storage = c.get("storage");
-      const user = c.get("user");
-
-      const { workspaceId } = c.req.valid("param");
+      const { projectId } = c.req.valid("param");
       const { name, imageUrl } = c.req.valid("form");
 
       let imageUploadUrl: string | undefined;
-      const member = await getMember(databases, workspaceId, user.$id);
-
-      if (!member || member?.role !== "ADMIN") {
-        return c.json(
-          {
-            success: false,
-            message: "Unauthorized",
-          },
-          401
-        );
-      }
 
       if (imageUrl instanceof File) {
         const file = await storage.createFile(
@@ -173,61 +158,37 @@ const app = new Hono()
         ).toString("base64")}`;
       }
       // TODO: Delete the previous old uploaded image
-      await databases.updateDocument(DATABASE_ID, WORKSPACES_ID, workspaceId, {
+      await databases.updateDocument(DATABASE_ID, PROJECTS_ID, projectId, {
         name,
         imageUrl: imageUploadUrl || null,
       });
 
       return c.json({
         success: true,
-        message: "Successfully update the workspace",
+        message: "Successfully update the project",
       });
     }
   )
   .delete(
-    "/:workspaceId",
+    "/:projectId",
     zValidator(
       "param",
       z.object({
-        workspaceId: z.string(),
+        projectId: z.string(),
       })
     ),
     sessionMiddleware,
     async (c) => {
       const databases = c.get("databases");
-      const user = c.get("user");
+      const { projectId } = c.req.valid("param");
 
-      const { workspaceId } = c.req.valid("param");
+      await databases.deleteDocument(DATABASE_ID, PROJECTS_ID, projectId);
 
-      const member = await getMember(databases, workspaceId, user.$id);
+      // TODO: check do i need to delete other data related to project
 
-      if (!member || member?.role !== "ADMIN") {
-        return c.json(
-          {
-            success: false,
-            message: "Unauthorized",
-          },
-          401
-        );
-      }
-      // Delete the workspace
-      await databases.deleteDocument(DATABASE_ID, WORKSPACES_ID, workspaceId);
-
-      // Delete the members that related to workspace
-
-      const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
-        Query.equal("workspaceId", workspaceId),
-      ]);
-
-      if (members.total !== 0) {
-        members.documents.forEach(async (member) => {
-          await databases.deleteDocument(DATABASE_ID, MEMBERS_ID, member.$id);
-        });
-      }
-      // TODO delete also other related data with workspace
       return c.json({
         success: true,
-        message: "Successfully deleted the workspace",
+        message: "Successfully deleted the project",
       });
     }
   );

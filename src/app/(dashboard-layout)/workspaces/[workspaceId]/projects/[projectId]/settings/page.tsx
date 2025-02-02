@@ -1,7 +1,7 @@
 import { getCurrent } from "@/features/auth/queries";
+import DeleteProjectSection from "@/features/projects/components/delete-project-section";
 import EditProjectForm from "@/features/projects/components/edit-workspaces-form";
 import { getProjectById } from "@/features/projects/queries";
-import DeleteWorkspaceSection from "@/features/workspaces/components/delete-workspace-section";
 import { redirect } from "next/navigation";
 
 interface ProjectIdSettingPageProps {
@@ -32,7 +32,7 @@ export default async function ProjectIdSettingPage({
   return (
     <div className="w-full mx-auto space-y-6">
       <EditProjectForm initialValue={project} />
-      <DeleteWorkspaceSection workspaceId={workspace.$id} />
+      <DeleteProjectSection projectId={project.$id} />
     </div>
   );
 }

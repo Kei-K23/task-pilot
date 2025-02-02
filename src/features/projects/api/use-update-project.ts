@@ -3,32 +3,31 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { InferRequestType, InferResponseType } from "hono";
 
 type ResponseType = InferResponseType<
-  (typeof client.api.workspaces)[":workspaceId"]["join"][":inviteCode"]["$post"]
+  (typeof client.api.projects)[":projectId"]["$patch"]
 >;
 type RequestType = InferRequestType<
-  (typeof client.api.workspaces)[":workspaceId"]["join"][":inviteCode"]["$post"]
+  (typeof client.api.projects)[":projectId"]["$patch"]
 >;
 
-export const useJoinWorkspace = () => {
+export const useUpdateProject = ({ workspaceId }: { workspaceId: string }) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async ({ param }) => {
-      const res = await client.api.workspaces[":workspaceId"]["join"][
-        ":inviteCode"
-      ]["$post"]({
+    mutationFn: async ({ form, param }) => {
+      const res = await client.api.projects[":projectId"]["$patch"]({
         param,
+        form,
       });
 
       if (!res.ok) {
         const errorBody = await res.json();
-        throw new Error(errorBody.message || "Failed to join workspace");
+        throw new Error(errorBody.message || "Failed to update the project");
       }
 
       return await res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["workspaces"] });
+      queryClient.invalidateQueries({ queryKey: ["projects", workspaceId] });
     },
   });
 

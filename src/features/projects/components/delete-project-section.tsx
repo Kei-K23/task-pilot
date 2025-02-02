@@ -9,20 +9,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Trash2 } from "lucide-react";
-import { useDeleteWorkspace } from "../api/use-delete-workspaces";
 import useConfirmDialog from "@/hooks/use-confirm-dialog";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-interface DeleteWorkspaceSectionProps {
-  workspaceId: string;
+interface DeleteProjectSectionProps {
+  projectId: string;
 }
 
-export default function DeleteWorkspaceSection({
-  workspaceId,
-}: DeleteWorkspaceSectionProps) {
+export default function DeleteProjectSection({
+  projectId,
+}: DeleteProjectSectionProps) {
   const router = useRouter();
-  const { mutate } = useDeleteWorkspace();
+  // const { mutate } = useDeletePro();
   const [DeleteConfirmDialog, confirm] = useConfirmDialog(
     "Are you sure?",
     "This process cannot be undo."
@@ -37,7 +36,7 @@ export default function DeleteWorkspaceSection({
     mutate(
       {
         param: {
-          workspaceId,
+          projectId,
         },
       },
       {

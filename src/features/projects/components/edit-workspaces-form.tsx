@@ -21,8 +21,9 @@ import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ImageIcon, Trash2, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useUpdateWorkspace } from "../api/use-update-workspaces";
 import { Project } from "../type";
+import { useUpdateProject } from "../api/use-update-project";
+import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 
 interface EditProjectFormProps {
   onCancel?: () => void;
@@ -33,8 +34,9 @@ export default function EditProjectForm({
   onCancel,
   initialValue,
 }: EditProjectFormProps) {
+  const workspaceId = useGetWorkspaceParam();
   const router = useRouter();
-  const { mutate, isPending } = useUpdateWorkspace();
+  const { mutate, isPending } = useUpdateProject({ workspaceId });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof projectUpdateSchema>>({
@@ -54,15 +56,17 @@ export default function EditProjectForm({
     mutate(
       {
         param: {
-          workspaceId: initialValue.$id,
+          projectId: initialValue.$id,
         },
         form: finalValue,
       },
       {
-        onSuccess: () => {
-          toast.success("Successfully updated project");
+        onSuccess: ({ message }) => {
+          toast.success(message);
           form.reset();
-          router.push(`/projects/${initialValue.$id}`);
+          router.push(
+            `/workspaces/${workspaceId}/projects/${initialValue.$id}`
+          );
         },
         onError: () => {
           toast.error("Failed to update project");
