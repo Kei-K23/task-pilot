@@ -44,13 +44,17 @@ export default function EditProjectForm({
     defaultValues: {
       name: initialValue.name,
       imageUrl: initialValue.imageUrl || "",
+      workspaceId: initialValue.workspaceId,
     },
   });
 
   async function onSubmit(values: z.infer<typeof projectUpdateSchema>) {
     const finalValue = {
       ...values,
-      imageUrl: values.imageUrl instanceof File ? values.imageUrl : "",
+      imageUrl:
+        values.imageUrl instanceof File
+          ? values.imageUrl
+          : initialValue.imageUrl,
     };
 
     mutate(
@@ -196,7 +200,7 @@ export default function EditProjectForm({
                 </Button>
               )}
               <Button disabled={isPending} type="submit" className="font-bold">
-                Save Project
+                {isPending ? "Saving..." : "Save Project"}
               </Button>
             </div>
           </form>

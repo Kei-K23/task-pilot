@@ -12,6 +12,8 @@ import { Trash2 } from "lucide-react";
 import useConfirmDialog from "@/hooks/use-confirm-dialog";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useDeleteProject } from "../api/use-delete-project";
+import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 
 interface DeleteProjectSectionProps {
   projectId: string;
@@ -20,8 +22,9 @@ interface DeleteProjectSectionProps {
 export default function DeleteProjectSection({
   projectId,
 }: DeleteProjectSectionProps) {
+  const workspaceId = useGetWorkspaceParam();
   const router = useRouter();
-  // const { mutate } = useDeletePro();
+  const { mutate, isPending } = useDeleteProject({ workspaceId });
   const [DeleteConfirmDialog, confirm] = useConfirmDialog(
     "Are you sure?",
     "This process cannot be undo."
@@ -40,12 +43,12 @@ export default function DeleteProjectSection({
         },
       },
       {
-        onSuccess: (data) => {
-          toast.success(data.message);
-          router.push("/");
+        onSuccess: ({ message }) => {
+          toast.success(message);
+          router.push(`/workspaces/${workspaceId}`);
         },
-        onError: (data) => {
-          toast.success(data.message);
+        onError: ({ message }) => {
+          toast.error(message);
         },
       }
     );
@@ -58,14 +61,24 @@ export default function DeleteProjectSection({
         <CardHeader>
           <CardTitle className="text-lg">Danger Zone</CardTitle>
           <CardDescription className="text-primary text-base">
-            Deleting a workspace is irreversible and will remove every related
-            data with the workspace.
+            Deleting a project is irreversible and will remove every related
+            data with the project.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex justify-end">
-            <Button onClick={handleDelete} variant={"destructive"}>
-              <Trash2 /> Delete
+            <Button
+              disabled={isPending}
+              onClick={handleDelete}
+              variant={"destructive"}
+            >
+              {isPending ? (
+                "Deleting..."
+              ) : (
+                <>
+                  <Trash2 /> Delete
+                </>
+              )}
             </Button>
           </div>
         </CardContent>

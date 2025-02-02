@@ -48,7 +48,10 @@ export default function EditWorkspacesForm({
   async function onSubmit(values: z.infer<typeof workspacesUpdateSchema>) {
     const finalValue = {
       ...values,
-      imageUrl: values.imageUrl instanceof File ? values.imageUrl : "",
+      imageUrl:
+        values.imageUrl instanceof File
+          ? values.imageUrl
+          : initialValue.imageUrl,
     };
 
     mutate(

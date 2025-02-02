@@ -137,7 +137,7 @@ const app = new Hono()
       const databases = c.get("databases");
       const storage = c.get("storage");
       const { projectId } = c.req.valid("param");
-      const { name, imageUrl } = c.req.valid("form");
+      const { name, imageUrl, workspaceId } = c.req.valid("form");
 
       let imageUploadUrl: string | undefined;
 
@@ -156,11 +156,14 @@ const app = new Hono()
         imageUploadUrl = `data:image/png;base64,${Buffer.from(
           arrayBuffer
         ).toString("base64")}`;
+      } else {
+        imageUploadUrl = imageUrl;
       }
       // TODO: Delete the previous old uploaded image
       await databases.updateDocument(DATABASE_ID, PROJECTS_ID, projectId, {
         name,
         imageUrl: imageUploadUrl || null,
+        workspaceId,
       });
 
       return c.json({
