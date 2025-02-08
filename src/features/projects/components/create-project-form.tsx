@@ -31,7 +31,7 @@ export default function CreateProjectForm({
   onCancel,
 }: CreateProjectFormProps) {
   const workspaceId = useGetWorkspaceParam();
-  const { mutate, isPending } = useCreateProject();
+  const { mutate, isPending } = useCreateProject({ workspaceId });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof projectCreateSchema>>({

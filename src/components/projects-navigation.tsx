@@ -43,18 +43,20 @@ export default function ProjectsNavigation() {
               return (
                 <SidebarMenuItem key={project.$id}>
                   <SidebarMenuButton asChild isActive={isActive}>
-                    <div className="flex items-center gap-x-2">
-                      <Avatar className="size-8 rounded-lg">
-                        <AvatarImage
-                          src={project?.imageUrl}
-                          alt="Project logo"
-                        />
-                        <AvatarFallback className="bg-black text-white rounded-lg font-bold text-lg">
-                          {project?.name.charAt(0).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <Link href={fullHrefPath}>{project.name}</Link>
-                    </div>
+                    <Link href={fullHrefPath}>
+                      <div className="flex items-center gap-x-2">
+                        <Avatar className="size-8 rounded-lg">
+                          <AvatarImage
+                            src={project?.imageUrl}
+                            alt="Project logo"
+                          />
+                          <AvatarFallback className="bg-black text-white rounded-lg font-bold text-lg">
+                            {project?.name.charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span>{project.name}</span>
+                      </div>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               );
