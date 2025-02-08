@@ -25,7 +25,7 @@ export default function ProjectsNavigation() {
           className="size-4 p-0.5 bg-neutral-500 hover:bg-neutral-500/80 cursor-pointer transition-all text-white rounded-full"
         />
       </div>
-      <div className="space-y-2">
+      <div className="space-y-1">
         {isLoading
           ? [1, 2, 3].map((i) => (
               <div
@@ -42,7 +42,11 @@ export default function ProjectsNavigation() {
 
               return (
                 <SidebarMenuItem key={project.$id}>
-                  <SidebarMenuButton asChild isActive={isActive}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={isActive}
+                    className="h-10"
+                  >
                     <Link href={fullHrefPath}>
                       <div className="flex items-center gap-x-2">
                         <Avatar className="size-8 rounded-lg">

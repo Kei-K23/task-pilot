@@ -5,7 +5,13 @@ import { InferRequestType, InferResponseType } from "hono";
 type ResponseType = InferResponseType<(typeof client.api.tasks)["$post"]>;
 type RequestType = InferRequestType<(typeof client.api.tasks)["$post"]>;
 
-export const useCreateTask = ({ workspaceId }: { workspaceId: string }) => {
+export const useCreateTask = ({
+  workspaceId,
+  projectId,
+}: {
+  workspaceId: string;
+  projectId: string;
+}) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
@@ -15,7 +21,7 @@ export const useCreateTask = ({ workspaceId }: { workspaceId: string }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["tasks", workspaceId],
+        queryKey: ["tasks", workspaceId, projectId],
       });
     },
   });

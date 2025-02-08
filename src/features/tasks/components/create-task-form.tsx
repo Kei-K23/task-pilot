@@ -41,15 +41,17 @@ import { useGetMembers } from "@/features/members/api/use-get-members";
 import { useGetProjects } from "@/features/projects/api/use-get-projects";
 import MemberAvatar from "@/features/members/components/member-avatar";
 import ProjectAvatar from "@/features/projects/components/project-avatar";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface CreateTaskFormProps {
   onCancel?: () => void;
 }
 
 export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
+  const queryClient = useQueryClient();
   const workspaceId = useGetWorkspaceParam();
   const projectId = useGetProjectIdParam();
-  const { mutate, isPending } = useCreateTask({ workspaceId });
+  const { mutate, isPending } = useCreateTask({ workspaceId, projectId });
   const form = useForm<z.infer<typeof taskCreateSchema>>({
     resolver: zodResolver(taskCreateSchema),
     defaultValues: {
@@ -88,6 +90,9 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
         onSuccess: () => {
           toast.success("Successfully created new task");
           form.reset();
+          queryClient.invalidateQueries({
+            queryKey: ["tasks", values.workspaceId, values.projectId],
+          });
           onCancel?.();
         },
         onError: () => {
@@ -119,6 +124,7 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
                 </FormItem>
               )}
             />
+
             <FormField
               disabled={isPending}
               control={form.control}
@@ -166,21 +172,6 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
             <FormField
               disabled={isPending}
               control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Enter task description" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              disabled={isPending}
-              control={form.control}
               name="status"
               render={({ field }) => (
                 <FormItem>
@@ -212,6 +203,20 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
                       </SelectItem>
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              disabled={isPending}
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Enter task description" {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
