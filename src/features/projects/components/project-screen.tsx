@@ -6,6 +6,8 @@ import ProjectAvatar from "./project-avatar";
 import { Edit } from "lucide-react";
 import Link from "next/link";
 import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
+import TaskViewSwitcher from "@/features/tasks/components/task-view-switcher";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface ProjectScreenProps {
   project: Project;
@@ -25,6 +27,11 @@ export default function ProjectScreen({ project }: ProjectScreenProps) {
           </Button>
         </Link>
       </div>
+      <Card>
+        <CardContent className="mt-4">
+          <TaskViewSwitcher />
+        </CardContent>
+      </Card>
     </div>
   );
 }
