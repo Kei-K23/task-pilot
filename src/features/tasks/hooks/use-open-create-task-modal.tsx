@@ -1,8 +1,8 @@
 import { parseAsBoolean, useQueryState } from "nuqs";
 
-export const useCreateProject = () => {
+export const useOpenCreateTaskModal = () => {
   const [isOpen, setIsOpen] = useQueryState(
-    "create-project-form",
+    "create-task-form",
     parseAsBoolean.withDefault(false).withOptions({ clearOnDefault: true })
   );
   const open = () => setIsOpen(true);

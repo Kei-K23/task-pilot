@@ -2,7 +2,7 @@
 
 import { Plus } from "lucide-react";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
-import { useCreateProject } from "@/features/projects/hooks/use-create-project";
+import { useOpenCreateProjectModal } from "@/features/projects/hooks/use-open-create-project-modal";
 import { useGetProjects } from "@/features/projects/api/use-get-projects";
 import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 import Link from "next/link";
@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 export default function ProjectsNavigation() {
   const workspaceId = useGetWorkspaceParam();
   const { data, isLoading } = useGetProjects({ workspaceId });
-  const { open: openCreateProject } = useCreateProject();
+  const { open: openCreateProjectModal } = useOpenCreateProjectModal();
   const pathname = usePathname();
 
   return (
@@ -21,7 +21,7 @@ export default function ProjectsNavigation() {
       <div className="px-2 flex items-center justify-between mb-1">
         <span className="text-[11px] text-muted-foreground">PROJECTS</span>
         <Plus
-          onClick={openCreateProject}
+          onClick={openCreateProjectModal}
           className="size-4 p-0.5 bg-neutral-500 hover:bg-neutral-500/80 cursor-pointer transition-all text-white rounded-full"
         />
       </div>
