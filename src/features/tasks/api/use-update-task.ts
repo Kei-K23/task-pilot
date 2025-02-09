@@ -3,31 +3,31 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { InferRequestType, InferResponseType } from "hono";
 
 type ResponseType = InferResponseType<
-  (typeof client.api.projects)[":projectId"]["$patch"]
+  (typeof client.api.tasks)[":taskId"]["$patch"]
 >;
 type RequestType = InferRequestType<
-  (typeof client.api.projects)[":projectId"]["$patch"]
+  (typeof client.api.tasks)[":taskId"]["$patch"]
 >;
 
-export const useUpdateProject = ({ workspaceId }: { workspaceId: string }) => {
+export const useUpdateTask = ({ workspaceId }: { workspaceId: string }) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async ({ form, param }) => {
-      const res = await client.api.projects[":projectId"]["$patch"]({
+    mutationFn: async ({ json, param }) => {
+      const res = await client.api.tasks[":taskId"]["$patch"]({
         param,
-        form,
+        json,
       });
 
       if (!res.ok) {
         const errorBody = await res.json();
-        throw new Error(errorBody.message || "Failed to update the project");
+        throw new Error(errorBody.message || "Failed to update the task");
       }
 
       return await res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["projects", workspaceId] });
+      queryClient.invalidateQueries({ queryKey: ["tasks", workspaceId] });
     },
   });
 

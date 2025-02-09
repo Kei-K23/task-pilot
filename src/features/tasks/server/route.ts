@@ -328,7 +328,7 @@ const app = new Hono()
       });
     }
   )
-  .patch(
+  .delete(
     "/:taskId",
     zValidator(
       "param",

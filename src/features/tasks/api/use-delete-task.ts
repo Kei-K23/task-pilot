@@ -3,10 +3,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { InferRequestType, InferResponseType } from "hono";
 
 type ResponseType = InferResponseType<
-  (typeof client.api.projects)[":projectId"]["$delete"]
+  (typeof client.api.tasks)[":taskId"]["$delete"]
 >;
 type RequestType = InferRequestType<
-  (typeof client.api.projects)[":projectId"]["$delete"]
+  (typeof client.api.tasks)[":taskId"]["$delete"]
 >;
 
 export const useDeleteProject = ({ workspaceId }: { workspaceId: string }) => {
@@ -14,19 +14,22 @@ export const useDeleteProject = ({ workspaceId }: { workspaceId: string }) => {
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async ({ param }) => {
-      const res = await client.api.projects[":projectId"]["$delete"]({
+      const res = await client.api.tasks[":taskId"]["$delete"]({
         param,
+        query: {
+          workspaceId,
+        },
       });
 
       if (!res.ok) {
         const errorBody = await res.json();
-        throw new Error(errorBody.message || "Failed to delete the project");
+        throw new Error(errorBody.message || "Failed to delete the task");
       }
 
       return await res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["projects", workspaceId] });
+      queryClient.invalidateQueries({ queryKey: ["tasks", workspaceId] });
     },
   });
 
