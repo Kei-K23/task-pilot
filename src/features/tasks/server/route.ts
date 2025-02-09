@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { sessionMiddleware } from "@/lib/session-middleware";
-import { taskCreateSchema } from "../schemas";
+import { taskCreateSchema, taskUpdateSchema } from "../schemas";
 import { DATABASE_ID, MEMBERS_ID, PROJECTS_ID, TASKS_ID } from "@/config";
 import { ID, Query } from "node-appwrite";
 import { getMember } from "@/features/members/queries";
@@ -127,6 +127,78 @@ const app = new Hono()
       });
     }
   )
+  .get(
+    "/:taskId",
+    zValidator(
+      "param",
+      z.object({
+        taskId: z.string(),
+      })
+    ),
+    zValidator(
+      "query",
+      z.object({
+        workspaceId: z.string(),
+      })
+    ),
+    sessionMiddleware,
+    async (c) => {
+      const { users } = await createAdminClient();
+      const databases = c.get("databases");
+      const user = c.get("user");
+
+      const { taskId } = c.req.valid("param");
+      const { workspaceId } = c.req.valid("query");
+
+      const member = await getMember(databases, workspaceId, user.$id);
+
+      if (!member) {
+        return c.json(
+          {
+            success: false,
+            message: "Unauthorized",
+            data: null,
+          },
+          401
+        );
+      }
+
+      // Get the tasks according to query filter
+      const task = await databases.getDocument<Task>(
+        DATABASE_ID,
+        TASKS_ID,
+        taskId
+      );
+
+      const project = await databases.getDocument(
+        DATABASE_ID,
+        PROJECTS_ID,
+        task.projectId
+      );
+
+      const memberData = await databases.getDocument(
+        DATABASE_ID,
+        MEMBERS_ID,
+        task.assigneeId
+      );
+
+      const memberUser = await users.get(memberData.userId);
+
+      const assignee = {
+        ...member,
+        name: memberUser.name,
+        email: memberUser.email,
+      };
+
+      return c.json({
+        data: {
+          ...task,
+          project,
+          assignee,
+        },
+      });
+    }
+  )
   .post(
     "/",
     zValidator("json", taskCreateSchema),
@@ -191,7 +263,111 @@ const app = new Hono()
       );
 
       return c.json({
+        success: true,
+        message: "Successfully created new task",
         data: task,
+      });
+    }
+  )
+  .patch(
+    "/:taskId",
+    zValidator(
+      "param",
+      z.object({
+        taskId: z.string(),
+      })
+    ),
+    zValidator("json", taskUpdateSchema),
+    sessionMiddleware,
+    async (c) => {
+      const {
+        workspaceId,
+        name,
+        projectId,
+        assigneeId,
+        status,
+        dueDate,
+        description,
+      } = c.req.valid("json");
+      const { taskId } = c.req.valid("param");
+      const databases = c.get("databases");
+      const user = c.get("user");
+
+      const member = getMember(databases, workspaceId, user.$id);
+
+      if (!member) {
+        return c.json(
+          {
+            success: false,
+            message: "Unauthorized",
+            data: null,
+          },
+          401
+        );
+      }
+
+      const task = await databases.updateDocument(
+        DATABASE_ID,
+        TASKS_ID,
+        taskId,
+        {
+          name,
+          workspaceId,
+          projectId,
+          assigneeId,
+          description,
+          dueDate,
+          status,
+        }
+      );
+
+      return c.json({
+        success: true,
+        message: "Successfully updated the task",
+        data: task,
+      });
+    }
+  )
+  .patch(
+    "/:taskId",
+    zValidator(
+      "param",
+      z.object({
+        taskId: z.string(),
+      })
+    ),
+    zValidator(
+      "query",
+      z.object({
+        workspaceId: z.string(),
+      })
+    ),
+    sessionMiddleware,
+    async (c) => {
+      const { taskId } = c.req.valid("param");
+      const { workspaceId } = c.req.valid("query");
+      const databases = c.get("databases");
+      const user = c.get("user");
+
+      const member = getMember(databases, workspaceId, user.$id);
+
+      if (!member) {
+        return c.json(
+          {
+            success: false,
+            message: "Unauthorized",
+            data: null,
+          },
+          401
+        );
+      }
+
+      await databases.deleteDocument(DATABASE_ID, TASKS_ID, taskId);
+
+      return c.json({
+        success: true,
+        message: "Successfully deleted the task",
+        data: null,
       });
     }
   );

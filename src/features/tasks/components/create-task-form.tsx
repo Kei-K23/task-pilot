@@ -88,16 +88,16 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
     mutate(
       { json: values },
       {
-        onSuccess: () => {
-          toast.success("Successfully created new task");
+        onSuccess: ({ message }) => {
+          toast.success(message);
           form.reset();
           queryClient.invalidateQueries({
             queryKey: ["tasks", values.workspaceId, values.projectId],
           });
           onCancel?.();
         },
-        onError: () => {
-          toast.error("Failed to create new task");
+        onError: ({ message }) => {
+          toast.error(message);
         },
       }
     );

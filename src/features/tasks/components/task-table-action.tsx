@@ -7,12 +7,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ExternalLink, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { Task } from "../type";
+import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
+import Link from "next/link";
 
 interface TaskTableActionProps {
   task: Task;
 }
 
 export default function TaskTableAction({ task }: TaskTableActionProps) {
+  const workspaceId = useGetWorkspaceParam();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="focus:ring-0">
@@ -22,13 +26,19 @@ export default function TaskTableAction({ task }: TaskTableActionProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>
-          <ExternalLink />
-          Task Detail
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <ExternalLink /> Open Project
-        </DropdownMenuItem>
+        <Link
+          href={`/workspaces/${workspaceId}/projects/${task.projectId}/tasks/${task.$id}`}
+        >
+          <DropdownMenuItem>
+            <ExternalLink />
+            Task Detail
+          </DropdownMenuItem>
+        </Link>
+        <Link href={`/workspaces/${workspaceId}/projects/${task.projectId}`}>
+          <DropdownMenuItem>
+            <ExternalLink /> Open Project
+          </DropdownMenuItem>
+        </Link>
         <DropdownMenuItem>
           <Pencil /> Edit Task
         </DropdownMenuItem>

@@ -7,12 +7,37 @@ import { useOpenCreateTaskModal } from "../hooks/use-open-create-task-modal";
 import TaskTableContent from "./task-table-content";
 import DataFilter from "./data-filter";
 import { useQueryState } from "nuqs";
+import useTasksFilterQuery from "../hooks/use-tasks-filter-query";
+import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
+import { useGetProjectIdParam } from "@/features/projects/hooks/use-get-project-id-param";
+import { useGetTasks } from "../api/use-get-tasks";
 
 export default function TaskViewSwitcher() {
   const [tasksView, setTasksView] = useQueryState("tasks-view", {
     defaultValue: "table",
   });
   const { setIsOpen } = useOpenCreateTaskModal();
+  const [{ assigneeId, projectId, search, status, dueDate }] =
+    useTasksFilterQuery();
+  const workspaceId = useGetWorkspaceParam();
+  const projectIdParam = useGetProjectIdParam();
+
+  const { data: tasksData, isPending } = useGetTasks({
+    workspaceId,
+    projectId:
+      projectId === null
+        ? projectIdParam
+        : projectId === "all"
+        ? null
+        : projectId === "default"
+        ? projectIdParam
+        : projectId,
+    status,
+    assigneeId,
+    search,
+    dueDate,
+  });
+
   return (
     <>
       <CreateTaskModal />
@@ -43,7 +68,7 @@ export default function TaskViewSwitcher() {
         <DataFilter />
         <DotdotSeparator className="my-4" />
         <TabsContent value="table">
-          <TaskTableContent />
+          <TaskTableContent data={tasksData || []} isLoading={isPending} />
         </TabsContent>
         <TabsContent value="kanban">kanban</TabsContent>
         <TabsContent value="calender">calender</TabsContent>
