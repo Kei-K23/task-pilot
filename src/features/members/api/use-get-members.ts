@@ -1,7 +1,7 @@
 import { client } from "@/lib/rpc";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetMembers = (workspaceId: string) => {
+export const useGetMembers = ({ workspaceId }: { workspaceId: string }) => {
   const query = useQuery({
     queryKey: ["members", workspaceId],
     queryFn: async () => {

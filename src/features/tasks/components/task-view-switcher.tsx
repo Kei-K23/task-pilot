@@ -5,13 +5,18 @@ import { Plus } from "lucide-react";
 import CreateTaskModal from "./create-task-modal";
 import { useOpenCreateTaskModal } from "../hooks/use-open-create-task-modal";
 import TaskTableContent from "./task-table-content";
+import DataFilter from "./data-filter";
+import { useQueryState } from "nuqs";
 
 export default function TaskViewSwitcher() {
+  const [tasksView, setTasksView] = useQueryState("tasks-view", {
+    defaultValue: "table",
+  });
   const { setIsOpen } = useOpenCreateTaskModal();
   return (
     <>
       <CreateTaskModal />
-      <Tabs defaultValue="table" className="">
+      <Tabs defaultValue={tasksView} onValueChange={setTasksView}>
         <div className="flex items-center gap-x-4 gap-y-2 justify-between flex-col md:flex-row">
           <TabsList className="w-full md:w-auto">
             <TabsTrigger className="w-full md:w-auto" value="table">
@@ -35,7 +40,7 @@ export default function TaskViewSwitcher() {
           </Button>
         </div>
         <DotdotSeparator className="my-4" />
-        <div>Date filter</div>
+        <DataFilter />
         <DotdotSeparator className="my-4" />
         <TabsContent value="table">
           <TaskTableContent />

@@ -11,17 +11,32 @@ export const useGetTasks = ({
   status,
 }: {
   workspaceId: string;
-  projectId?: string;
-  assigneeId?: string;
-  search?: string;
-  dueDate?: string;
-  status?: TASK_STATUS;
+  projectId?: string | null;
+  assigneeId?: string | null;
+  search?: string | null;
+  dueDate?: string | null;
+  status?: TASK_STATUS | null;
 }) => {
   const query = useQuery({
-    queryKey: ["tasks", workspaceId, projectId],
+    queryKey: [
+      "tasks",
+      workspaceId,
+      projectId,
+      assigneeId,
+      search,
+      dueDate,
+      status,
+    ],
     queryFn: async () => {
       const res = await client.api.tasks.$get({
-        query: { workspaceId, projectId, assigneeId, search, status, dueDate },
+        query: {
+          workspaceId,
+          projectId: projectId ?? undefined,
+          assigneeId: assigneeId ?? undefined,
+          search: search ?? undefined,
+          status: status ?? undefined,
+          dueDate: dueDate ?? undefined,
+        },
       });
 
       if (!res.ok) {

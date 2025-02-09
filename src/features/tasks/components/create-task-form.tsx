@@ -64,8 +64,9 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
       workspaceId,
     },
   });
-  const { data: memberOptions, isLoading: memberOptionLoading } =
-    useGetMembers(workspaceId);
+  const { data: memberOptions, isLoading: memberOptionLoading } = useGetMembers(
+    { workspaceId }
+  );
   const { data: projectOptions, isLoading: projectOptionLoading } =
     useGetProjects({ workspaceId });
 
@@ -146,7 +147,7 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
                           {field.value ? (
                             format(new Date(field.value), "PPP")
                           ) : (
-                            <span>Pick a date</span>
+                            <span>Due date</span>
                           )}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
@@ -298,7 +299,7 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
             <div className="flex items-center gap-3">
               {onCancel && (
                 <Button
-                  variant={"secondary-white"}
+                  variant={"secondary"}
                   disabled={isPending || isFetchingAssociatedDate}
                   type="button"
                   className="font-bold"

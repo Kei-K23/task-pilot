@@ -75,7 +75,7 @@ export default function WorkspaceInvitationSection({
       <Card className="mt-4">
         <CardHeader>
           <CardTitle className="text-lg">Invite Members</CardTitle>
-          <CardDescription className="text-primary text-base">
+          <CardDescription className="text-muted-foreground text-base">
             Use blew invite like to add members to your workspace.
           </CardDescription>
         </CardHeader>

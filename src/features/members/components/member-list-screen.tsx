@@ -29,8 +29,9 @@ export default function MemberListScreen() {
 
   const { data: currentMember, isLoading: currentMemberLoading } =
     useGetCurrentMember(workspaceId);
-  const { data: membersList, isLoading: memberListLoading } =
-    useGetMembers(workspaceId);
+  const { data: membersList, isLoading: memberListLoading } = useGetMembers({
+    workspaceId,
+  });
   const { mutate: deleteMember, isPending: deleteMemberLoading } =
     useDeleteMember();
 

@@ -60,7 +60,7 @@ export default function DeleteProjectSection({
       <Card className="mt-4 border-red-300 bg-red-200/30">
         <CardHeader>
           <CardTitle className="text-lg">Danger Zone</CardTitle>
-          <CardDescription className="text-primary text-base">
+          <CardDescription className="text-muted-foreground text-base">
             Deleting a project is irreversible and will remove every related
             data with the project.
           </CardDescription>
