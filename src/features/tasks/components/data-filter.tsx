@@ -10,16 +10,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { TASK_STATUS } from "../type";
-import { ListChecks, Users } from "lucide-react";
+import { Folder, ListChecks, Users } from "lucide-react";
 import MemberAvatar from "@/features/members/components/member-avatar";
 import { DatePicker } from "@/components/date-picker";
 import { Button } from "@/components/ui/button";
+import { useGetProjects } from "@/features/projects/api/use-get-projects";
+import ProjectAvatar from "@/features/projects/components/project-avatar";
 
 export default function DataFilter() {
   const workspaceId = useGetWorkspaceParam();
   const { data: memberOptions, isLoading: memberOptionLoading } = useGetMembers(
     { workspaceId }
   );
+  const { data: projectOptions, isLoading: projectOptionLoading } =
+    useGetProjects({ workspaceId });
 
   const members = memberOptions?.data?.map((member) => ({
     id: member.$id,
@@ -27,10 +31,16 @@ export default function DataFilter() {
     color: member.color,
   }));
 
-  const [{ assigneeId, status, dueDate }, setFilterQuery] =
+  const projects = projectOptions?.documents?.map((project) => ({
+    id: project.$id,
+    name: project.name,
+    imageUrl: project.imageUrl,
+  }));
+
+  const [{ assigneeId, status, dueDate, projectId }, setFilterQuery] =
     useTasksFilterQuery();
 
-  const isFetchingAssociatedDate = memberOptionLoading;
+  const isFetchingAssociatedDate = memberOptionLoading || projectOptionLoading;
 
   const handleStatusFilter = (value: string) => {
     setFilterQuery({ status: value === "all" ? null : (value as TASK_STATUS) });
@@ -40,9 +50,16 @@ export default function DataFilter() {
     setFilterQuery({ assigneeId: value === "all" ? null : value });
   };
 
+  const handleProjectFilter = (value: string) => {
+    setFilterQuery({
+      projectId: value,
+    });
+  };
+
   const clearFilters = () => {
     setFilterQuery({
       assigneeId: null,
+      projectId: null,
       status: null,
       dueDate: null,
     });
@@ -99,6 +116,38 @@ export default function DataFilter() {
                     className="size-7"
                   />
                   <span>{member.name}</span>
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select
+          onValueChange={handleProjectFilter}
+          value={projectId ?? "default"}
+        >
+          <SelectTrigger
+            className="focus:ring-0"
+            disabled={isFetchingAssociatedDate}
+          >
+            <div className="flex items-center gap-x-2">
+              <Folder className="size-4" />
+              <SelectValue placeholder="Select assignee" />
+            </div>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="default">Default projects</SelectItem>
+            <SelectItem value="all">All projects</SelectItem>
+            <SelectSeparator />
+            {projects?.map?.((project) => (
+              <SelectItem key={project.id} value={project.id}>
+                <div className="flex items-center gap-x-2">
+                  <ProjectAvatar
+                    name={project.name}
+                    imageUrl={project.imageUrl}
+                    className="size-7"
+                    showName={false}
+                  />
+                  <span>{project.name}</span>
                 </div>
               </SelectItem>
             ))}

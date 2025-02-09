@@ -1,17 +1,27 @@
 import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 import { useGetTasks } from "../api/use-get-tasks";
-import { useGetProjectIdParam } from "@/features/projects/hooks/use-get-project-id-param";
 import useTasksFilterQuery from "../hooks/use-tasks-filter-query";
 import { TaskDataTable } from "./task-data-table";
 import { taskColumns } from "./task-columns";
+import { useGetProjectIdParam } from "@/features/projects/hooks/use-get-project-id-param";
 
 export default function TaskTableContent() {
-  const [{ assigneeId, search, status, dueDate }] = useTasksFilterQuery();
+  const [{ assigneeId, projectId, search, status, dueDate }] =
+    useTasksFilterQuery();
   const workspaceId = useGetWorkspaceParam();
-  const projectId = useGetProjectIdParam();
+  const projectIdParam = useGetProjectIdParam();
+  console.log(projectId);
+
   const { data: tasksData, isPending } = useGetTasks({
     workspaceId,
-    projectId,
+    projectId:
+      projectId === null
+        ? projectIdParam
+        : projectId === "all"
+        ? null
+        : projectId === "default"
+        ? projectIdParam
+        : projectId,
     status,
     assigneeId,
     search,
