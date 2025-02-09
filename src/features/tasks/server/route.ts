@@ -8,6 +8,8 @@ import { getMember } from "@/features/members/queries";
 import { z } from "zod";
 import { Task, TASK_STATUS } from "../type";
 import { createAdminClient } from "@/lib/appwrite";
+import { Project } from "@/features/projects/type";
+import { Member } from "@/features/members/type";
 
 const app = new Hono()
   .get(
@@ -107,11 +109,11 @@ const app = new Hono()
       const populatedTasks = tasks.documents.map((task) => {
         const project = projects.documents.filter(
           (project) => project.$id === task.projectId
-        );
+        )?.[0] as unknown as Project;
 
         const assignee = assignees.filter(
           (assignee) => assignee.$id === task.assigneeId
-        );
+        )?.[0] as unknown as Member;
 
         return {
           ...task,

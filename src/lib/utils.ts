@@ -26,3 +26,11 @@ export function generateRandomColor(): string {
   ];
   return colors[Math.floor(Math.random() * colors.length)];
 }
+
+export function formatEnumCase(input: string): string {
+  return input
+    .toLowerCase()
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}

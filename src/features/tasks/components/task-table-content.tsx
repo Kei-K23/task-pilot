@@ -2,12 +2,14 @@ import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-worksp
 import { useGetTasks } from "../api/use-get-tasks";
 import { useGetProjectIdParam } from "@/features/projects/hooks/use-get-project-id-param";
 import useTasksFilterQuery from "../hooks/use-tasks-filter-query";
+import { TaskDataTable } from "./task-data-table";
+import { taskColumns } from "./task-columns";
 
 export default function TaskTableContent() {
   const [{ assigneeId, search, status, dueDate }] = useTasksFilterQuery();
   const workspaceId = useGetWorkspaceParam();
   const projectId = useGetProjectIdParam();
-  const { data: tasks } = useGetTasks({
+  const { data: tasksData, isPending } = useGetTasks({
     workspaceId,
     projectId,
     status,
@@ -17,10 +19,13 @@ export default function TaskTableContent() {
   });
 
   return (
+    // TODO Fix type error
     <div className="flex flex-col">
-      {tasks?.map?.((task) => (
-        <span key={task.$id}>{task.name}</span>
-      ))}
+      <TaskDataTable
+        columns={taskColumns}
+        data={tasksData || []}
+        isLoading={isPending}
+      />
     </div>
   );
 }
