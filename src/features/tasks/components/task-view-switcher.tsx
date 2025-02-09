@@ -11,6 +11,7 @@ import useTasksFilterQuery from "../hooks/use-tasks-filter-query";
 import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 import { useGetProjectIdParam } from "@/features/projects/hooks/use-get-project-id-param";
 import { useGetTasks } from "../api/use-get-tasks";
+import EditTaskModal from "./edit-task-modal";
 
 export default function TaskViewSwitcher() {
   const [tasksView, setTasksView] = useQueryState("tasks-view", {
@@ -41,6 +42,7 @@ export default function TaskViewSwitcher() {
   return (
     <>
       <CreateTaskModal />
+      <EditTaskModal />
       <Tabs defaultValue={tasksView} onValueChange={setTasksView}>
         <div className="flex items-center gap-x-4 gap-y-2 justify-between flex-col md:flex-row">
           <TabsList className="w-full md:w-auto">

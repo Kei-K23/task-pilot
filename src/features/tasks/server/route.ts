@@ -195,7 +195,7 @@ const app = new Hono()
           ...task,
           project,
           assignee,
-        },
+        } as unknown as Task,
       });
     }
   )

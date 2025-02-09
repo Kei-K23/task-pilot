@@ -9,7 +9,7 @@ type RequestType = InferRequestType<
   (typeof client.api.tasks)[":taskId"]["$delete"]
 >;
 
-export const useDeleteProject = ({ workspaceId }: { workspaceId: string }) => {
+export const useDeleteTask = ({ workspaceId }: { workspaceId: string }) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
