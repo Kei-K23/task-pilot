@@ -14,6 +14,8 @@ import { useState } from "react";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./task-calendar.css";
 import TaskCalendarEventCardItem from "./task-calendar-event-card-item";
+import { Button } from "@/components/ui/button";
+import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface TaskCalendarProps {
   data: Task[];
@@ -31,6 +33,46 @@ const localizer = dateFnsLocalizer({
   getDay,
   locales,
 });
+
+const CustomToolbar = ({
+  value,
+  handleDateNavigation,
+}: {
+  value: Date;
+  handleDateNavigation: (action: "NEXT" | "PREV" | "TODAY") => void;
+}) => {
+  return (
+    <div className="flex items-center justify-between gap-x-4 mb-4 bg-muted py-2 px-4 rounded-lg">
+      <Button
+        size={"icon"}
+        variant={"outline"}
+        onClick={() => {
+          handleDateNavigation("PREV");
+        }}
+      >
+        <ChevronLeft />
+      </Button>
+      <div className="text-muted-foreground flex items-center gap-x-2">
+        <CalendarDays
+          className="size-5 cursor-pointer"
+          onClick={() => {
+            handleDateNavigation("TODAY");
+          }}
+        />
+        <p>{format(new Date(value), "MMMM yyyy")}</p>
+      </div>
+      <Button
+        size={"icon"}
+        variant={"outline"}
+        onClick={() => {
+          handleDateNavigation("NEXT");
+        }}
+      >
+        <ChevronRight />
+      </Button>
+    </div>
+  );
+};
 
 export default function TaskCalendar({ data, isLoading }: TaskCalendarProps) {
   const [value, setValue] = useState(
@@ -83,6 +125,12 @@ export default function TaskCalendar({ data, isLoading }: TaskCalendarProps) {
         components={{
           eventWrapper: ({ event }) => (
             <TaskCalendarEventCardItem event={event} />
+          ),
+          toolbar: () => (
+            <CustomToolbar
+              value={value}
+              handleDateNavigation={handleDateNavigation}
+            />
           ),
         }}
       />

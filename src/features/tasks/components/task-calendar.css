@@ -1,5 +1,5 @@
 .rbc-header {
-  @apply text-sm font-normal pb-4 text-muted-foreground border-b-0;
+  @apply text-sm font-normal py-3 border text-muted-foreground border-b-0 border-t-0 bg-muted;
 }
 
 .rbc-header + .rbc-header {
