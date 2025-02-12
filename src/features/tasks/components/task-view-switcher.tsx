@@ -12,6 +12,7 @@ import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-worksp
 import { useGetProjectIdParam } from "@/features/projects/hooks/use-get-project-id-param";
 import { useGetTasks } from "../api/use-get-tasks";
 import EditTaskModal from "./edit-task-modal";
+import TaskDataKanban from "./task-data-kanban";
 
 export default function TaskViewSwitcher() {
   const [tasksView, setTasksView] = useQueryState("tasks-view", {
@@ -72,7 +73,9 @@ export default function TaskViewSwitcher() {
         <TabsContent value="table">
           <TaskTableContent data={tasksData || []} isLoading={isPending} />
         </TabsContent>
-        <TabsContent value="kanban">kanban</TabsContent>
+        <TabsContent value="kanban">
+          <TaskDataKanban data={tasksData || []} isLoading={isPending} />
+        </TabsContent>
         <TabsContent value="calender">calender</TabsContent>
       </Tabs>
     </>

@@ -8,7 +8,12 @@ export default function CreateTaskModal() {
   const { setIsOpen, isOpen, close } = useOpenCreateTaskModal();
 
   return (
-    <ResponsiveModal isOpen={isOpen} setIsOpen={setIsOpen}>
+    <ResponsiveModal
+      isOpen={isOpen}
+      setIsOpen={(e) => {
+        setIsOpen({ openCreateTaskModal: e, initialTaskStatus: null });
+      }}
+    >
       <CreateTaskForm onCancel={close} />
     </ResponsiveModal>
   );

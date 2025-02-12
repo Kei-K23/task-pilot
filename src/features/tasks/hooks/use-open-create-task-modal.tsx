@@ -1,17 +1,23 @@
-import { parseAsBoolean, useQueryState } from "nuqs";
+import { parseAsBoolean, parseAsStringEnum, useQueryStates } from "nuqs";
+import { TASK_STATUS } from "../type";
 
 export const useOpenCreateTaskModal = () => {
-  const [isOpen, setIsOpen] = useQueryState(
-    "create-task-form",
-    parseAsBoolean.withDefault(false).withOptions({ clearOnDefault: true })
-  );
-  const open = () => setIsOpen(true);
-  const close = () => setIsOpen(false);
+  const [{ openCreateTaskModal, initialTaskStatus }, setIsOpen] =
+    useQueryStates({
+      openCreateTaskModal: parseAsBoolean
+        .withDefault(false)
+        .withOptions({ clearOnDefault: true }),
+      initialTaskStatus: parseAsStringEnum(Object.values(TASK_STATUS)),
+    });
+
+  const open = () => setIsOpen({ openCreateTaskModal: true });
+  const close = () => setIsOpen({ openCreateTaskModal: false });
 
   return {
     open,
     close,
-    isOpen,
     setIsOpen,
+    isOpen: openCreateTaskModal,
+    initialTaskStatus,
   };
 };

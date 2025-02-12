@@ -20,4 +20,5 @@ export type Task = Models.Document & {
   description?: string;
   project: Project;
   assignee: Member;
+  position: number;
 };

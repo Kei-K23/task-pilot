@@ -42,12 +42,14 @@ import { useGetProjects } from "@/features/projects/api/use-get-projects";
 import MemberAvatar from "@/features/members/components/member-avatar";
 import ProjectAvatar from "@/features/projects/components/project-avatar";
 import { useQueryClient } from "@tanstack/react-query";
+import { useOpenCreateTaskModal } from "../hooks/use-open-create-task-modal";
 
 interface CreateTaskFormProps {
   onCancel?: () => void;
 }
 
 export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
+  const { initialTaskStatus } = useOpenCreateTaskModal();
   const queryClient = useQueryClient();
   const workspaceId = useGetWorkspaceParam();
   const projectId = useGetProjectIdParam();
@@ -59,7 +61,7 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
       description: "",
       assigneeId: "",
       dueDate: undefined,
-      status: TASK_STATUS.BACKLOG,
+      status: !initialTaskStatus ? TASK_STATUS.BACKLOG : initialTaskStatus,
       projectId,
       workspaceId,
     },
