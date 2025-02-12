@@ -9,7 +9,7 @@ import { z } from "zod";
 import { Task, TASK_STATUS } from "../type";
 import { createAdminClient } from "@/lib/appwrite";
 import { Project } from "@/features/projects/type";
-import { Member } from "@/features/members/type";
+import { MemberWithUserData } from "@/features/members/type";
 
 const app = new Hono()
   .get(
@@ -113,7 +113,7 @@ const app = new Hono()
 
         const assignee = assignees.filter(
           (assignee) => assignee.$id === task.assigneeId
-        )?.[0] as unknown as Member;
+        )?.[0] as unknown as MemberWithUserData;
 
         return {
           ...task,
@@ -325,6 +325,102 @@ const app = new Hono()
         success: true,
         message: "Successfully updated the task",
         data: task,
+      });
+    }
+  )
+  .post(
+    "/bulk-position-update",
+    zValidator(
+      "json",
+      z.object({
+        tasks: z.array(
+          z.object({
+            $id: z.string(),
+            status: z.nativeEnum(TASK_STATUS),
+            position: z.number().positive().min(1000).max(1_000_000),
+          })
+        ),
+      })
+    ),
+    zValidator(
+      "query",
+      z.object({
+        workspaceId: z.string(),
+      })
+    ),
+    sessionMiddleware,
+    async (c) => {
+      const { tasks } = c.req.valid("json");
+      const { workspaceId } = c.req.valid("query");
+      const databases = c.get("databases");
+      const user = c.get("user");
+      const member = getMember(databases, workspaceId, user.$id);
+
+      if (!member) {
+        return c.json(
+          {
+            success: false,
+            message: "Unauthorized",
+            data: null,
+          },
+          401
+        );
+      }
+
+      const tasksToUpdate = await databases.listDocuments<Task>(
+        DATABASE_ID,
+        TASKS_ID,
+        [
+          Query.contains(
+            "$id",
+            tasks.map((task) => task.$id)
+          ),
+        ]
+      );
+
+      if (tasksToUpdate.total === 0) {
+        return c.json(
+          {
+            success: false,
+            message: "No tasks to update",
+            data: null,
+          },
+          400
+        );
+      }
+
+      const workspaceIds = new Set(
+        tasksToUpdate.documents.map((task) => task.workspaceId)
+      );
+
+      if (workspaceIds.size !== 1) {
+        return c.json(
+          {
+            success: false,
+            message: "Cannot update tasks from different workspace",
+            data: null,
+          },
+          400
+        );
+      }
+
+      const updatedTasks = await Promise.all(
+        tasks.map(async (task) => {
+          const { $id, position, status } = task;
+
+          return await databases.updateDocument<Task>(
+            DATABASE_ID,
+            TASKS_ID,
+            $id,
+            { position, status }
+          );
+        })
+      );
+
+      return c.json({
+        success: true,
+        message: "Successfully updated the tasks",
+        data: updatedTasks,
       });
     }
   )

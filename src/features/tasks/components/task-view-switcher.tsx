@@ -13,6 +13,9 @@ import { useGetProjectIdParam } from "@/features/projects/hooks/use-get-project-
 import { useGetTasks } from "../api/use-get-tasks";
 import EditTaskModal from "./edit-task-modal";
 import TaskDataKanban from "./task-data-kanban";
+import { useBulkUpdateTasksPosition } from "../api/use-bulk-update-tasks-position";
+import { PositionedTask } from "../type";
+import { toast } from "sonner";
 
 export default function TaskViewSwitcher() {
   const [tasksView, setTasksView] = useQueryState("tasks-view", {
@@ -40,6 +43,31 @@ export default function TaskViewSwitcher() {
     dueDate,
   });
 
+  const { mutate: bulkUpdateTasksPosition } = useBulkUpdateTasksPosition({
+    workspaceId,
+  });
+
+  const onChangePosition = (tasks: PositionedTask[]) => {
+    bulkUpdateTasksPosition(
+      {
+        json: {
+          tasks,
+        },
+        query: {
+          workspaceId,
+        },
+      },
+      {
+        onSuccess: ({ message }) => {
+          toast.success(message);
+        },
+        onError: ({ message }) => {
+          toast.error(message);
+        },
+      }
+    );
+  };
+
   return (
     <>
       <CreateTaskModal />
@@ -61,7 +89,7 @@ export default function TaskViewSwitcher() {
             className="w-full md:w-auto"
             size={"sm"}
             onClick={() => {
-              setIsOpen(true);
+              setIsOpen({ openCreateTaskModal: true });
             }}
           >
             <Plus /> New Task
@@ -74,7 +102,11 @@ export default function TaskViewSwitcher() {
           <TaskTableContent data={tasksData || []} isLoading={isPending} />
         </TabsContent>
         <TabsContent value="kanban">
-          <TaskDataKanban data={tasksData || []} isLoading={isPending} />
+          <TaskDataKanban
+            onChangePosition={onChangePosition}
+            data={tasksData || []}
+            isLoading={isPending}
+          />
         </TabsContent>
         <TabsContent value="calender">calender</TabsContent>
       </Tabs>
