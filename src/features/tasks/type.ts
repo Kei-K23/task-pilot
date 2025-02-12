@@ -2,6 +2,12 @@ import { Models } from "node-appwrite";
 import { Project } from "../projects/type";
 import { MemberWithUserData } from "../members/type";
 
+export type PositionedTask = {
+  $id: string;
+  status: TASK_STATUS;
+  position: number;
+};
+
 export enum TASK_STATUS {
   BACKLOG = "BACKLOG",
   IN_PROGRESS = "IN_PROGRESS",
