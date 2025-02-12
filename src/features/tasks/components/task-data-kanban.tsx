@@ -11,8 +11,8 @@ import TaskKanbanItem from "./task-kanban-item";
 
 interface TaskDataKanbanProps {
   data: Task[];
-  onChangePosition: (tasks: PositionedTask[]) => void;
   isLoading: boolean;
+  onChangePosition: (tasks: PositionedTask[]) => void;
 }
 
 type TasksState = {

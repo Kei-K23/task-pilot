@@ -1,0 +1,35 @@
+.rbc-header {
+  @apply text-sm font-normal pb-4 text-muted-foreground border-b-0;
+}
+
+.rbc-header + .rbc-header {
+  @apply border-l-0;
+}
+
+.rbc-button-link {
+  @apply text-xs font-normal text-muted-foreground;
+}
+
+.rbc-now > .rbc-button-link {
+  @apply text-blue-500 bg-blue-500/10 p-1 rounded-full;
+}
+
+.rbc-off-range > .rbc-button-link {
+  @apply text-red-500 bg-red-500/10 p-1 rounded-full;
+}
+
+.rbc-month-row {
+  @apply min-h-[150px] border-t border-x;
+}
+
+.rbc-date-cell {
+  @apply p-2;
+}
+
+.rbc-off-range-bg {
+  background: inherit;
+}
+
+.rbc-today {
+  background: inherit;
+}

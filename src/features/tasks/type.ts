@@ -2,11 +2,21 @@ import { Models } from "node-appwrite";
 import { Project } from "../projects/type";
 import { MemberWithUserData } from "../members/type";
 
-export type PositionedTask = {
+export interface TaskCalendarEventCard {
+  $id: string;
+  title: string;
+  status: TASK_STATUS;
+  start: Date;
+  end: Date;
+  assignee: MemberWithUserData;
+  project: Project;
+}
+
+export interface PositionedTask {
   $id: string;
   status: TASK_STATUS;
   position: number;
-};
+}
 
 export enum TASK_STATUS {
   BACKLOG = "BACKLOG",

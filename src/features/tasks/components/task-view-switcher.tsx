@@ -16,6 +16,7 @@ import TaskDataKanban from "./task-data-kanban";
 import { useBulkUpdateTasksPosition } from "../api/use-bulk-update-tasks-position";
 import { PositionedTask } from "../type";
 import { toast } from "sonner";
+import TaskCalendar from "./task-calendar";
 
 export default function TaskViewSwitcher() {
   const [tasksView, setTasksView] = useQueryState("tasks-view", {
@@ -108,7 +109,9 @@ export default function TaskViewSwitcher() {
             isLoading={isPending}
           />
         </TabsContent>
-        <TabsContent value="calender">calender</TabsContent>
+        <TabsContent value="calender" className="h-full">
+          <TaskCalendar data={tasksData || []} isLoading={isPending} />
+        </TabsContent>
       </Tabs>
     </>
   );
