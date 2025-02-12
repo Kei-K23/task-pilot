@@ -7,7 +7,7 @@ import MemberAvatar from "@/features/members/components/member-avatar";
 import TaskDate from "./task-date";
 import { formatEnumCase } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import TaskTableAction from "./task-table-action";
+import TaskAction from "./task-action";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 
@@ -139,7 +139,7 @@ export const taskColumns: ColumnDef<Task>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      return <TaskTableAction task={row.original} />;
+      return <TaskAction task={row.original} />;
     },
   },
 ];

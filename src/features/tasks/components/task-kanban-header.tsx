@@ -34,7 +34,7 @@ export default function TaskKanbanHeader({
   const icon = statusToIconMap[board];
 
   return (
-    <div className="flex items-center justify-between gap-x-8 bg-gray-100 px-3 rounded-lg">
+    <div className="flex items-center justify-between gap-x-8 bg-muted px-3 rounded-lg">
       <div className="flex items-center gap-x-2">
         {icon}
         <span>{formatEnumCase(board)}</span>

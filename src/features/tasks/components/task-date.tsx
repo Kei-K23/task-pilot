@@ -4,9 +4,10 @@ import React from "react";
 
 interface TaskDateProps {
   dueDate: string;
+  className?: string;
 }
 
-export default function TaskDate({ dueDate }: TaskDateProps) {
+export default function TaskDate({ dueDate, className }: TaskDateProps) {
   const now = new Date();
   const end = new Date(dueDate);
   const dateBetween = differenceInDays(end, now);
@@ -21,5 +22,7 @@ export default function TaskDate({ dueDate }: TaskDateProps) {
     textColor += " text-yellow-600";
   }
 
-  return <div className={cn(textColor)}>{format(dueDate, "PPP")}</div>;
+  return (
+    <div className={cn(textColor, className)}>{format(dueDate, "PPP")}</div>
+  );
 }

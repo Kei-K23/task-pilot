@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Task, TASK_STATUS } from "../type";
-import { DragDropContext } from "@hello-pangea/dnd";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import TaskKanbanHeader from "./task-kanban-header";
+import TaskKanbanItem from "./task-kanban-item";
 
 interface TaskDataKanbanProps {
   data: Task[];
@@ -49,13 +50,38 @@ export default function TaskDataKanban({
 
   return (
     <DragDropContext onDragEnd={() => {}}>
-      <div className="flex overflow-x-auto gap-x-4 items-center">
+      <div className="flex overflow-x-auto gap-x-4 items-start">
         {boards.map((board) => (
-          <TaskKanbanHeader
-            key={board}
-            board={board}
-            tasksCount={tasks[board].length}
-          />
+          <div key={board} className="min-w-[250px]">
+            <TaskKanbanHeader board={board} tasksCount={tasks[board].length} />
+            <Droppable droppableId={board}>
+              {(provided) => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  className="min-h-[300px] py-2 px-3 bg-muted mt-2 space-y-2"
+                >
+                  {tasks[board].map((task, index) => (
+                    <Draggable
+                      index={index}
+                      draggableId={`${task}-${index}`}
+                      key={`${task}-${index}`}
+                    >
+                      {(provided) => (
+                        <div
+                          {...provided.dragHandleProps}
+                          {...provided.draggableProps}
+                          ref={provided.innerRef}
+                        >
+                          <TaskKanbanItem task={task} />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                </div>
+              )}
+            </Droppable>
+          </div>
         ))}
       </div>
     </DragDropContext>

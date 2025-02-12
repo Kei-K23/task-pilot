@@ -5,6 +5,7 @@ interface ProjectAvatarProps {
   imageUrl?: string;
   name: string;
   className?: string;
+  textClassName?: string;
   showName?: boolean;
 }
 
@@ -12,6 +13,7 @@ export default function ProjectAvatar({
   imageUrl,
   name,
   className,
+  textClassName,
   showName = true,
 }: ProjectAvatarProps) {
   return (
@@ -22,7 +24,9 @@ export default function ProjectAvatar({
           {name.charAt(0).toUpperCase()}
         </AvatarFallback>
       </Avatar>
-      {showName && <span className="text-lg font-bold">{name}</span>}
+      {showName && (
+        <span className={cn("text-lg font-bold", textClassName)}>{name}</span>
+      )}
     </div>
   );
 }

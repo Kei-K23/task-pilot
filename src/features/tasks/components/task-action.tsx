@@ -14,11 +14,11 @@ import { useDeleteTask } from "../api/use-delete-task";
 import { toast } from "sonner";
 import { useOpenEditTaskModal } from "../hooks/use-open-edit-task-modal";
 
-interface TaskTableActionProps {
+interface TaskActionProps {
   task: Task;
 }
 
-export default function TaskTableAction({ task }: TaskTableActionProps) {
+export default function TaskAction({ task }: TaskActionProps) {
   const workspaceId = useGetWorkspaceParam();
   const { setIsOpen } = useOpenEditTaskModal();
   const [DeleteConfirmDialog, deleteConfirm] = useConfirmDialog(
