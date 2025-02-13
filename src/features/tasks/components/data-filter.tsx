@@ -17,7 +17,13 @@ import { Button } from "@/components/ui/button";
 import { useGetProjects } from "@/features/projects/api/use-get-projects";
 import ProjectAvatar from "@/features/projects/components/project-avatar";
 
-export default function DataFilter() {
+interface DataFilterProps {
+  showProjectFilter?: boolean;
+}
+
+export default function DataFilter({
+  showProjectFilter = true,
+}: DataFilterProps) {
   const workspaceId = useGetWorkspaceParam();
   const { data: memberOptions, isLoading: memberOptionLoading } = useGetMembers(
     { workspaceId }
@@ -121,38 +127,40 @@ export default function DataFilter() {
             ))}
           </SelectContent>
         </Select>
-        <Select
-          onValueChange={handleProjectFilter}
-          value={projectId ?? "default"}
-        >
-          <SelectTrigger
-            className="focus:ring-0"
-            disabled={isFetchingAssociatedDate}
+        {showProjectFilter && (
+          <Select
+            onValueChange={handleProjectFilter}
+            value={projectId ?? "default"}
           >
-            <div className="flex items-center gap-x-2">
-              <Folder className="size-4" />
-              <SelectValue placeholder="Select assignee" />
-            </div>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="default">Default projects</SelectItem>
-            <SelectItem value="all">All projects</SelectItem>
-            <SelectSeparator />
-            {projects?.map?.((project) => (
-              <SelectItem key={project.id} value={project.id}>
-                <div className="flex items-center gap-x-2">
-                  <ProjectAvatar
-                    name={project.name}
-                    imageUrl={project.imageUrl}
-                    className="size-7"
-                    showName={false}
-                  />
-                  <span>{project.name}</span>
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+            <SelectTrigger
+              className="focus:ring-0"
+              disabled={isFetchingAssociatedDate}
+            >
+              <div className="flex items-center gap-x-2">
+                <Folder className="size-4" />
+                <SelectValue placeholder="Select assignee" />
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="default">Default projects</SelectItem>
+              <SelectItem value="all">All projects</SelectItem>
+              <SelectSeparator />
+              {projects?.map?.((project) => (
+                <SelectItem key={project.id} value={project.id}>
+                  <div className="flex items-center gap-x-2">
+                    <ProjectAvatar
+                      name={project.name}
+                      imageUrl={project.imageUrl}
+                      className="size-7"
+                      showName={false}
+                    />
+                    <span>{project.name}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
         <DatePicker
           date={dueDate ? new Date(dueDate) : undefined}
           setDate={(date) => {

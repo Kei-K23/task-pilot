@@ -18,7 +18,13 @@ import { PositionedTask } from "../type";
 import { toast } from "sonner";
 import TaskCalendar from "./task-calendar";
 
-export default function TaskViewSwitcher() {
+interface TaskViewSwitcherProps {
+  showProjectFilter?: boolean;
+}
+
+export default function TaskViewSwitcher({
+  showProjectFilter = true,
+}: TaskViewSwitcherProps) {
   const [tasksView, setTasksView] = useQueryState("tasks-view", {
     defaultValue: "table",
   });
@@ -97,7 +103,7 @@ export default function TaskViewSwitcher() {
           </Button>
         </div>
         <DotdotSeparator className="my-4" />
-        <DataFilter />
+        <DataFilter showProjectFilter={showProjectFilter} />
         <DotdotSeparator className="my-4" />
         <TabsContent value="table">
           <TaskTableContent data={tasksData || []} isLoading={isPending} />
