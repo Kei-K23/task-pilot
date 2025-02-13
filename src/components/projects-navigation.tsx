@@ -4,14 +4,14 @@ import { Plus } from "lucide-react";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
 import { useOpenCreateProjectModal } from "@/features/projects/hooks/use-open-create-project-modal";
 import { useGetProjects } from "@/features/projects/api/use-get-projects";
-import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
+import { useGetWorkspaceIdParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Skeleton } from "./ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function ProjectsNavigation() {
-  const workspaceId = useGetWorkspaceParam();
+  const workspaceId = useGetWorkspaceIdParam();
   const { data, isLoading } = useGetProjects({ workspaceId });
   const { open: openCreateProjectModal } = useOpenCreateProjectModal();
   const pathname = usePathname();

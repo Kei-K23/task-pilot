@@ -13,7 +13,7 @@ import useConfirmDialog from "@/hooks/use-confirm-dialog";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useDeleteProject } from "../api/use-delete-project";
-import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
+import { useGetWorkspaceIdParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 
 interface DeleteProjectSectionProps {
   projectId: string;
@@ -22,7 +22,7 @@ interface DeleteProjectSectionProps {
 export default function DeleteProjectSection({
   projectId,
 }: DeleteProjectSectionProps) {
-  const workspaceId = useGetWorkspaceParam();
+  const workspaceId = useGetWorkspaceIdParam();
   const router = useRouter();
   const { mutate, isPending } = useDeleteProject({ workspaceId });
   const [DeleteConfirmDialog, confirm] = useConfirmDialog(

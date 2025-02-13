@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { CalendarIcon } from "lucide-react";
 import { taskCreateSchema } from "../schemas";
-import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
+import { useGetWorkspaceIdParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 import { useCreateTask } from "../api/use-create-task";
 import { useGetProjectIdParam } from "@/features/projects/hooks/use-get-project-id-param";
 import { TASK_STATUS } from "../type";
@@ -51,7 +51,7 @@ interface CreateTaskFormProps {
 export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
   const { initialTaskStatus } = useOpenCreateTaskModal();
   const queryClient = useQueryClient();
-  const workspaceId = useGetWorkspaceParam();
+  const workspaceId = useGetWorkspaceIdParam();
   const projectId = useGetProjectIdParam();
   const { mutate, isPending } = useCreateTask({ workspaceId, projectId });
   const form = useForm<z.infer<typeof taskCreateSchema>>({

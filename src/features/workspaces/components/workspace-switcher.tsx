@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import { SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { useGetWorkspaces } from "../api/use-get-workspaces";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useGetWorkspaceParam } from "../hooks/use-get-workspace-param";
+import { useGetWorkspaceIdParam } from "../hooks/use-get-workspace-param";
 import {
   Select,
   SelectContent,
@@ -21,7 +21,7 @@ export function WorkspaceSwitcher() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { open: openCreateWorkspace } = useCreateWorkspace();
-  const workspaceId = useGetWorkspaceParam();
+  const workspaceId = useGetWorkspaceIdParam();
   const { data, isPending } = useGetWorkspaces();
 
   return (

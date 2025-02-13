@@ -8,7 +8,7 @@ import TaskTableContent from "./task-table-content";
 import DataFilter from "./data-filter";
 import { useQueryState } from "nuqs";
 import useTasksFilterQuery from "../hooks/use-tasks-filter-query";
-import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
+import { useGetWorkspaceIdParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 import { useGetProjectIdParam } from "@/features/projects/hooks/use-get-project-id-param";
 import { useGetTasks } from "../api/use-get-tasks";
 import EditTaskModal from "./edit-task-modal";
@@ -31,7 +31,7 @@ export default function TaskViewSwitcher({
   const { setIsOpen } = useOpenCreateTaskModal();
   const [{ assigneeId, projectId, search, status, dueDate }] =
     useTasksFilterQuery();
-  const workspaceId = useGetWorkspaceParam();
+  const workspaceId = useGetWorkspaceIdParam();
   const projectIdParam = useGetProjectIdParam();
 
   const { data: tasksData, isPending } = useGetTasks({

@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetMembers } from "../api/use-get-members";
-import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
+import { useGetWorkspaceIdParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 import { useGetCurrentMember } from "../api/use-get-current-member";
 import { useMemo, useState } from "react";
 import MemberListItem, { MemberListItemSkeleton } from "./member-list-item";
@@ -18,7 +18,7 @@ export default function MemberListScreen() {
   const [openRoleUpdateDialog, setOpenRoleUpdateDialog] = useState(false);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
 
-  const workspaceId = useGetWorkspaceParam();
+  const workspaceId = useGetWorkspaceIdParam();
   const router = useRouter();
   const queryClient = useQueryClient();
 

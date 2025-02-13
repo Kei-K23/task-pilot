@@ -1,5 +1,5 @@
 import { useGetMembers } from "@/features/members/api/use-get-members";
-import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
+import { useGetWorkspaceIdParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 import useTasksFilterQuery from "../hooks/use-tasks-filter-query";
 import {
   Select,
@@ -24,7 +24,7 @@ interface DataFilterProps {
 export default function DataFilter({
   showProjectFilter = true,
 }: DataFilterProps) {
-  const workspaceId = useGetWorkspaceParam();
+  const workspaceId = useGetWorkspaceIdParam();
   const { data: memberOptions, isLoading: memberOptionLoading } = useGetMembers(
     { workspaceId }
   );

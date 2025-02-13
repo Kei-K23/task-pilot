@@ -23,7 +23,7 @@ import { ImageIcon, Trash2, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Project } from "../type";
 import { useUpdateProject } from "../api/use-update-project";
-import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
+import { useGetWorkspaceIdParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 
 interface EditProjectFormProps {
   onCancel?: () => void;
@@ -34,7 +34,7 @@ export default function EditProjectForm({
   onCancel,
   initialValue,
 }: EditProjectFormProps) {
-  const workspaceId = useGetWorkspaceParam();
+  const workspaceId = useGetWorkspaceIdParam();
   const router = useRouter();
   const { mutate, isPending } = useUpdateProject({ workspaceId });
   const fileInputRef = useRef<HTMLInputElement>(null);

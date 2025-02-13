@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ExternalLink, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { Task } from "../type";
-import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
+import { useGetWorkspaceIdParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 import Link from "next/link";
 import useConfirmDialog from "@/hooks/use-confirm-dialog";
 import { useDeleteTask } from "../api/use-delete-task";
@@ -19,7 +19,7 @@ interface TaskActionProps {
 }
 
 export default function TaskAction({ task }: TaskActionProps) {
-  const workspaceId = useGetWorkspaceParam();
+  const workspaceId = useGetWorkspaceIdParam();
   const { setIsOpen } = useOpenEditTaskModal();
   const [DeleteConfirmDialog, deleteConfirm] = useConfirmDialog(
     "Are you sure?",
@@ -58,9 +58,7 @@ export default function TaskAction({ task }: TaskActionProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <Link
-            href={`/workspaces/${workspaceId}/projects/${task.projectId}/tasks/${task.$id}`}
-          >
+          <Link href={`/workspaces/${workspaceId}/tasks/${task.$id}`}>
             <DropdownMenuItem>
               <ExternalLink />
               Task Detail

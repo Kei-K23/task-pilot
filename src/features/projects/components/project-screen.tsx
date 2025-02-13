@@ -5,7 +5,7 @@ import { Project } from "../type";
 import ProjectAvatar from "./project-avatar";
 import { Edit } from "lucide-react";
 import Link from "next/link";
-import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
+import { useGetWorkspaceIdParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 import TaskViewSwitcher from "@/features/tasks/components/task-view-switcher";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -14,7 +14,7 @@ interface ProjectScreenProps {
 }
 
 export default function ProjectScreen({ project }: ProjectScreenProps) {
-  const workspaceId = useGetWorkspaceParam();
+  const workspaceId = useGetWorkspaceIdParam();
   const fullHref = `/workspaces/${workspaceId}/projects/${project.$id}`;
 
   return (

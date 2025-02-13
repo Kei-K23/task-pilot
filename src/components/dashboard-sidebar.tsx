@@ -14,7 +14,7 @@ import {
 import { NAV_ITEMS } from "@/constants";
 import CreateWorkspacesModal from "@/features/workspaces/components/create-workspaces-modal";
 import { WorkspaceSwitcher } from "@/features/workspaces/components/workspace-switcher";
-import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
+import { useGetWorkspaceIdParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 import { RefreshCcw } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -25,7 +25,7 @@ import CreateProjectModal from "@/features/projects/components/create-project-mo
 export function DashboardSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const workspaceId = useGetWorkspaceParam();
+  const workspaceId = useGetWorkspaceIdParam();
   const pathname = usePathname();
 
   return (

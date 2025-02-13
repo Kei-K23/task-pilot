@@ -4,10 +4,10 @@ import ResponsiveModal from "@/components/responsive-modal";
 import { useOpenEditTaskModal } from "../hooks/use-open-edit-task-modal";
 import EditTaskForm from "./edit-task-form";
 import { useGetTaskById } from "../api/use-get-task-by-id";
-import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
+import { useGetWorkspaceIdParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 
 export default function EditTaskModal() {
-  const workspaceId = useGetWorkspaceParam();
+  const workspaceId = useGetWorkspaceIdParam();
   const { setIsOpen, editTaskForm, taskId, close } = useOpenEditTaskModal();
   const { data: task, isLoading } = useGetTaskById({
     workspaceId,

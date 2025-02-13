@@ -17,8 +17,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { CalendarIcon } from "lucide-react";
 import { taskCreateSchema } from "../schemas";
-import { useGetWorkspaceParam } from "@/features/workspaces/hooks/use-get-workspace-param";
-import { useGetProjectIdParam } from "@/features/projects/hooks/use-get-project-id-param";
+import { useGetWorkspaceIdParam } from "@/features/workspaces/hooks/use-get-workspace-param";
 import { Task, TASK_STATUS } from "../type";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -53,8 +52,7 @@ export default function EditTaskForm({
   initValue,
 }: EditTaskFormProps) {
   const queryClient = useQueryClient();
-  const workspaceId = useGetWorkspaceParam();
-  const projectId = useGetProjectIdParam();
+  const workspaceId = useGetWorkspaceIdParam();
   const { mutate, isPending } = useUpdateTask({ workspaceId });
   const form = useForm<z.infer<typeof taskCreateSchema>>({
     resolver: zodResolver(taskCreateSchema),
@@ -64,7 +62,7 @@ export default function EditTaskForm({
       assigneeId: initValue?.assigneeId,
       dueDate: new Date(initValue.dueDate),
       status: TASK_STATUS[initValue?.status as TASK_STATUS],
-      projectId,
+      projectId: initValue?.projectId,
       workspaceId,
     },
   });
