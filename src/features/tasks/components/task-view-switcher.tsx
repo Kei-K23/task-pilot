@@ -102,7 +102,7 @@ export default function TaskViewSwitcher() {
         <TabsContent value="table">
           <TaskTableContent data={tasksData || []} isLoading={isPending} />
         </TabsContent>
-        <TabsContent value="kanban">
+        <TabsContent value="kanban" className="overflow-x-auto">
           <TaskDataKanban
             onChangePosition={onChangePosition}
             data={tasksData || []}
@@ -110,7 +110,7 @@ export default function TaskViewSwitcher() {
           />
         </TabsContent>
         <TabsContent value="calender" className="h-full">
-          <TaskCalendar data={tasksData || []} isLoading={isPending} />
+          <TaskCalendar data={tasksData || []} />
         </TabsContent>
       </Tabs>
     </>

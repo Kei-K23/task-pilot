@@ -1,7 +1,7 @@
 import {
   addMonths,
   addYears,
-  format,
+  format, 
   getDay,
   parseISO,
   startOfWeek,
@@ -19,7 +19,6 @@ import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface TaskCalendarProps {
   data: Task[];
-  isLoading: boolean;
 }
 
 const locales = {
@@ -74,7 +73,7 @@ const CustomToolbar = ({
   );
 };
 
-export default function TaskCalendar({ data, isLoading }: TaskCalendarProps) {
+export default function TaskCalendar({ data }: TaskCalendarProps) {
   const [value, setValue] = useState(
     data.length > 0 ? new Date(data[0].dueDate) : new Date()
   );
