@@ -43,7 +43,7 @@ export default function ProjectScreen({ project }: ProjectScreenProps) {
         <p>Loading...</p>
       ) : (
         projectAnalyticsData && (
-          <AnalyticsContainer projectAnalyticsData={projectAnalyticsData} />
+          <AnalyticsContainer analyticsData={projectAnalyticsData} />
         )
       )}
       <Card>

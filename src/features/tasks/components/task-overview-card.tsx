@@ -13,7 +13,7 @@ export default function TaskOverviewCard({ task }: TaskOverviewCardProps) {
   return (
     <div className="bg-neutral-100 p-4 rounded-lg border">
       <span className="text-lg font-bold">Overview</span>
-      <div className="space-y-3">
+      <div className="space-y-3 mt-4">
         <TaskOverviewProperty label="Name">
           <p>{task.name}</p>
         </TaskOverviewProperty>
