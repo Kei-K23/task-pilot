@@ -11,7 +11,7 @@ interface TaskOverviewCardProps {
 
 export default function TaskOverviewCard({ task }: TaskOverviewCardProps) {
   return (
-    <div className="bg-muted p-4 rounded-lg">
+    <div className="bg-neutral-100 p-4 rounded-lg border">
       <span className="text-lg font-bold">Overview</span>
       <div className="space-y-3">
         <TaskOverviewProperty label="Name">

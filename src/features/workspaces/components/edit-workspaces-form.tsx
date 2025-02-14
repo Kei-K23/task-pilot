@@ -20,9 +20,9 @@ import { useRef } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ImageIcon, Trash2, Upload } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useUpdateWorkspace } from "../api/use-update-workspaces";
 import { Workspace } from "../type";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface EditWorkspacesFormProps {
   onCancel?: () => void;
@@ -33,7 +33,7 @@ export default function EditWorkspacesForm({
   onCancel,
   initialValue,
 }: EditWorkspacesFormProps) {
-  const router = useRouter();
+  const queryClient = useQueryClient();
   const { mutate, isPending } = useUpdateWorkspace();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -62,13 +62,16 @@ export default function EditWorkspacesForm({
         form: finalValue,
       },
       {
-        onSuccess: () => {
-          toast.success("Successfully updated workspace");
-          form.reset();
-          router.push(`/workspaces/${initialValue.$id}`);
+        onSuccess: ({ message }) => {
+          console.log(initialValue);
+
+          toast.success(message);
+          queryClient.invalidateQueries({
+            queryKey: ["workspaces", initialValue.$id],
+          });
         },
-        onError: () => {
-          toast.error("Failed to update workspace");
+        onError: ({ message }) => {
+          toast.error(message);
         },
       }
     );
@@ -91,21 +94,23 @@ export default function EditWorkspacesForm({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
-              disabled={isPending}
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Workspace Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter workspace name" {...field} />
+                    <Input
+                      disabled={isPending}
+                      placeholder="Enter workspace name"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
-              disabled={isPending}
               control={form.control}
               name="imageUrl"
               render={({ field }) => (
@@ -185,7 +190,7 @@ export default function EditWorkspacesForm({
             <div className="flex items-center gap-3">
               {onCancel && (
                 <Button
-                  variant={"secondary-white"}
+                  variant={"secondary"}
                   disabled={isPending}
                   type="button"
                   className="font-bold"

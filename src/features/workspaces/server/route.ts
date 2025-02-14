@@ -9,7 +9,7 @@ import {
   WORKSPACES_ID,
 } from "@/config";
 import { ID, Query } from "node-appwrite";
-import { MEMBER_ROLE } from "../type";
+import { MEMBER_ROLE, Workspace } from "../type";
 import { generateRandomCharacters, generateRandomColor } from "@/lib/utils";
 import { z } from "zod";
 import { getMember } from "@/features/members/queries";
@@ -41,6 +41,58 @@ const app = new Hono()
       data: workspaces,
     });
   })
+  .get(
+    "/:workspaceId",
+    zValidator(
+      "param",
+      z.object({
+        workspaceId: z.string(),
+      })
+    ),
+    sessionMiddleware,
+    async (c) => {
+      const databases = c.get("databases");
+      const user = c.get("user");
+
+      const { workspaceId } = c.req.valid("param");
+
+      const member = await getMember(databases, workspaceId, user.$id);
+
+      if (!member) {
+        return c.json(
+          {
+            success: false,
+            message: "Unauthorized",
+            data: null,
+          },
+          401
+        );
+      }
+
+      const workspace = await databases.getDocument<Workspace>(
+        DATABASE_ID,
+        WORKSPACES_ID,
+        workspaceId
+      );
+
+      if (!workspace) {
+        return c.json(
+          {
+            success: false,
+            message: "Workspace not found",
+            data: null,
+          },
+          400
+        );
+      }
+
+      return c.json({
+        success: true,
+        message: "",
+        data: workspace,
+      });
+    }
+  )
   .post(
     "/",
     zValidator("form", workspacesCreateSchema),
@@ -121,6 +173,7 @@ const app = new Hono()
           {
             success: false,
             message: "Unauthorized",
+            data: null,
           },
           401
         );
@@ -145,15 +198,24 @@ const app = new Hono()
         imageUploadUrl = imageUrl;
       }
       // TODO: Delete the previous old uploaded image
-      await databases.updateDocument(DATABASE_ID, WORKSPACES_ID, workspaceId, {
-        name,
-        imageUrl: imageUploadUrl || null,
-      });
+      const updatedWorkspace = await databases.updateDocument(
+        DATABASE_ID,
+        WORKSPACES_ID,
+        workspaceId,
+        {
+          name,
+          imageUrl: imageUploadUrl || null,
+        }
+      );
 
-      return c.json({
-        success: true,
-        message: "Successfully update the workspace",
-      });
+      return c.json(
+        {
+          success: true,
+          message: "Successfully update the workspace",
+          data: updatedWorkspace,
+        },
+        200
+      );
     }
   )
   .delete(

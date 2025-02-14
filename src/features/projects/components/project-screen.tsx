@@ -22,8 +22,8 @@ export default function ProjectScreen({ project }: ProjectScreenProps) {
       <div className="flex items-center justify-between gap-x-4">
         <ProjectAvatar imageUrl={project.imageUrl} name={project.name} />
         <Link href={`${fullHref}/settings`}>
-          <Button>
-            <Edit /> Edit Project
+          <Button variant={"outline"}>
+            <Edit /> <span className="font-semibold">Edit</span>
           </Button>
         </Link>
       </div>

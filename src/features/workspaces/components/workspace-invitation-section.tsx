@@ -13,7 +13,7 @@ import useConfirmDialog from "@/hooks/use-confirm-dialog";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useWorkspaceRestInviteCode } from "../api/use-workspace-reset-invite-code";
 
 interface WorkspaceInvitationSectionProps {
@@ -25,6 +25,8 @@ export default function WorkspaceInvitationSection({
   workspaceId,
   inviteCode,
 }: WorkspaceInvitationSectionProps) {
+  const [currentUrl, setCurrentUrl] = useState("");
+
   const [isCopied, setIsCopied] = useState(false);
   const router = useRouter();
   const { mutate, isPending } = useWorkspaceRestInviteCode();
@@ -57,7 +59,7 @@ export default function WorkspaceInvitationSection({
     );
   };
 
-  const fullInvitationUrl = `${window.location.origin}/workspaces/${workspaceId}/join/${inviteCode}`;
+  const fullInvitationUrl = `${currentUrl}/workspaces/${workspaceId}/join/${inviteCode}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(fullInvitationUrl).then(() => {
@@ -68,6 +70,13 @@ export default function WorkspaceInvitationSection({
       setIsCopied(false);
     }, 3000);
   };
+
+  useEffect(() => {
+    if (process) {
+      // Access the current page URL using window.location
+      setCurrentUrl(window.location.origin);
+    }
+  }, []);
 
   return (
     <>

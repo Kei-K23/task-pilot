@@ -93,7 +93,7 @@ export default function TaskViewSwitcher({
             </TabsTrigger>
           </TabsList>
           <Button
-            className="w-full md:w-auto"
+            className="w-full md:w-auto font-semibold"
             size={"sm"}
             onClick={() => {
               setIsOpen({ openCreateTaskModal: true });

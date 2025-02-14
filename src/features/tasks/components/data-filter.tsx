@@ -169,7 +169,12 @@ export default function DataFilter({
           placeholder="Due date"
         />
       </div>
-      <Button onClick={clearFilters} size="sm" className="font-bold">
+      <Button
+        variant={"outline"}
+        onClick={clearFilters}
+        size="sm"
+        className="font-semibold"
+      >
         Clear filter
       </Button>
     </div>
