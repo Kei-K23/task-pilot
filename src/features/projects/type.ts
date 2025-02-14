@@ -6,7 +6,7 @@ export type Project = Models.Document & {
   workspaceId: string;
 };
 
-export type ProjectAnalysisResponse = {
+export type ProjectAnalyticsResponse = {
   taskCount: number;
   taskDiff: number;
   assignedTaskCount: number;

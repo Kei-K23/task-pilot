@@ -63,7 +63,7 @@ const app = new Hono()
     }
   )
   .get(
-    "/:projectId/analysis",
+    "/:projectId/analytics",
     zValidator(
       "param",
       z.object({
@@ -230,7 +230,7 @@ const app = new Hono()
 
       return c.json({
         success: true,
-        message: "Successfully get the project analysis",
+        message: "Successfully get the project analytics",
         data: {
           taskCount,
           taskDiff,
