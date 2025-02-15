@@ -7,6 +7,8 @@ import PageLoader from "@/components/page-loader";
 import { Button } from "@/components/ui/button";
 import { useGetMembers } from "@/features/members/api/use-get-members";
 import { useGetProjects } from "@/features/projects/api/use-get-projects";
+import ProjectAvatar from "@/features/projects/components/project-avatar";
+import { Project } from "@/features/projects/type";
 import { useGetTasks } from "@/features/tasks/api/use-get-tasks";
 import { Task } from "@/features/tasks/type";
 import { useGetWorkspaceById } from "@/features/workspaces/api/use-get-workspace-by-id";
@@ -71,6 +73,10 @@ export default function WorkspaceIdClientPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <TasksContainer workspaceId={workspaceId} tasks={tasksData || []} />
+        <ProjectsContainer
+          projects={projectsData?.documents || []}
+          workspaceId={workspaceId}
+        />
       </div>
     </div>
   );
@@ -95,7 +101,7 @@ const TasksContainer = ({ tasks, workspaceId }: TasksContainerProps) => {
         {tasks.slice(0, 3).map((task) => (
           <li
             key={task.$id}
-            className="bg-white p-4 rounded-md flex items-center justify-between gap-x-4"
+            className="bg-white border p-4 rounded-md flex items-center justify-between gap-x-4"
           >
             <div>
               <span className="font-semibold">{task.name}</span>
@@ -124,6 +130,52 @@ const TasksContainer = ({ tasks, workspaceId }: TasksContainerProps) => {
           Show All
         </Button>
       </Link>
+    </div>
+  );
+};
+
+interface ProjectsContainerProps {
+  projects: Project[];
+  workspaceId: string;
+}
+
+const ProjectsContainer = ({
+  projects,
+  workspaceId,
+}: ProjectsContainerProps) => {
+  return (
+    <div className="bg-neutral-100 p-4 rounded-lg border">
+      <div className="flex items-center justify-between gap-x-4">
+        <span className="text-lg font-bold">Projects ({projects?.length})</span>
+        <Button variant={"outline"} size={"sm"}>
+          <Plus />
+        </Button>
+      </div>
+      <DotdotSeparator className="my-3" />
+      <ul className="grid grid-cols-2 gap-x-5 gap-y-3">
+        {projects.slice(0, 3).map((project) => (
+          <li
+            key={project.$id}
+            className="bg-white rounded-md flex items-center justify-between gap-x-4 group border transition-colors"
+          >
+            <Link
+              className="w-full h-full p-4 group-hover:bg-neutral-100/50 transition-colors rounded-md"
+              href={`/workspaces/${workspaceId}/projects/${project.$id}`}
+            >
+              <div>
+                <ProjectAvatar
+                  name={project.name}
+                  imageUrl={project.imageUrl}
+                  textClassName="text-base"
+                />
+              </div>
+            </Link>
+          </li>
+        ))}
+        <li className="hidden text-center text-base text-muted-foreground first-of-type:block">
+          No projects found
+        </li>
+      </ul>
     </div>
   );
 };
