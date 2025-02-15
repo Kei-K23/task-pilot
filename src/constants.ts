@@ -7,7 +7,7 @@ export const NAV_ITEMS = [
     icon: Home,
   },
   {
-    name: "My Tasks",
+    name: "Tasks",
     link: "/tasks",
     icon: CheckCircle2,
   },

@@ -6,6 +6,7 @@ interface MemberAvatarProps {
   img?: string;
   color: string;
   className?: string;
+  textClassName?: string;
 }
 
 export default function MemberAvatar({
@@ -13,6 +14,7 @@ export default function MemberAvatar({
   img,
   color,
   className,
+  textClassName,
 }: MemberAvatarProps) {
   return (
     <Avatar
@@ -26,7 +28,7 @@ export default function MemberAvatar({
         style={{
           backgroundColor: color,
         }}
-        className="font-bold text-lg"
+        className={cn("font-bold text-lg", textClassName)}
       >
         {name.charAt(0).toUpperCase()}
       </AvatarFallback>

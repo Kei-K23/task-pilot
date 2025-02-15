@@ -10,7 +10,7 @@ export const useCreateTask = ({
   projectId,
 }: {
   workspaceId: string;
-  projectId: string;
+  projectId?: string;
 }) => {
   const queryClient = useQueryClient();
 
@@ -21,7 +21,7 @@ export const useCreateTask = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["tasks", workspaceId, projectId],
+        queryKey: ["tasks", workspaceId, projectId ?? undefined],
       });
     },
   });

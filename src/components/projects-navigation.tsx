@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { Folder, Plus } from "lucide-react";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
 import { useOpenCreateProjectModal } from "@/features/projects/hooks/use-open-create-project-modal";
 import { useGetProjects } from "@/features/projects/api/use-get-projects";
@@ -26,45 +26,45 @@ export default function ProjectsNavigation() {
         />
       </div>
       <div className="space-y-1">
-        {isLoading
-          ? [1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="w-full h-[30px] flex items-center gap-x-2"
-              >
-                <Skeleton className="bg-neutral-200 w-[35px] h-full" />
-                <Skeleton className="bg-neutral-200 flex-1 w-full h-full" />
-              </div>
-            ))
-          : data?.documents.map((project) => {
-              const fullHrefPath = `/workspaces/${workspaceId}/projects/${project.$id}`;
-              const isActive = pathname === fullHrefPath;
+        {isLoading ? (
+          [1, 2, 3].map((i) => (
+            <div key={i} className="w-full h-[30px] flex items-center gap-x-2">
+              <Skeleton className="bg-neutral-200 w-[35px] h-full" />
+              <Skeleton className="bg-neutral-200 flex-1 w-full h-full" />
+            </div>
+          ))
+        ) : data?.total === 0 ? (
+          <div className="text-muted-foreground flex items-center justify-center gap-x-1">
+            <span>No projects found</span>{" "}
+            <Folder className="size-4 text-muted-foreground" />
+          </div>
+        ) : (
+          data?.documents.map((project) => {
+            const fullHrefPath = `/workspaces/${workspaceId}/projects/${project.$id}`;
+            const isActive = pathname === fullHrefPath;
 
-              return (
-                <SidebarMenuItem key={project.$id}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive}
-                    className="h-10"
-                  >
-                    <Link href={fullHrefPath}>
-                      <div className="flex items-center gap-x-2">
-                        <Avatar className="size-8 rounded-lg">
-                          <AvatarImage
-                            src={project?.imageUrl}
-                            alt="Project logo"
-                          />
-                          <AvatarFallback className="bg-black text-white rounded-lg font-bold text-lg">
-                            {project?.name.charAt(0).toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                        <span>{project.name}</span>
-                      </div>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              );
-            })}
+            return (
+              <SidebarMenuItem key={project.$id}>
+                <SidebarMenuButton asChild isActive={isActive} className="h-10">
+                  <Link href={fullHrefPath}>
+                    <div className="flex items-center gap-x-2">
+                      <Avatar className="size-8 rounded-lg">
+                        <AvatarImage
+                          src={project?.imageUrl}
+                          alt="Project logo"
+                        />
+                        <AvatarFallback className="bg-black text-white rounded-lg font-bold text-lg">
+                          {project?.name.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span>{project.name}</span>
+                    </div>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })
+        )}
       </div>
     </SidebarMenu>
   );
