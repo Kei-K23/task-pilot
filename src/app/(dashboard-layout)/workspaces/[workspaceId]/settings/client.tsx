@@ -32,13 +32,16 @@ export default function WorkspaceIdSettingClientPage() {
   }
 
   return (
-    <div className="w-full mx-auto space-y-6">
-      <EditWorkspacesForm initialValue={data} />
-      <WorkspaceInvitationSection
-        workspaceId={data.$id}
-        inviteCode={data.inviteCode}
-      />
-      <DeleteWorkspaceSection workspaceId={data.$id} />
+    <div>
+      <h2 className="mb-5 text-2xl font-semibold">Settings</h2>
+      <div className="w-full mx-auto space-y-6">
+        <EditWorkspacesForm initialValue={data} />
+        <WorkspaceInvitationSection
+          workspaceId={data.$id}
+          inviteCode={data.inviteCode}
+        />
+        <DeleteWorkspaceSection workspaceId={data.$id} />
+      </div>
     </div>
   );
 }

@@ -48,7 +48,7 @@ export default function useConfirmDialog(
             <DialogDescription>{message}</DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex items-center justify-between gap-x-2">
-            <Button variant={"outline"} onClick={handleCancel}>
+            <Button variant={"secondary"} onClick={handleCancel}>
               Cancel
             </Button>
             <Button onClick={handleConfirm}>Confirm</Button>

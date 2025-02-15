@@ -170,7 +170,7 @@ export default function CreateProjectForm({
             <div className="flex items-center gap-3">
               {onCancel && (
                 <Button
-                  variant={"secondary-white"}
+                  variant={"secondary"}
                   disabled={isPending}
                   type="button"
                   className="font-bold"

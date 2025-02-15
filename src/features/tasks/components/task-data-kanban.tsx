@@ -167,7 +167,7 @@ export default function TaskDataKanban({
     <DragDropContext onDragEnd={handleOnDragEnd}>
       <div className="flex overflow-x-auto gap-x-4 items-start flex-nowrap w-full">
         {boards.map((board) => (
-          <div key={board} className="overflow-x-auto">
+          <div key={board} className="overflow-x-auto min-w-[250px]">
             <TaskKanbanHeader board={board} tasksCount={tasks[board].length} />
             <Droppable droppableId={board} isDropDisabled={isLoading}>
               {(provided) => (

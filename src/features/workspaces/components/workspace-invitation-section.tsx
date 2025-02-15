@@ -106,7 +106,11 @@ export default function WorkspaceInvitationSection({
             </Button>
           </div>
           <div className="flex justify-end mt-8">
-            <Button disabled={isPending} onClick={handleResetCode}>
+            <Button
+              disabled={isPending}
+              onClick={handleResetCode}
+              variant={"outline"}
+            >
               <Recycle /> Reset invite link
             </Button>
           </div>

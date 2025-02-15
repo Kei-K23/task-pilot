@@ -84,7 +84,7 @@ export default function WorkspaceJoinScreen({
         <div className="mt-4 flex items-center justify-between">
           <Button
             disabled={isPending}
-            variant={"outline"}
+            variant={"secondary"}
             onClick={() => {
               router.push("/");
             }}
