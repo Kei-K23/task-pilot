@@ -16,7 +16,7 @@ export default function DashboardLayout({
   return (
     <SidebarProvider>
       <DashboardSidebar />
-      <SidebarInset>
+      <SidebarInset className="overflow-x-hidden">
         <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4 sticky top-0 z-30 bg-background">
           <div className="flex items-center gap-x-2">
             <SidebarTrigger className="-ml-1" />

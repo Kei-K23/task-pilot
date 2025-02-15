@@ -108,9 +108,11 @@ const TasksContainer = ({ tasks, workspaceId }: TasksContainerProps) => {
                 </span>
               </div>
             </div>
-            <Button variant={"outline"} size={"sm"}>
-              <ExternalLink />
-            </Button>
+            <Link href={`/workspaces/${workspaceId}/tasks/${task.$id}`}>
+              <Button variant={"outline"} size={"sm"}>
+                <ExternalLink />
+              </Button>
+            </Link>
           </li>
         ))}
         <li className="hidden text-center text-base text-muted-foreground first-of-type:block">
