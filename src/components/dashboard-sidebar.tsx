@@ -15,12 +15,12 @@ import { NAV_ITEMS } from "@/constants";
 import CreateWorkspacesModal from "@/features/workspaces/components/create-workspaces-modal";
 import { WorkspaceSwitcher } from "@/features/workspaces/components/workspace-switcher";
 import { useGetWorkspaceIdParam } from "@/features/workspaces/hooks/use-get-workspace-param";
-import { RefreshCcw } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ProjectsNavigation from "./projects-navigation";
 import { Separator } from "./ui/separator";
 import CreateProjectModal from "@/features/projects/components/create-project-modal";
+import Image from "next/image";
 
 export function DashboardSidebar({
   ...props
@@ -36,8 +36,15 @@ export function DashboardSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <Link href={"/"} className="flex items-center gap-x-2">
-              <RefreshCcw />
-              WorkSync
+              <Image
+                src={"/icons/icon.png"}
+                alt="icon"
+                width={30}
+                height={30}
+              />
+              <span className="text-lg font-semibold text-muted-foreground hover:text-black transition-colors">
+                TaskPilot
+              </span>
             </Link>
           </SidebarMenuItem>
           <SidebarMenuItem className="pt-4">
