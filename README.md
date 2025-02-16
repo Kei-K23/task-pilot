@@ -7,4 +7,6 @@
 - [ ] Add scrollable for project listing in sidebar
 - [ ] Add more advanced role-based access for member
 - [ ] Implement SEO
-- [ ] Implement OAuth
+- [x] Implement OAuth
+- [ ] Deployment to Vercel
+- [ ] Need to revalidate Analytics data after making some mutation to tasks

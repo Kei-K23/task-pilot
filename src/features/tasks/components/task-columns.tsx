@@ -77,6 +77,7 @@ export const taskColumns: ColumnDef<Task>[] = [
             name={assignee.name}
             color={assignee.color}
             className="size-7"
+            textClassName="text-base"
           />
           <span>{assignee.name}</span>
         </div>

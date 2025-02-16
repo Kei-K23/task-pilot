@@ -145,6 +145,7 @@ export default function EditWorkspacesForm({
                           JPG, PNG, SVG or JPEG, max 1MB
                         </p>
                         <input
+                          disabled={isPending}
                           ref={fileInputRef}
                           type="file"
                           className="hidden"

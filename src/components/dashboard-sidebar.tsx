@@ -35,7 +35,10 @@ export function DashboardSidebar({
       <SidebarHeader className="pt-4 px-4">
         <SidebarMenu>
           <SidebarMenuItem>
-            <Link href={"/"} className="flex items-center gap-x-2">
+            <Link
+              href={`/workspaces/${workspaceId}`}
+              className="flex items-center gap-x-2"
+            >
               <Image
                 src={"/icons/icon.png"}
                 alt="icon"

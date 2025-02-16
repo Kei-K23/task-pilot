@@ -84,21 +84,23 @@ export default function CreateWorkspacesForm({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
-              disabled={isPending}
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Workspace Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter workspace name" {...field} />
+                    <Input
+                      disabled={isPending}
+                      placeholder="Enter workspace name"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
-              disabled={isPending}
               control={form.control}
               name="imageUrl"
               render={({ field }) => (
@@ -131,6 +133,7 @@ export default function CreateWorkspacesForm({
                       JPG, PNG, SVG or JPEG, max 1MB
                     </p>
                     <input
+                      disabled={isPending}
                       ref={fileInputRef}
                       type="file"
                       className="hidden"

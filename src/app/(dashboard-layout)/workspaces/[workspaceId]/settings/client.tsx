@@ -5,15 +5,8 @@ import PageLoader from "@/components/page-loader";
 import { useGetWorkspaceById } from "@/features/workspaces/api/use-get-workspace-by-id";
 import DeleteWorkspaceSection from "@/features/workspaces/components/delete-workspace-section";
 import EditWorkspacesForm from "@/features/workspaces/components/edit-workspaces-form";
+import WorkspaceInvitationSection from "@/features/workspaces/components/workspace-invitation-section";
 import { useGetWorkspaceIdParam } from "@/features/workspaces/hooks/use-get-workspace-param";
-import dynamic from "next/dynamic";
-
-const WorkspaceInvitationSection = dynamic(
-  () => import("@/features/workspaces/components/workspace-invitation-section"),
-  {
-    ssr: false,
-  }
-);
 
 export default function WorkspaceIdSettingClientPage() {
   const workspaceId = useGetWorkspaceIdParam();

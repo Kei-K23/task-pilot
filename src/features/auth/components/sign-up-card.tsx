@@ -24,6 +24,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { registerSchema } from "@/features/auth/schemas";
 import { useRegister } from "@/features/auth/api/use-register";
+import { signUpWithGithub, signUpWithGoogle } from "@/lib/oauth";
 
 export default function SignUpCard() {
   const { mutate, isPending } = useRegister();
@@ -130,6 +131,9 @@ export default function SignUpCard() {
         <Separator className="w-full h-[1px] my-6" />
         <div className="space-y-4">
           <Button
+            onClick={() => {
+              signUpWithGoogle();
+            }}
             disabled={isPending}
             variant={"outline"}
             className="w-full flex items-center"
@@ -143,6 +147,9 @@ export default function SignUpCard() {
             Continue with Google
           </Button>
           <Button
+            onClick={() => {
+              signUpWithGithub();
+            }}
             disabled={isPending}
             variant={"outline"}
             className="w-full flex items-center"
