@@ -191,7 +191,9 @@ const app = new Hono()
         message: isCurrentUser
           ? "Successfully left the workspace"
           : "Successfully removed the member",
-        data: null,
+        data: {
+          workspaceId,
+        },
       });
     }
   )

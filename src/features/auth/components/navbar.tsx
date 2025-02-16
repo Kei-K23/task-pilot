@@ -20,7 +20,7 @@ export default function Navbar() {
         </Link>
 
         <Link href={btn.link}>
-          <Button variant={"secondary-white"} className="font-bold">
+          <Button variant={"outline"} className="font-bold">
             {btn.name}
           </Button>
         </Link>

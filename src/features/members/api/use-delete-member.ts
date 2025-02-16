@@ -21,8 +21,10 @@ export const useDeleteMember = () => {
 
       return await res.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["members", workspaceId] });
+    onSuccess: ({ data }) => {
+      queryClient.invalidateQueries({
+        queryKey: ["members", data?.workspaceId],
+      });
     },
   });
 
