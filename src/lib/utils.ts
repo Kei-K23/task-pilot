@@ -49,3 +49,16 @@ export function getGreeting() {
     return "Good night!";
   }
 }
+
+export function extractNameFromEmail(email: string): string {
+  if (!email.includes("@")) {
+    throw new Error("Invalid email format");
+  }
+
+  const namePart = email.split("@")[0]; // Get the part before '@'
+
+  // Replace common separators with spaces and capitalize words
+  return namePart
+    .replace(/[\.\_\-]/g, " ") // Replace dots, underscores, and hyphens with spaces
+    .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize first letter of each word
+}

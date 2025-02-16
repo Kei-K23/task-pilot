@@ -18,6 +18,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { loginSchema } from "@/features/auth/schemas";
 import { useLogin } from "@/features/auth/api/use-login";
+import { signUpWithGithub } from "@/lib/oauth";
 
 export default function SignInCard() {
   const { mutate, isPending } = useLogin();
@@ -100,6 +101,9 @@ export default function SignInCard() {
             Continue with Google
           </Button>
           <Button
+            onClick={() => {
+              signUpWithGithub();
+            }}
             disabled={isPending}
             variant={"outline"}
             className="w-full flex items-center"

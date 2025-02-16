@@ -8,6 +8,7 @@ import { DATABASE_ID, MEMBERS_ID } from "@/config";
 import { Query } from "node-appwrite";
 import { MEMBER_ROLE } from "@/features/workspaces/type";
 import { MemberWithUserData } from "../type";
+import { extractNameFromEmail } from "@/lib/utils";
 
 const app = new Hono()
   .get(
@@ -49,7 +50,7 @@ const app = new Hono()
 
           return {
             ...member,
-            name: user.name,
+            name: user.name || extractNameFromEmail(user.email),
             email: user.email,
             userId: member.userId,
             workspaceId: member.workspaceId,
@@ -94,7 +95,7 @@ const app = new Hono()
 
       const populatedMember = {
         ...member,
-        name: user.name,
+        name: user.name || extractNameFromEmail(user.email),
         email: user.email,
         userId: member.userId,
         workspaceId: member.workspaceId,

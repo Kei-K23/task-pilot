@@ -10,6 +10,7 @@ import { Task, TASK_STATUS } from "../type";
 import { createAdminClient } from "@/lib/appwrite";
 import { Project } from "@/features/projects/type";
 import { MemberWithUserData } from "@/features/members/type";
+import { extractNameFromEmail } from "@/lib/utils";
 
 const app = new Hono()
   .get(
@@ -100,7 +101,7 @@ const app = new Hono()
 
           return {
             ...member,
-            name: user.name,
+            name: user.name || extractNameFromEmail(user.email),
             email: user.email,
           };
         })
@@ -186,7 +187,7 @@ const app = new Hono()
 
       const assignee = {
         ...member,
-        name: memberUser.name,
+        name: memberUser.name || extractNameFromEmail(memberUser.email),
         email: memberUser.email,
       };
 
