@@ -107,7 +107,13 @@ const app = new Hono()
 
       const { name, imageUrl } = c.req.valid("form");
 
-      let imageUploadUrl: string | undefined;
+      const imageUpload: {
+        imageUploadUrl: string | undefined;
+        fileId: string | undefined;
+      } = {
+        imageUploadUrl: "",
+        fileId: "",
+      };
 
       if (imageUrl instanceof File) {
         const file = await storage.createFile(
@@ -121,9 +127,10 @@ const app = new Hono()
           file.$id
         );
 
-        imageUploadUrl = `data:image/png;base64,${Buffer.from(
+        imageUpload.imageUploadUrl = `data:image/png;base64,${Buffer.from(
           arrayBuffer
         ).toString("base64")}`;
+        imageUpload.fileId = file.$id;
       }
 
       const workspace = await databases.createDocument(
@@ -133,7 +140,8 @@ const app = new Hono()
         {
           name,
           userId: user.$id,
-          imageUrl: imageUploadUrl,
+          imageUrl: imageUpload.imageUploadUrl,
+          fileId: imageUpload.fileId,
           inviteCode: generateRandomCharacters(6),
         }
       );
@@ -146,6 +154,8 @@ const app = new Hono()
       });
 
       return c.json({
+        success: true,
+        message: "Successfully created workspace",
         data: workspace,
       });
     }
@@ -167,8 +177,8 @@ const app = new Hono()
 
       const { workspaceId } = c.req.valid("param");
       const { name, imageUrl } = c.req.valid("form");
+      console.log(imageUrl, name);
 
-      let imageUploadUrl: string | undefined;
       const member = await getMember(databases, workspaceId, user.$id);
 
       if (!member || member?.role !== "ADMIN") {
@@ -182,7 +192,36 @@ const app = new Hono()
         );
       }
 
+      const imageUpload: {
+        imageUploadUrl: string | undefined;
+        fileId: string | undefined;
+      } = {
+        imageUploadUrl: "",
+        fileId: "",
+      };
+
+      const existWorkspace = await databases.getDocument<Workspace>(
+        DATABASE_ID,
+        WORKSPACES_ID,
+        workspaceId
+      );
+
+      if (!existWorkspace) {
+        return c.json(
+          {
+            success: false,
+            message: "Workspace not found to update",
+            data: null,
+          },
+          404
+        );
+      }
+
       if (imageUrl instanceof File) {
+        if (existWorkspace.fileId) {
+          await storage.deleteFile(STORAGE_BUCKET_ID, existWorkspace.fileId);
+        }
+
         const file = await storage.createFile(
           STORAGE_BUCKET_ID,
           ID.unique(),
@@ -194,20 +233,26 @@ const app = new Hono()
           file.$id
         );
 
-        imageUploadUrl = `data:image/png;base64,${Buffer.from(
+        imageUpload.imageUploadUrl = `data:image/png;base64,${Buffer.from(
           arrayBuffer
         ).toString("base64")}`;
+        imageUpload.fileId = file.$id;
       } else {
-        imageUploadUrl = imageUrl;
+        if (existWorkspace.fileId) {
+          await storage.deleteFile(STORAGE_BUCKET_ID, existWorkspace.fileId);
+        }
+
+        imageUpload.imageUploadUrl = imageUrl;
       }
-      // TODO: Delete the previous old uploaded image
+
       const updatedWorkspace = await databases.updateDocument(
         DATABASE_ID,
         WORKSPACES_ID,
         workspaceId,
         {
           name,
-          imageUrl: imageUploadUrl || null,
+          imageUrl: imageUpload.imageUploadUrl || null,
+          fileId: imageUpload.fileId || null,
         }
       );
 
@@ -233,7 +278,7 @@ const app = new Hono()
     async (c) => {
       const databases = c.get("databases");
       const user = c.get("user");
-
+      const storage = c.get("storage");
       const { workspaceId } = c.req.valid("param");
 
       const member = await getMember(databases, workspaceId, user.$id);
@@ -247,11 +292,32 @@ const app = new Hono()
           401
         );
       }
+
+      const existWorkspace = await databases.getDocument<Workspace>(
+        DATABASE_ID,
+        WORKSPACES_ID,
+        workspaceId
+      );
+
+      if (!existWorkspace) {
+        return c.json(
+          {
+            success: false,
+            message: "Workspace not found to delete",
+            data: null,
+          },
+          404
+        );
+      }
+
       // Delete the workspace
       await databases.deleteDocument(DATABASE_ID, WORKSPACES_ID, workspaceId);
 
-      // Delete the members that related to workspace
+      if (existWorkspace.fileId) {
+        await storage.deleteFile(STORAGE_BUCKET_ID, existWorkspace.fileId);
+      }
 
+      // Delete the members that related to workspace
       const members = await databases.listDocuments(DATABASE_ID, MEMBERS_ID, [
         Query.equal("workspaceId", workspaceId),
       ]);

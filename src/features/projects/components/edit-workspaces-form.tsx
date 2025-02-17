@@ -51,10 +51,7 @@ export default function EditProjectForm({
   async function onSubmit(values: z.infer<typeof projectUpdateSchema>) {
     const finalValue = {
       ...values,
-      imageUrl:
-        values.imageUrl instanceof File
-          ? values.imageUrl
-          : initialValue.imageUrl,
+      imageUrl: values.imageUrl instanceof File ? values.imageUrl : "",
     };
 
     mutate(
@@ -72,8 +69,8 @@ export default function EditProjectForm({
             `/workspaces/${workspaceId}/projects/${initialValue.$id}`
           );
         },
-        onError: () => {
-          toast.error("Failed to update project");
+        onError: ({ message }) => {
+          toast.error(message || "Failed to update project");
         },
       }
     );

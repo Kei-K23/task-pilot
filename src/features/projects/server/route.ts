@@ -276,7 +276,13 @@ const app = new Hono()
         );
       }
 
-      let imageUploadUrl: string | undefined;
+      const imageUpload: {
+        imageUploadUrl: string | undefined;
+        fileId: string | undefined;
+      } = {
+        imageUploadUrl: "",
+        fileId: "",
+      };
 
       if (imageUrl instanceof File) {
         const file = await storage.createFile(
@@ -290,9 +296,10 @@ const app = new Hono()
           file.$id
         );
 
-        imageUploadUrl = `data:image/png;base64,${Buffer.from(
+        imageUpload.imageUploadUrl = `data:image/png;base64,${Buffer.from(
           arrayBuffer
         ).toString("base64")}`;
+        imageUpload.fileId = file.$id;
       }
 
       const project = await databases.createDocument(
@@ -302,11 +309,14 @@ const app = new Hono()
         {
           name,
           workspaceId,
-          imageUrl: imageUploadUrl,
+          imageUrl: imageUpload.imageUploadUrl,
+          fileId: imageUpload.fileId,
         }
       );
 
       return c.json({
+        success: true,
+        message: "Successfully created project",
         data: project,
       });
     }
@@ -327,9 +337,38 @@ const app = new Hono()
       const { projectId } = c.req.valid("param");
       const { name, imageUrl, workspaceId } = c.req.valid("form");
 
-      let imageUploadUrl: string | undefined;
+      const imageUpload: {
+        imageUploadUrl: string | undefined;
+        fileId: string | undefined;
+      } = {
+        imageUploadUrl: "",
+        fileId: "",
+      };
+
+      // Get tasks to update
+      const existProject = await databases.getDocument<Project>(
+        DATABASE_ID,
+        PROJECTS_ID,
+        projectId
+      );
+
+      if (!existProject) {
+        return c.json(
+          {
+            success: false,
+            message: "Project not found to update",
+            data: null,
+          },
+          404
+        );
+      }
 
       if (imageUrl instanceof File) {
+        // Delete existing image from storage, when project have old image
+        if (existProject.fileId) {
+          await storage.deleteFile(STORAGE_BUCKET_ID, existProject.fileId);
+        }
+
         const file = await storage.createFile(
           STORAGE_BUCKET_ID,
           ID.unique(),
@@ -341,16 +380,22 @@ const app = new Hono()
           file.$id
         );
 
-        imageUploadUrl = `data:image/png;base64,${Buffer.from(
+        imageUpload.imageUploadUrl = `data:image/png;base64,${Buffer.from(
           arrayBuffer
         ).toString("base64")}`;
+        imageUpload.fileId = file.$id;
       } else {
-        imageUploadUrl = imageUrl;
+        if (existProject.fileId) {
+          await storage.deleteFile(STORAGE_BUCKET_ID, existProject.fileId);
+        }
+
+        imageUpload.imageUploadUrl = imageUrl;
       }
-      // TODO: Delete the previous old uploaded image
+
       await databases.updateDocument(DATABASE_ID, PROJECTS_ID, projectId, {
         name,
-        imageUrl: imageUploadUrl || null,
+        imageUrl: imageUpload.imageUploadUrl || null,
+        fileId: imageUpload.fileId || null,
         workspaceId,
       });
 
@@ -372,10 +417,34 @@ const app = new Hono()
     async (c) => {
       const databases = c.get("databases");
       const { projectId } = c.req.valid("param");
+      const storage = c.get("storage");
+
+      // Get tasks to update
+      const existProject = await databases.getDocument<Project>(
+        DATABASE_ID,
+        PROJECTS_ID,
+        projectId
+      );
+
+      if (!existProject) {
+        return c.json(
+          {
+            success: false,
+            message: "Project not found to delete",
+            data: null,
+          },
+          404
+        );
+      }
 
       await databases.deleteDocument(DATABASE_ID, PROJECTS_ID, projectId);
 
+      if (existProject.fileId) {
+        await storage.deleteFile(STORAGE_BUCKET_ID, existProject.fileId);
+      }
+
       // TODO: check do i need to delete other data related to project
+      // TODO: Tasks are related to projects
 
       return c.json({
         success: true,

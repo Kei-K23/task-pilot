@@ -48,10 +48,7 @@ export default function EditWorkspacesForm({
   async function onSubmit(values: z.infer<typeof workspacesUpdateSchema>) {
     const finalValue = {
       ...values,
-      imageUrl:
-        values.imageUrl instanceof File
-          ? values.imageUrl
-          : initialValue.imageUrl,
+      imageUrl: values.imageUrl instanceof File ? values.imageUrl : "",
     };
 
     mutate(
@@ -63,12 +60,10 @@ export default function EditWorkspacesForm({
       },
       {
         onSuccess: ({ message }) => {
-          console.log(initialValue);
-
-          toast.success(message);
           queryClient.invalidateQueries({
             queryKey: ["workspaces", initialValue.$id],
           });
+          toast.success(message);
         },
         onError: ({ message }) => {
           toast.error(message);

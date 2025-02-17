@@ -11,6 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import PageError from "@/components/page-error";
 import { useGetProjectAnalytics } from "../api/use-get-project-analytics";
 import AnalyticsContainer from "@/components/analysis-container";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ProjectScreenProps {
   project: Project;
@@ -39,8 +40,11 @@ export default function ProjectScreen({ project }: ProjectScreenProps) {
         </Link>
       </div>
       {isLoadingProjectAnalyticsData ? (
-        // TODO Implement loading skeleton
-        <p>Loading...</p>
+        <div className="grid grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map((number) => (
+            <Skeleton key={number} className="w-full h-[100px] rounded-lg" />
+          ))}
+        </div>
       ) : (
         projectAnalyticsData && (
           <AnalyticsContainer analyticsData={projectAnalyticsData} />

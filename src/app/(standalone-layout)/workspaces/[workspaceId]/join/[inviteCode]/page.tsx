@@ -1,3 +1,4 @@
+import PageNotFound from "@/components/page-not-found";
 import WorkspaceJoinScreen from "@/features/workspaces/components/workspace-join-screen";
 import { getWorkspaceById } from "@/features/workspaces/queries";
 
@@ -14,8 +15,7 @@ export default async function WorkspaceJoinPage({
   const workspace = await getWorkspaceById(workspaceId);
 
   if (!workspace) {
-    // TODO : show not found workspace
-    return null;
+    return <PageNotFound />;
   }
 
   return (
