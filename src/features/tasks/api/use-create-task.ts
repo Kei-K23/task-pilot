@@ -23,6 +23,12 @@ export const useCreateTask = ({
       queryClient.invalidateQueries({
         queryKey: ["tasks", workspaceId, projectId ?? undefined],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["projects", "analytics", workspaceId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["projects", "analytics", workspaceId, projectId],
+      });
     },
   });
 

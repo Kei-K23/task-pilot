@@ -459,12 +459,31 @@ const app = new Hono()
         );
       }
 
+      const existTask = await databases.getDocument(
+        DATABASE_ID,
+        TASKS_ID,
+        taskId
+      );
+
+      if (!existTask) {
+        return c.json(
+          {
+            success: false,
+            message: "Task not found to delete",
+            data: null,
+          },
+          404
+        );
+      }
+
       await databases.deleteDocument(DATABASE_ID, TASKS_ID, taskId);
 
       return c.json({
         success: true,
         message: "Successfully deleted the task",
-        data: null,
+        data: {
+          projectId: existTask.$id,
+        },
       });
     }
   );

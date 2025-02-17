@@ -28,8 +28,14 @@ export const useDeleteTask = ({ workspaceId }: { workspaceId: string }) => {
 
       return await res.json();
     },
-    onSuccess: () => {
+    onSuccess: ({ data }) => {
       queryClient.invalidateQueries({ queryKey: ["tasks", workspaceId] });
+      queryClient.invalidateQueries({
+        queryKey: ["projects", "analytics", workspaceId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["projects", "analytics", workspaceId, data?.projectId],
+      });
     },
   });
 
