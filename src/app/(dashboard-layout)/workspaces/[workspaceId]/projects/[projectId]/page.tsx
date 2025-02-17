@@ -1,3 +1,4 @@
+import PageNotFound from "@/components/page-not-found";
 import { getCurrent } from "@/features/auth/queries";
 import ProjectScreen from "@/features/projects/components/project-screen";
 import { getProjectById } from "@/features/projects/queries";
@@ -20,8 +21,7 @@ export default async function ProjectIdPage({ params }: ProjectIdPageProps) {
   const project = await getProjectById({ projectId });
 
   if (!project) {
-    // TODO: implement not found
-    return <div>Project not found</div>;
+    return <PageNotFound />;
   }
 
   return <ProjectScreen project={project} />;
