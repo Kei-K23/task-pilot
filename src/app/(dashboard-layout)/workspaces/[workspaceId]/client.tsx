@@ -18,7 +18,7 @@ import { Project } from "@/features/projects/type";
 import { useGetTasks } from "@/features/tasks/api/use-get-tasks";
 import CreateTaskModal from "@/features/tasks/components/create-task-modal";
 import { useOpenCreateTaskModal } from "@/features/tasks/hooks/use-open-create-task-modal";
-import { Task } from "@/features/tasks/type";
+import { Task, TASK_STATUS } from "@/features/tasks/type";
 import { useGetWorkspaceById } from "@/features/workspaces/api/use-get-workspace-by-id";
 import { useGetWorkspaceAnalytics } from "@/features/workspaces/hooks/use-get-workspace-analytics";
 import { useGetWorkspaceIdParam } from "@/features/workspaces/hooks/use-get-workspace-param";
@@ -118,7 +118,9 @@ const TasksContainer = ({ tasks, workspaceId }: TasksContainerProps) => {
       <CreateTaskModal />
       <div className="bg-neutral-100 p-4 rounded-lg border">
         <div className="flex items-center justify-between gap-x-4">
-          <span className="text-lg font-bold">Tasks ({tasks?.length})</span>
+          <span className="text-lg font-bold">
+            Total Tasks ({tasks?.length})
+          </span>
           <Button
             variant={"outline"}
             size={"sm"}
@@ -139,13 +141,18 @@ const TasksContainer = ({ tasks, workspaceId }: TasksContainerProps) => {
               className="bg-white border p-4 rounded-md flex items-center justify-between gap-x-4"
             >
               <div>
-                <span className="font-semibold">{task.name}</span>
+                <div className="flex items-center gap-x-3">
+                  <span className="font-semibold">{task.name}</span>
+                  <Badge variant={task.status as TASK_STATUS}>
+                    {task.status}
+                  </Badge>
+                </div>
                 <div className="mt-1 text-muted-foreground text-sm flex items-center gap-x-1">
                   <span>{task.project.name}</span>
                   <Dot />
                   <span className="flex items-center gap-x-1">
                     <Calendar className="size-4" />{" "}
-                    {formatDistanceToNow(task.project.$createdAt)}
+                    {formatDistanceToNow(task.$createdAt)}
                   </span>
                 </div>
               </div>

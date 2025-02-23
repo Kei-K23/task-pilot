@@ -16,6 +16,7 @@ import { z } from "zod";
 import { getMember } from "@/features/members/queries";
 import { endOfMonth, startOfMonth, subMonths } from "date-fns";
 import { TASK_STATUS } from "@/features/tasks/type";
+import { Member } from "@/features/members/type";
 
 const app = new Hono()
   .get("/", sessionMiddleware, async (c) => {
@@ -457,13 +458,36 @@ const app = new Hono()
         workspaceId: z.string(),
       })
     ),
+    zValidator(
+      "query",
+      z.object({
+        memberId: z.string().optional(),
+      })
+    ),
     sessionMiddleware,
     async (c) => {
       const databases = c.get("databases");
       const user = c.get("user");
       const { workspaceId } = c.req.valid("param");
+      const { memberId } = c.req.valid("query");
 
-      const member = await getMember(databases, workspaceId, user.$id);
+      let member: Member | null = null;
+
+      // If memberId is give that mean viewing member profile
+      if (memberId) {
+        console.log("should log here");
+
+        member = await databases.getDocument<Member>(
+          DATABASE_ID,
+          MEMBERS_ID,
+          memberId
+        );
+      } else {
+        // For authenticated logined user
+        member = await getMember(databases, workspaceId, user.$id);
+      }
+
+      console.log({ memberId, member });
 
       if (!member) {
         return c.json(
