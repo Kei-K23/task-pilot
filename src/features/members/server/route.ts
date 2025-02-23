@@ -7,7 +7,7 @@ import { getMember } from "../queries";
 import { DATABASE_ID, MEMBERS_ID } from "@/config";
 import { Query } from "node-appwrite";
 import { MEMBER_ROLE } from "@/features/workspaces/type";
-import { MemberWithUserData } from "../type";
+import { Member, MemberWithUserData } from "../type";
 import { extractNameFromEmail } from "@/lib/utils";
 
 const app = new Hono()
@@ -101,6 +101,73 @@ const app = new Hono()
         workspaceId: member.workspaceId,
         role: member.role,
         color: member.color,
+      } satisfies MemberWithUserData;
+
+      return c.json({
+        success: true,
+        message: "Success",
+        data: populatedMember,
+      });
+    }
+  )
+  .get(
+    "/:memberId",
+    zValidator(
+      "param",
+      z.object({
+        memberId: z.string(),
+      })
+    ),
+    zValidator(
+      "query",
+      z.object({
+        workspaceId: z.string(),
+      })
+    ),
+    sessionMiddleware,
+    async (c) => {
+      const databases = c.get("databases");
+      const user = c.get("user");
+      const { workspaceId } = c.req.valid("query");
+      const { memberId } = c.req.valid("param");
+
+      const member = await getMember(databases, workspaceId, user.$id);
+      if (!member) {
+        return c.json(
+          {
+            success: false,
+            message: "Unauthorized",
+            data: null,
+          },
+          401
+        );
+      }
+
+      const memberById = await databases.getDocument<Member>(
+        DATABASE_ID,
+        MEMBERS_ID,
+        memberId
+      );
+
+      if (!memberById) {
+        return c.json(
+          {
+            success: false,
+            message: "Member not found",
+            data: null,
+          },
+          400
+        );
+      }
+
+      const populatedMember = {
+        ...memberById,
+        name: user.name || extractNameFromEmail(user.email),
+        email: user.email,
+        userId: memberById.userId,
+        workspaceId: memberById.workspaceId,
+        role: memberById.role,
+        color: memberById.color,
       } satisfies MemberWithUserData;
 
       return c.json({
