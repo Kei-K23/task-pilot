@@ -100,6 +100,7 @@ export default function MemberListScreen() {
               ? [1, 2, 3].map((i) => <MemberListItemSkeleton key={i} />)
               : membersList?.data?.map((member) => (
                   <MemberListItem
+                    workspaceId={workspaceId}
                     setOpenRoleUpdateDialog={setOpenRoleUpdateDialog}
                     setSelectedMember={setSelectedMember}
                     key={member.$id}

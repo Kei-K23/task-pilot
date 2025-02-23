@@ -35,7 +35,7 @@ export default function ProjectsNavigation() {
           ))
         ) : data?.total === 0 ? (
           <div className="text-muted-foreground flex items-center justify-center gap-x-1">
-            <span>No projects found</span>{" "}
+            <span>No project create yet!</span>{" "}
             <Folder className="size-4 text-muted-foreground" />
           </div>
         ) : (

@@ -1,21 +1,15 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Gavel, LogOut, MoreHorizontal, Shield, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import MemberAvatar from "./member-avatar";
 import type { Member } from "../type";
 import { MEMBER_ROLE } from "@/features/workspaces/type";
 import { Skeleton } from "@/components/ui/skeleton";
+import MemberActions from "./member-actions";
 
 interface MemberListItemProps {
   member: Member;
   currentMember?: Member | null;
   isMutationLoading: boolean;
+  workspaceId: string;
   setOpenRoleUpdateDialog: (openRoleUpdateDialog: boolean) => void;
   setSelectedMember: (selectedMember: Member) => void;
   onDeleteMember: (memberId: string) => void;
@@ -25,6 +19,7 @@ export default function MemberListItem({
   member,
   currentMember,
   isMutationLoading,
+  workspaceId,
   onDeleteMember,
   setOpenRoleUpdateDialog,
   setSelectedMember,
@@ -36,45 +31,16 @@ export default function MemberListItem({
     const isCurrentUser = currentMember.$id === member.$id;
 
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button disabled={isMutationLoading} variant={"outline"} size={"sm"}>
-            <MoreHorizontal />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem>
-            <User />
-            View Profile
-          </DropdownMenuItem>
-          {isAdmin && (
-            <DropdownMenuItem
-              onClick={() => {
-                setSelectedMember(member);
-                setOpenRoleUpdateDialog(true);
-              }}
-            >
-              <Shield /> Role
-            </DropdownMenuItem>
-          )}
-          {!isAdmin && isCurrentUser && (
-            <DropdownMenuItem
-              className="bg-red-500 text-white focus:bg-red-600/90 focus:text-white/90"
-              onClick={() => onDeleteMember(member.$id)}
-            >
-              <LogOut /> Leave
-            </DropdownMenuItem>
-          )}
-          {isAdmin && !isCurrentUser && member.role !== MEMBER_ROLE.ADMIN && (
-            <DropdownMenuItem
-              className="bg-red-500 text-white focus:bg-red-600/90 focus:text-white/90"
-              onClick={() => onDeleteMember(member.$id)}
-            >
-              <Gavel /> Kick
-            </DropdownMenuItem>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <MemberActions
+        workspaceId={workspaceId}
+        isAdmin={isAdmin}
+        isCurrentUser={isCurrentUser}
+        isMutationLoading={isMutationLoading}
+        member={member}
+        onDeleteMember={onDeleteMember}
+        setOpenRoleUpdateDialog={setOpenRoleUpdateDialog}
+        setSelectedMember={setSelectedMember}
+      />
     );
   };
 
