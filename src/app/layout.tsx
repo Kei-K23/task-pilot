@@ -3,6 +3,7 @@ import "./globals.css";
 import QueryProviders from "@/components/provider/query-provider";
 import { Toaster } from "sonner";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { ThemeProvider } from "@/components/provider/theme-provider";
 
 export const metadata: Metadata = {
   title: "TaskPilot",
@@ -17,9 +18,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased`}>
+      <body className={`antialiased`} suppressHydrationWarning>
         <QueryProviders>
-          <NuqsAdapter>{children}</NuqsAdapter>
+          <NuqsAdapter>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+              storageKey="task_pilot_theme_key"
+            >
+              {children}
+            </ThemeProvider>
+          </NuqsAdapter>
           <Toaster />
         </QueryProviders>
       </body>

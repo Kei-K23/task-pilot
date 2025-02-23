@@ -55,7 +55,7 @@ interface TasksContainerProps {
 const TasksContainer = ({ tasks, workspaceId }: TasksContainerProps) => {
   return (
     <>
-      <div className="bg-neutral-100 p-4 rounded-lg border">
+      <div className="p-4 rounded-lg border">
         <div className="flex items-center justify-between gap-x-4">
           <span className="text-lg font-bold">
             Other Related Tasks ({tasks?.length})
@@ -66,7 +66,7 @@ const TasksContainer = ({ tasks, workspaceId }: TasksContainerProps) => {
           {tasks?.slice(0, 3).map((task) => (
             <li
               key={task.$id}
-              className="bg-white border p-4 rounded-md flex items-center justify-between gap-x-4"
+              className="border p-4 rounded-md flex items-center justify-between gap-x-4"
             >
               <div>
                 <div className="flex items-center gap-x-3">

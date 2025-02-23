@@ -20,7 +20,7 @@ export default function UserButton() {
 
   if (isLoading) {
     return (
-      <Skeleton className="size-10 rounded-full bg-neutral-300 hover:opacity-75 transition-all" />
+      <Skeleton className="size-10 rounded-full bg-neutral-300 dark:bg-neutral-700 hover:opacity-75 transition-all" />
     );
   }
 
@@ -34,9 +34,9 @@ export default function UserButton() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="focus:outline-none ring-neutral-200">
-        <Avatar className="size-10 border border-neutral-300 transition-all hover:opacity-75 cursor-pointer">
-          <AvatarFallback className="bg-neutral-200 font-medium">
+      <DropdownMenuTrigger className="focus:outline-none ring-neutral-200 dark:ring-neutral-800">
+        <Avatar className="size-10 border border-neutral-300 dark:border-neutral-700 transition-all hover:opacity-75 cursor-pointer">
+          <AvatarFallback className="bg-neutral-200 dark:bg-neutral-800 font-medium">
             {fallbackName}
           </AvatarFallback>
         </Avatar>
@@ -48,8 +48,8 @@ export default function UserButton() {
         sideOffset={10}
       >
         <div className="flex items-center justify-center flex-col">
-          <Avatar className="size-14 border border-neutral-300 transition-all hover:opacity-75 cursor-pointer">
-            <AvatarFallback className="bg-neutral-200 font-medium text-2xl">
+          <Avatar className="size-14 border border-neutral-300 dark:border-neutral-700 transition-all hover:opacity-75 cursor-pointer">
+            <AvatarFallback className="bg-neutral-200 dark:bg-neutral-800 font-medium text-2xl">
               {fallbackName}
             </AvatarFallback>
           </Avatar>

@@ -57,7 +57,6 @@ export default function TaskDataKanban({
 
   const handleOnDragEnd = useCallback(
     (result: DropResult) => {
-      console.log(result);
       // If destination item is not exist, then return
       if (!result.destination) return;
 

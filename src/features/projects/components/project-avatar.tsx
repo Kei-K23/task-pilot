@@ -20,7 +20,7 @@ export default function ProjectAvatar({
     <div className="flex items-center gap-x-2">
       <Avatar className={cn("size-12 rounded-lg", className)}>
         <AvatarImage src={imageUrl} alt="Project logo" />
-        <AvatarFallback className="bg-black text-white rounded-lg font-bold text-lg">
+        <AvatarFallback className="bg-primary text-white rounded-lg font-bold text-lg">
           {name.charAt(0).toUpperCase()}
         </AvatarFallback>
       </Avatar>

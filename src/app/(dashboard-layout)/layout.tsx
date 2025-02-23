@@ -1,4 +1,5 @@
 import { DashboardSidebar } from "@/components/dashboard-sidebar";
+import { ModeToggle } from "@/components/mode-toggle";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
@@ -23,7 +24,10 @@ export default function DashboardLayout({
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
             </div>
-            <UserButton />
+            <div className="flex items-center gap-x-2">
+              <UserButton />
+              <ModeToggle />
+            </div>
           </header>
           <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
         </SidebarInset>

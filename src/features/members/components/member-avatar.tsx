@@ -19,7 +19,7 @@ export default function MemberAvatar({
   return (
     <Avatar
       className={cn(
-        "size-12 border border-neutral-300 transition-all hover:opacity-75 cursor-pointer",
+        "size-12 border transition-all hover:opacity-75 cursor-pointer",
         className
       )}
     >

@@ -116,7 +116,7 @@ const TasksContainer = ({ tasks, workspaceId }: TasksContainerProps) => {
   return (
     <>
       <CreateTaskModal />
-      <div className="bg-neutral-100 p-4 rounded-lg border">
+      <div className="p-4 rounded-lg border">
         <div className="flex items-center justify-between gap-x-4">
           <span className="text-lg font-bold">
             Total Tasks ({tasks?.length})
@@ -138,7 +138,7 @@ const TasksContainer = ({ tasks, workspaceId }: TasksContainerProps) => {
           {tasks.slice(0, 3).map((task) => (
             <li
               key={task.$id}
-              className="bg-white border p-4 rounded-md flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+              className="border p-4 rounded-md flex flex-col md:flex-row md:items-center md:justify-between gap-4"
             >
               <div>
                 <div className="flex items-center gap-x-3">
@@ -196,7 +196,7 @@ const ProjectsContainer = ({
   return (
     <>
       <CreateProjectModal />
-      <div className="bg-neutral-100 p-4 rounded-lg border">
+      <div className="p-4 rounded-lg border">
         <div className="flex items-center justify-between gap-x-4">
           <span className="text-lg font-bold">
             Projects ({projects?.length})
@@ -216,10 +216,10 @@ const ProjectsContainer = ({
           {projects.map((project) => (
             <li
               key={project.$id}
-              className="bg-white rounded-md flex items-center justify-between gap-x-4 group border transition-colors"
+              className="rounded-md flex items-center justify-between gap-x-4 group border transition-colors"
             >
               <Link
-                className="w-full h-full p-4 group-hover:bg-neutral-100/50 transition-colors rounded-md"
+                className="w-full h-full p-4 group-hover:bg-neutral-100/50 dark:group-hover:bg-neutral-800/50 transition-colors rounded-md"
                 href={`/workspaces/${workspaceId}/projects/${project.$id}`}
               >
                 <div>
@@ -248,7 +248,7 @@ interface MembersContainerProps {
 
 const MembersContainer = ({ members, workspaceId }: MembersContainerProps) => {
   return (
-    <div className="bg-neutral-100 p-4 rounded-lg border">
+    <div className="p-4 rounded-lg border">
       <div className="flex items-center justify-between gap-x-4">
         <span className="text-lg font-bold">Members ({members?.length})</span>
       </div>
@@ -258,7 +258,7 @@ const MembersContainer = ({ members, workspaceId }: MembersContainerProps) => {
           return (
             <li
               key={member.$id}
-              className="bg-white rounded-md flex items-center justify-center flex-col group border transition-colors py-4 px-3"
+              className="rounded-md flex items-center justify-center flex-col group border transition-colors py-4 px-3"
             >
               <MemberAvatar
                 name={member.name}

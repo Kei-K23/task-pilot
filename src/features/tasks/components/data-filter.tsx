@@ -74,11 +74,11 @@ export default function DataFilter({
 
   return (
     <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between gap-x-2 gap-y-3">
-      <ScrollArea className="w-full shrink-0 whitespace-nowrap">
+      <ScrollArea className="w-full shrink-0 lg:w-auto whitespace-nowrap">
         <div className="flex w-max flex-row gap-x-2">
           <Select onValueChange={handleStatusFilter} value={status ?? "all"}>
             <SelectTrigger className="focus:ring-0">
-              <div className="flex items-center gap-x-2">
+              <div className="flex items-center gap-x-2 min-w-[130px]">
                 <ListChecks className="size-4" />
                 <SelectValue placeholder="Select status" />
               </div>
@@ -111,7 +111,7 @@ export default function DataFilter({
               className="focus:ring-0"
               disabled={isFetchingAssociatedDate}
             >
-              <div className="flex items-center gap-x-2">
+              <div className="flex items-center gap-x-2 min-w-[130px]">
                 <Users className="size-4" />
                 <SelectValue placeholder="Select assignee" />
               </div>
@@ -121,7 +121,7 @@ export default function DataFilter({
               <SelectSeparator />
               {members?.map?.((member) => (
                 <SelectItem key={member.id} value={member.id}>
-                  <div className="flex items-center gap-x-2">
+                  <div className="flex items-center gap-x-2 min-w-[130px]">
                     <MemberAvatar
                       name={member.name}
                       color={member.color}
@@ -142,7 +142,7 @@ export default function DataFilter({
                 className="focus:ring-0"
                 disabled={isFetchingAssociatedDate}
               >
-                <div className="flex items-center gap-x-2">
+                <div className="flex items-center gap-x-2 min-w-[130px]">
                   <Folder className="size-4" />
                   <SelectValue placeholder="Select assignee" />
                 </div>
@@ -153,7 +153,7 @@ export default function DataFilter({
                 <SelectSeparator />
                 {projects?.map?.((project) => (
                   <SelectItem key={project.id} value={project.id}>
-                    <div className="flex items-center gap-x-2">
+                    <div className="flex items-center gap-x-2 min-w-[130px]">
                       <ProjectAvatar
                         name={project.name}
                         imageUrl={project.imageUrl}

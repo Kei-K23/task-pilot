@@ -38,7 +38,7 @@ export default function TaskKanbanHeader({
       <div className="flex items-center gap-x-2">
         {icon}
         <span>{formatEnumCase(board)}</span>
-        <span className="bg-gray-200 px-2 rounded-lg text-muted-foreground text-sm">
+        <span className="bg-gray-200 dark:bg-gray-800 px-2 rounded-lg text-muted-foreground text-sm">
           {tasksCount}
         </span>
       </div>

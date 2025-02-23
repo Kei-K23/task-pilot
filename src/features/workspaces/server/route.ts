@@ -178,7 +178,6 @@ const app = new Hono()
 
       const { workspaceId } = c.req.valid("param");
       const { name, imageUrl } = c.req.valid("form");
-      console.log(imageUrl, name);
 
       const member = await getMember(databases, workspaceId, user.$id);
 
@@ -475,8 +474,6 @@ const app = new Hono()
 
       // If memberId is give that mean viewing member profile
       if (memberId) {
-        console.log("should log here");
-
         member = await databases.getDocument<Member>(
           DATABASE_ID,
           MEMBERS_ID,
@@ -486,8 +483,6 @@ const app = new Hono()
         // For authenticated logined user
         member = await getMember(databases, workspaceId, user.$id);
       }
-
-      console.log({ memberId, member });
 
       if (!member) {
         return c.json(

@@ -22,15 +22,15 @@ export default function ProjectsNavigation() {
         <span className="text-[11px] text-muted-foreground">PROJECTS</span>
         <Plus
           onClick={openCreateProjectModal}
-          className="size-4 p-0.5 bg-neutral-500 hover:bg-neutral-500/80 cursor-pointer transition-all text-white rounded-full"
+          className="size-4 p-0.5 bg-neutral-500 hover:bg-neutral-500/80  cursor-pointer transition-all text-white rounded-full"
         />
       </div>
       <div className="space-y-1">
         {isLoading ? (
           [1, 2, 3].map((i) => (
             <div key={i} className="w-full h-[30px] flex items-center gap-x-2">
-              <Skeleton className="bg-neutral-200 w-[35px] h-full" />
-              <Skeleton className="bg-neutral-200 flex-1 w-full h-full" />
+              <Skeleton className="bg-neutral-200 dark:bg-neutral-700 w-[35px] h-full" />
+              <Skeleton className="bg-neutral-200 dark:bg-neutral-700 flex-1 w-full h-full" />
             </div>
           ))
         ) : data?.total === 0 ? (
@@ -53,7 +53,7 @@ export default function ProjectsNavigation() {
                           src={project?.imageUrl}
                           alt="Project logo"
                         />
-                        <AvatarFallback className="bg-black text-white rounded-lg font-bold text-lg">
+                        <AvatarFallback className="bg-primary text-white rounded-lg font-bold text-lg">
                           {project?.name.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>

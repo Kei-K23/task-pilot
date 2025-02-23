@@ -57,7 +57,7 @@ export default function DeleteProjectSection({
   return (
     <>
       <DeleteConfirmDialog />
-      <Card className="mt-4 border-red-300 bg-red-200/30">
+      <Card className="mt-4 dark:border-red-500 dark:bg-red-400/30 border-red-300 bg-red-200/30">
         <CardHeader>
           <CardTitle className="text-lg">Danger Zone</CardTitle>
           <CardDescription className="text-muted-foreground text-base">

@@ -11,7 +11,7 @@ interface TaskKanbanItemProps {
 
 export default function TaskKanbanItem({ task }: TaskKanbanItemProps) {
   return (
-    <div className="bg-white pt-2 pb-3 px-2 rounded-md">
+    <div className="bg-white dark:bg-gray-700 pt-2 pb-3 px-2 rounded-md">
       <div className="flex items-center justify-between gap-x-1">
         <span className="text-base">{task.name}</span>
         <TaskAction task={task} />

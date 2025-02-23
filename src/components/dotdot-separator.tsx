@@ -9,7 +9,7 @@ export default function DotdotSeparator({ className }: DotdotSeparatorProps) {
   return (
     <div
       className={cn(
-        "w-full border-t-2 border-dotted border-neutral-300",
+        "w-full border-t-2 border-dotted border-neutral-300 dark:border-neutral-700",
         className
       )}
     />
