@@ -114,14 +114,17 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
-              disabled={isPending}
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Task Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter task name" {...field} />
+                    <Input
+                      disabled={isPending}
+                      placeholder="Enter task name"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -129,14 +132,13 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
             />
 
             <FormField
-              disabled={isPending}
               control={form.control}
               name="dueDate"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Due Date</FormLabel>
                   <Popover>
-                    <PopoverTrigger asChild>
+                    <PopoverTrigger asChild disabled={isPending}>
                       <FormControl>
                         <Button
                           disabled={isPending}
@@ -173,7 +175,6 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
               )}
             />
             <FormField
-              disabled={isPending}
               control={form.control}
               name="status"
               render={({ field }) => (
@@ -211,14 +212,17 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
               )}
             />
             <FormField
-              disabled={isPending}
               control={form.control}
               name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Enter task description" {...field} />
+                    <Textarea
+                      disabled={isPending}
+                      placeholder="Enter task description"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -226,7 +230,6 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
             />
             <div className="flex justify-between items-center gap-x-2">
               <FormField
-                disabled={isPending || isFetchingAssociatedDate}
                 control={form.control}
                 name="assigneeId"
                 render={({ field }) => (
@@ -235,9 +238,12 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
+                      disabled={isPending || isFetchingAssociatedDate}
                     >
                       <FormControl>
-                        <SelectTrigger disabled={isPending}>
+                        <SelectTrigger
+                          disabled={isPending || isFetchingAssociatedDate}
+                        >
                           <SelectValue placeholder="Select assignee" />
                         </SelectTrigger>
                       </FormControl>
@@ -261,7 +267,6 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
                 )}
               />
               <FormField
-                disabled={isPending || isFetchingAssociatedDate}
                 control={form.control}
                 name="projectId"
                 render={({ field }) => (
@@ -270,9 +275,12 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
+                      disabled={isPending || isFetchingAssociatedDate}
                     >
                       <FormControl>
-                        <SelectTrigger disabled={isPending}>
+                        <SelectTrigger
+                          disabled={isPending || isFetchingAssociatedDate}
+                        >
                           <SelectValue placeholder="Select project" />
                         </SelectTrigger>
                       </FormControl>
@@ -301,7 +309,7 @@ export default function CreateTaskForm({ onCancel }: CreateTaskFormProps) {
             <div className="flex items-center gap-3">
               {onCancel && (
                 <Button
-                  variant={"secondary"}
+                  variant={"outline"}
                   disabled={isPending || isFetchingAssociatedDate}
                   type="button"
                   className="font-bold"

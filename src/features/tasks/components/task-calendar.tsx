@@ -1,7 +1,7 @@
 import {
   addMonths,
   addYears,
-  format, 
+  format,
   getDay,
   parseISO,
   startOfWeek,

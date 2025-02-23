@@ -39,7 +39,7 @@ export default function TaskIdClientPage() {
     <div>
       <TaskBreadcrumbs task={data} project={data.project} />
       <DotdotSeparator className="my-4" />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <TaskOverviewCard task={data} />
         <TasksContainer tasks={data.relatedTasks} workspaceId={workspaceId} />
       </div>
@@ -97,7 +97,7 @@ const TasksContainer = ({ tasks, workspaceId }: TasksContainerProps) => {
         </ul>
         {tasks && tasks?.length > 0 && (
           <Link href={`/workspaces/${workspaceId}/tasks`}>
-            <Button className="w-full mt-4" variant={"secondary"}>
+            <Button className="w-full mt-4" variant={"outline"}>
               Show All
             </Button>
           </Link>

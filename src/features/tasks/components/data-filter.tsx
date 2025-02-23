@@ -16,6 +16,7 @@ import { DatePicker } from "@/components/date-picker";
 import { Button } from "@/components/ui/button";
 import { useGetProjects } from "@/features/projects/api/use-get-projects";
 import ProjectAvatar from "@/features/projects/components/project-avatar";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface DataFilterProps {
   showProjectFilter?: boolean;
@@ -72,108 +73,115 @@ export default function DataFilter({
   };
 
   return (
-    <div className="flex items-center justify-between gap-x-2">
-      <div className="flex items-center gap-x-2">
-        <Select onValueChange={handleStatusFilter} value={status ?? "all"}>
-          <SelectTrigger className="focus:ring-0">
-            <div className="flex items-center gap-x-2">
-              <ListChecks className="size-4" />
-              <SelectValue placeholder="Select status" />
-            </div>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Status</SelectItem>
-            <SelectSeparator />
-            <SelectItem value={TASK_STATUS.BACKLOG}>
-              {TASK_STATUS.BACKLOG}
-            </SelectItem>
-            <SelectItem value={TASK_STATUS.IN_PROGRESS}>
-              {TASK_STATUS.IN_PROGRESS}
-            </SelectItem>
-            <SelectItem value={TASK_STATUS.IN_REVIEW}>
-              {TASK_STATUS.IN_REVIEW}
-            </SelectItem>
-            <SelectItem value={TASK_STATUS.TODO}>{TASK_STATUS.TODO}</SelectItem>
-            <SelectItem value={TASK_STATUS.DONE}>{TASK_STATUS.DONE}</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select
-          onValueChange={handleAssigneeFilter}
-          value={assigneeId ?? "all"}
-        >
-          <SelectTrigger
-            className="focus:ring-0"
-            disabled={isFetchingAssociatedDate}
-          >
-            <div className="flex items-center gap-x-2">
-              <Users className="size-4" />
-              <SelectValue placeholder="Select assignee" />
-            </div>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All assignees</SelectItem>
-            <SelectSeparator />
-            {members?.map?.((member) => (
-              <SelectItem key={member.id} value={member.id}>
-                <div className="flex items-center gap-x-2">
-                  <MemberAvatar
-                    name={member.name}
-                    color={member.color}
-                    className="size-7"
-                  />
-                  <span>{member.name}</span>
-                </div>
+    <div className="flex flex-col items-start lg:flex-row lg:items-center lg:justify-between gap-x-2 gap-y-3">
+      <ScrollArea className="w-full shrink-0 whitespace-nowrap">
+        <div className="flex w-max flex-row gap-x-2">
+          <Select onValueChange={handleStatusFilter} value={status ?? "all"}>
+            <SelectTrigger className="focus:ring-0">
+              <div className="flex items-center gap-x-2">
+                <ListChecks className="size-4" />
+                <SelectValue placeholder="Select status" />
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectSeparator />
+              <SelectItem value={TASK_STATUS.BACKLOG}>
+                {TASK_STATUS.BACKLOG}
               </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {showProjectFilter && (
+              <SelectItem value={TASK_STATUS.IN_PROGRESS}>
+                {TASK_STATUS.IN_PROGRESS}
+              </SelectItem>
+              <SelectItem value={TASK_STATUS.IN_REVIEW}>
+                {TASK_STATUS.IN_REVIEW}
+              </SelectItem>
+              <SelectItem value={TASK_STATUS.TODO}>
+                {TASK_STATUS.TODO}
+              </SelectItem>
+              <SelectItem value={TASK_STATUS.DONE}>
+                {TASK_STATUS.DONE}
+              </SelectItem>
+            </SelectContent>
+          </Select>
           <Select
-            onValueChange={handleProjectFilter}
-            value={projectId ?? "default"}
+            onValueChange={handleAssigneeFilter}
+            value={assigneeId ?? "all"}
           >
             <SelectTrigger
               className="focus:ring-0"
               disabled={isFetchingAssociatedDate}
             >
               <div className="flex items-center gap-x-2">
-                <Folder className="size-4" />
+                <Users className="size-4" />
                 <SelectValue placeholder="Select assignee" />
               </div>
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="default">Default projects</SelectItem>
-              <SelectItem value="all">All projects</SelectItem>
+              <SelectItem value="all">All assignees</SelectItem>
               <SelectSeparator />
-              {projects?.map?.((project) => (
-                <SelectItem key={project.id} value={project.id}>
+              {members?.map?.((member) => (
+                <SelectItem key={member.id} value={member.id}>
                   <div className="flex items-center gap-x-2">
-                    <ProjectAvatar
-                      name={project.name}
-                      imageUrl={project.imageUrl}
+                    <MemberAvatar
+                      name={member.name}
+                      color={member.color}
                       className="size-7"
-                      showName={false}
                     />
-                    <span>{project.name}</span>
+                    <span>{member.name}</span>
                   </div>
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-        )}
-        <DatePicker
-          date={dueDate ? new Date(dueDate) : undefined}
-          setDate={(date) => {
-            setFilterQuery({ dueDate: date ? date?.toISOString() : null });
-          }}
-          placeholder="Due date"
-        />
-      </div>
+          {showProjectFilter && (
+            <Select
+              onValueChange={handleProjectFilter}
+              value={projectId ?? "default"}
+            >
+              <SelectTrigger
+                className="focus:ring-0"
+                disabled={isFetchingAssociatedDate}
+              >
+                <div className="flex items-center gap-x-2">
+                  <Folder className="size-4" />
+                  <SelectValue placeholder="Select assignee" />
+                </div>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="default">Default projects</SelectItem>
+                <SelectItem value="all">All projects</SelectItem>
+                <SelectSeparator />
+                {projects?.map?.((project) => (
+                  <SelectItem key={project.id} value={project.id}>
+                    <div className="flex items-center gap-x-2">
+                      <ProjectAvatar
+                        name={project.name}
+                        imageUrl={project.imageUrl}
+                        className="size-7"
+                        showName={false}
+                      />
+                      <span>{project.name}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+          <DatePicker
+            date={dueDate ? new Date(dueDate) : undefined}
+            setDate={(date) => {
+              setFilterQuery({ dueDate: date ? date?.toISOString() : null });
+            }}
+            placeholder="Due date"
+          />
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
       <Button
         variant={"outline"}
         onClick={clearFilters}
         size="sm"
-        className="font-semibold"
+        className="font-semibold w-full lg:w-auto"
       >
         Clear filter
       </Button>

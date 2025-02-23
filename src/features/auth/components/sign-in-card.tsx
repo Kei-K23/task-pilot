@@ -45,13 +45,13 @@ export default function SignInCard() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
-              disabled={isPending}
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <Input
+                    disabled={isPending}
                     type="email"
                     placeholder="Enter email address"
                     {...field}
@@ -61,13 +61,13 @@ export default function SignInCard() {
               )}
             />
             <FormField
-              disabled={isPending}
               control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <Input
+                    disabled={isPending}
                     type="password"
                     placeholder="Enter password"
                     {...field}

@@ -55,7 +55,7 @@ export default function TaskBreadcrumbs({
     <>
       <EditTaskModal />
       <DeleteConfirmDialog />
-      <div className="flex items-center justify-between gap-x-1">
+      <div className="flex items-center justify-between gap-x-4">
         <div className="flex items-center gap-x-1">
           <Link
             href={`/workspaces/${task.workspaceId}/projects/${task.projectId}`}
@@ -68,8 +68,12 @@ export default function TaskBreadcrumbs({
               textClassName="text-[14px] text-muted-foreground group-hover:text-black transition-colors"
             />
           </Link>
-          <ChevronRight className="size-6 text-muted-foreground" />
-          <span className="font-bold text-base">{task.name}</span>
+          <div className="flex items-center gap-x-1">
+            <ChevronRight className="size-5 lg:size-6 text-muted-foreground" />
+            <span className="font-bold text-sm lg:text-base truncate">
+              {task.name}
+            </span>
+          </div>
         </div>
         <div className="flex items-center gap-x-2">
           <Button
@@ -82,12 +86,12 @@ export default function TaskBreadcrumbs({
               });
             }}
           >
-            <Pencil className="hidden md:block" />
-            <span className="text-sm font-bold">Edit</span>
+            <Pencil />
+            <span className="text-sm font-bold hidden lg:block">Edit</span>
           </Button>
           <Button variant={"destructive"} size={"sm"} onClick={handleDelete}>
-            <Trash2 className="hidden md:block" />
-            <span className="text-sm font-bold">Delete</span>
+            <Trash2 />
+            <span className="text-sm font-bold hidden lg:block">Delete</span>
           </Button>
         </div>
       </div>

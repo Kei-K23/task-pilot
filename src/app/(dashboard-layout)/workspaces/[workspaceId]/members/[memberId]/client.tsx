@@ -126,7 +126,7 @@ const TasksContainer = ({ tasks, workspaceId }: TasksContainerProps) => {
         </ul>
         {tasks.length > 0 && (
           <Link href={`/workspaces/${workspaceId}/tasks`}>
-            <Button className="w-full mt-4" variant={"secondary"}>
+            <Button className="w-full mt-4" variant={"outline"}>
               Show All
             </Button>
           </Link>

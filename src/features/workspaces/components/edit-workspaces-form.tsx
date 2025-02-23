@@ -81,7 +81,7 @@ export default function EditWorkspacesForm({
   return (
     <Card className="mt-4">
       <CardHeader className="flex items-center flex-row gap-x-4">
-        <CardTitle className="text-lg text-center">
+        <CardTitle className="text-lg">
           Edit &quot;{initialValue.name}&quot; workspace
         </CardTitle>
       </CardHeader>
@@ -164,7 +164,7 @@ export default function EditWorkspacesForm({
                           </Button>
                         ) : (
                           <Button
-                            variant={"secondary"}
+                            variant={"outline"}
                             type="button"
                             size={"sm"}
                             className="mt-2"
@@ -186,7 +186,7 @@ export default function EditWorkspacesForm({
             <div className="flex items-center gap-3">
               {onCancel && (
                 <Button
-                  variant={"secondary"}
+                  variant={"outline"}
                   disabled={isPending}
                   type="button"
                   className="font-bold"

@@ -80,21 +80,20 @@ export default function TaskViewSwitcher({
       <CreateTaskModal />
       <EditTaskModal />
       <Tabs defaultValue={tasksView} onValueChange={setTasksView}>
-        <div className="flex items-center gap-x-4 gap-y-2 justify-between flex-col md:flex-row">
-          <TabsList className="w-full md:w-auto">
-            <TabsTrigger className="w-full md:w-auto" value="table">
+        <div className="flex items-center gap-x-4 gap-y-2 justify-between flex-col lg:flex-row">
+          <TabsList className="w-full lg:w-auto">
+            <TabsTrigger className="w-full lg:w-auto" value="table">
               Table
             </TabsTrigger>
-            <TabsTrigger className="w-full md:w-auto" value="kanban">
+            <TabsTrigger className="w-full lg:w-auto" value="kanban">
               Kanban
             </TabsTrigger>
-            <TabsTrigger className="w-full md:w-auto" value="calender">
+            <TabsTrigger className="w-full lg:w-auto" value="calender">
               Calender
             </TabsTrigger>
           </TabsList>
           <Button
-            className="w-full md:w-auto font-semibold"
-            size={"sm"}
+            className="w-full lg:w-auto font-semibold"
             onClick={() => {
               setIsOpen({ openCreateTaskModal: true });
             }}

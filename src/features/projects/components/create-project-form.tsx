@@ -81,21 +81,23 @@ export default function CreateProjectForm({
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
-              disabled={isPending}
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Project Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter project name" {...field} />
+                    <Input
+                      disabled={isPending}
+                      placeholder="Enter project name"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
-              disabled={isPending}
               control={form.control}
               name="imageUrl"
               render={({ field }) => (
@@ -128,6 +130,7 @@ export default function CreateProjectForm({
                       JPG, PNG, SVG or JPEG, max 1MB
                     </p>
                     <input
+                      disabled={isPending}
                       ref={fileInputRef}
                       type="file"
                       className="hidden"
@@ -151,7 +154,7 @@ export default function CreateProjectForm({
                       </Button>
                     ) : (
                       <Button
-                        variant={"secondary"}
+                        variant={"outline"}
                         type="button"
                         disabled={isPending}
                         size={"sm"}
@@ -170,7 +173,7 @@ export default function CreateProjectForm({
             <div className="flex items-center gap-3">
               {onCancel && (
                 <Button
-                  variant={"secondary"}
+                  variant={"outline"}
                   disabled={isPending}
                   type="button"
                   className="font-bold"

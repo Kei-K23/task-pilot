@@ -157,7 +157,7 @@ export default function CreateWorkspacesForm({
                       </Button>
                     ) : (
                       <Button
-                        variant={"secondary"}
+                        variant={"outline"}
                         type="button"
                         disabled={isPending}
                         size={"sm"}
@@ -176,7 +176,7 @@ export default function CreateWorkspacesForm({
             <div className="flex items-center gap-3">
               {onCancel && (
                 <Button
-                  variant={"secondary"}
+                  variant={"outline"}
                   disabled={isPending}
                   type="button"
                   className="font-bold"

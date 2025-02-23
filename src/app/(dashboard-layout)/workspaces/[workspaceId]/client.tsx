@@ -138,7 +138,7 @@ const TasksContainer = ({ tasks, workspaceId }: TasksContainerProps) => {
           {tasks.slice(0, 3).map((task) => (
             <li
               key={task.$id}
-              className="bg-white border p-4 rounded-md flex items-center justify-between gap-x-4"
+              className="bg-white border p-4 rounded-md flex flex-col md:flex-row md:items-center md:justify-between gap-4"
             >
               <div>
                 <div className="flex items-center gap-x-3">
@@ -157,7 +157,11 @@ const TasksContainer = ({ tasks, workspaceId }: TasksContainerProps) => {
                 </div>
               </div>
               <Link href={`/workspaces/${workspaceId}/tasks/${task.$id}`}>
-                <Button variant={"outline"} size={"sm"}>
+                <Button
+                  variant={"outline"}
+                  size={"sm"}
+                  className="w-full md:w-auto"
+                >
                   <ExternalLink />
                 </Button>
               </Link>
@@ -169,7 +173,7 @@ const TasksContainer = ({ tasks, workspaceId }: TasksContainerProps) => {
         </ul>
         {tasks.length > 0 && (
           <Link href={`/workspaces/${workspaceId}/tasks`}>
-            <Button className="w-full mt-4" variant={"secondary"}>
+            <Button className="w-full mt-4" variant={"outline"}>
               Show All
             </Button>
           </Link>
@@ -208,7 +212,7 @@ const ProjectsContainer = ({
           </Button>
         </div>
         <DotdotSeparator className="my-3" />
-        <ul className="grid grid-cols-2 gap-x-5 gap-y-3">
+        <ul className="grid grid-cols-1 lg:grid-cols-2 gap-x-5 gap-y-3">
           {projects.map((project) => (
             <li
               key={project.$id}
@@ -249,7 +253,7 @@ const MembersContainer = ({ members, workspaceId }: MembersContainerProps) => {
         <span className="text-lg font-bold">Members ({members?.length})</span>
       </div>
       <DotdotSeparator className="my-3" />
-      <ul className="grid grid-cols-3 gap-x-5 gap-y-3">
+      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-3">
         {members.slice(0, 6).map((member) => {
           return (
             <li
@@ -278,7 +282,7 @@ const MembersContainer = ({ members, workspaceId }: MembersContainerProps) => {
         </li>
       </ul>
       <Link href={`/workspaces/${workspaceId}/members`}>
-        <Button className="w-full mt-4" variant={"secondary"}>
+        <Button className="w-full mt-4" variant={"outline"}>
           Show All
         </Button>
       </Link>
