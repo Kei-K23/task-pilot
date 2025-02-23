@@ -17,7 +17,6 @@ Manage, gather and navigate your tasks and projects like a pro with **TaskPilot*
 - [x] Deployment to Vercel
 - [x] Need to revalidate Analytics data after making some mutation to tasks
 - [ ] Implement SEO
-- [ ] Add scrollable for project listing in sidebar
 - [ ] Implement Sentry
 - [ ] Add Landing page
 - [ ] Add more advanced role-based access for member
@@ -26,4 +25,3 @@ Manage, gather and navigate your tasks and projects like a pro with **TaskPilot*
 
 - [ ] Fix image icon and favicon is not load in production
 - [ ] Improve accessibility features
-- [ ] Check why project create modal dialog is more black backdrop color
