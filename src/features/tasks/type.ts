@@ -37,4 +37,5 @@ export type Task = Models.Document & {
   project: Project;
   assignee: MemberWithUserData;
   position: number;
+  relatedTasks?: Task[];
 };

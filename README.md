@@ -9,7 +9,7 @@ Manage, gather and navigate your tasks and projects like a pro with **TaskPilot*
 
 # TODO
 
-- [ ] Add Member profile page for each member in the workspace
+- [x] Add Member profile page for each member in the workspace
 - [ ] Make mobile responsive
 - [ ] Add Light/Dark themes
 - [ ] Implement SEO

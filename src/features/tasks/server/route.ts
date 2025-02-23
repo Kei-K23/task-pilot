@@ -200,6 +200,142 @@ const app = new Hono()
       });
     }
   )
+  .get(
+    "/get-related-tasks/:taskId",
+    zValidator(
+      "param",
+      z.object({
+        taskId: z.string(),
+      })
+    ),
+    zValidator(
+      "query",
+      z.object({
+        workspaceId: z.string(),
+      })
+    ),
+    sessionMiddleware,
+    async (c) => {
+      const { users } = await createAdminClient();
+      const databases = c.get("databases");
+      const user = c.get("user");
+
+      const { taskId } = c.req.valid("param");
+      const { workspaceId } = c.req.valid("query");
+
+      const member = await getMember(databases, workspaceId, user.$id);
+
+      if (!member) {
+        return c.json(
+          {
+            success: false,
+            message: "Unauthorized",
+            data: null,
+          },
+          401
+        );
+      }
+
+      // Get the tasks according to query filter
+      const task = await databases.getDocument<Task>(
+        DATABASE_ID,
+        TASKS_ID,
+        taskId
+      );
+
+      const project = await databases.getDocument(
+        DATABASE_ID,
+        PROJECTS_ID,
+        task.projectId
+      );
+
+      const memberData = await databases.getDocument(
+        DATABASE_ID,
+        MEMBERS_ID,
+        task.assigneeId
+      );
+
+      const memberUser = await users.get(memberData.userId);
+
+      const assignee = {
+        ...member,
+        name: memberUser.name || extractNameFromEmail(memberUser.email),
+        email: memberUser.email,
+      };
+
+      const queryForOtherRelatedTasks = [
+        Query.equal("workspaceId", workspaceId),
+        Query.notEqual("$id", task.$id),
+        Query.equal("assigneeId", task.assigneeId),
+        Query.orderDesc("$createdAt"),
+      ];
+
+      // Retrieve other tasks for the got task member id
+      const rawOtherRelatedTasks = await databases.listDocuments(
+        DATABASE_ID,
+        TASKS_ID,
+        queryForOtherRelatedTasks
+      );
+
+      const projectIds = rawOtherRelatedTasks?.documents?.map(
+        (task) => task.projectId
+      );
+      const assigneeIds = rawOtherRelatedTasks?.documents?.map(
+        (task) => task.assigneeId
+      );
+
+      const projects = await databases.listDocuments(
+        DATABASE_ID,
+        PROJECTS_ID,
+        projectIds.length > 0 ? [Query.contains("$id", projectIds)] : []
+      );
+
+      const members = await databases.listDocuments(
+        DATABASE_ID,
+        MEMBERS_ID,
+        assigneeIds.length > 0 ? [Query.contains("$id", assigneeIds)] : []
+      );
+
+      const assignees = await Promise.all(
+        members.documents.map(async (member) => {
+          const user = await users.get(member.userId);
+
+          return {
+            ...member,
+            name: user.name || extractNameFromEmail(user.email),
+            email: user.email,
+          };
+        })
+      );
+
+      const populatedRelatedTasks = rawOtherRelatedTasks.documents.map(
+        (task) => {
+          const project = projects.documents.filter(
+            (project) => project.$id === task.projectId
+          )?.[0] as unknown as Project;
+
+          const assignee = assignees.filter(
+            (assignee) => assignee.$id === task.assigneeId
+          )?.[0] as unknown as MemberWithUserData;
+
+          return {
+            ...task,
+            project,
+            assignee,
+          };
+        }
+      );
+
+      return c.json({
+        data: {
+          ...task,
+          project,
+          assignee,
+          relatedTasks: populatedRelatedTasks,
+        } as unknown as Task,
+      });
+    }
+  )
   .post(
     "/",
     zValidator("json", taskCreateSchema),
