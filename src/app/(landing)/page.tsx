@@ -9,11 +9,11 @@ import {
   Zap,
 } from "lucide-react";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen w-full">
       {/* Navigation */}
-      <header className="border-b">
+      <header className="border-b border-b-gray-200 fixed w-full bg-background bg-gray-300 rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40">
         <div className="mx-auto container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <LayoutDashboard className="h-6 w-6" />
@@ -57,7 +57,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex-1">
+      <main className="flex-1 mt-28">
         {/* Hero Section */}
         <section className="py-20 md:py-28">
           <div className="container mx-auto px-4 md:px-6">
@@ -73,9 +73,11 @@ export default function Home() {
                 love. Navigate your tasks and projects with ease.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 min-[400px]:gap-4">
-                <Button size="lg" className="gap-1.5">
-                  Get Started <ArrowRight className="h-4 w-4" />
-                </Button>
+                <Link href={"/sign-in"}>
+                  <Button size="lg" className="gap-1.5">
+                    Get Started <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
                 <Link
                   href={"https://github.com/Kei-K23/task-pilot"}
                   target="_blank"
@@ -213,8 +215,8 @@ export default function Home() {
                     Kinda Free forever (Until free resource run out 🤧)
                   </p>
                 </div>
-                <div className="p-6 pt-0 space-y-4">
-                  <ul className="space-y-2">
+                <div className="p-6 pt-0">
+                  <ul className="space-y-2 mb-4">
                     <li className="flex items-center">
                       <CheckCircle className="mr-2 h-4 w-4 text-primary" />
                       <span>Unlimited workspaces</span>
@@ -232,7 +234,9 @@ export default function Home() {
                       <span>Workspace members invitation</span>
                     </li>
                   </ul>
-                  <Button className="w-full">Get Started</Button>
+                  <Link href={"/sign-in"}>
+                    <Button className="w-full">Get Started</Button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -250,9 +254,11 @@ export default function Home() {
                 Join thousands of developers who are already using TaskPilot to
                 manage their projects.
               </p>
-              <Button size="lg" variant={"ghost"} className="mt-4">
-                Get Started Now
-              </Button>
+              <Link href={"/sign-in"}>
+                <Button size="lg" variant={"ghost"} className="mt-4">
+                  Get Started Now
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
