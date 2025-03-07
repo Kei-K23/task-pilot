@@ -20,7 +20,7 @@ import { usePathname } from "next/navigation";
 import ProjectsNavigation from "./projects-navigation";
 import { Separator } from "./ui/separator";
 import CreateProjectModal from "@/features/projects/components/create-project-modal";
-import Image from "next/image";
+import { LayoutDashboard } from "lucide-react";
 
 export function DashboardSidebar({
   ...props
@@ -39,12 +39,7 @@ export function DashboardSidebar({
               href={`/workspaces/${workspaceId}`}
               className="flex items-center gap-x-2"
             >
-              <Image
-                src={"/icons/icon.png"}
-                alt="icon"
-                width={30}
-                height={30}
-              />
+              <LayoutDashboard />
               <span className="text-lg font-semibold text-muted-foreground hover:text-black transition-colors">
                 TaskPilot
               </span>

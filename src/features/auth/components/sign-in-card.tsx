@@ -88,8 +88,8 @@ export default function SignInCard() {
         <Separator className="w-full h-[1px] my-6" />
         <div className="space-y-4">
           <Button
-            onClick={() => {
-              signUpWithGoogle();
+            onClick={async () => {
+              await signUpWithGoogle();
             }}
             disabled={isPending}
             variant={"outline"}
@@ -104,8 +104,8 @@ export default function SignInCard() {
             Continue with Google
           </Button>
           <Button
-            onClick={() => {
-              signUpWithGithub();
+            onClick={async () => {
+              await signUpWithGithub();
             }}
             disabled={isPending}
             variant={"outline"}
