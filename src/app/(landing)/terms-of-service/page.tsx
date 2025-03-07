@@ -6,7 +6,7 @@ export default function TermsOfService() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Navigation */}
-      <header className="border-b border-b-gray-200 fixed w-full bg-background bg-gray-300 rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40">
+      <header className="border-b border-b-gray-200 dark:border-b-gray-800 fixed w-full bg-background bg-gray-300 dark:bg-gray-900 rounded-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 z-50">
         <div className="container mx-auto flex h-16 items-center justify-between">
           <Link href={"/"} className="flex items-center gap-2">
             <LayoutDashboard className="h-6 w-6" />
